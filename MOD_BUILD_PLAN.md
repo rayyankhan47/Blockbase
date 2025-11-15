@@ -322,6 +322,29 @@
 - [ ] Show user-friendly error messages
 - [ ] Test: Disconnect network, verify error handling
 
+### 8.5 AI Build Generation (Simple Builds)
+- [ ] Add `/blockbase ai build <description>` command
+- [ ] Format prompt to request JSON output from Gemini
+- [ ] Request structured format: `{"actions": [{"type": "place", "x": ..., "y": ..., "z": ..., "block": "..."}]}`
+- [ ] Parse JSON response in backend (handle markdown code blocks)
+- [ ] Validate block placements (coordinates, block names, world bounds)
+- [ ] Send validated actions to mod
+- [ ] Create `BuildApplier` class in mod to apply block changes
+- [ ] Add confirmation step: "AI wants to place X blocks. Type '/blockbase ai build confirm'"
+- [ ] Store pending build until confirmed
+- [ ] Start with simple blocks only (redstone_wire, stone, basic blocks)
+- [ ] Test: "Place a 3x3 square of redstone wire"
+- [ ] Add undo capability (store original blocks before applying)
+
+**Implementation Details:**
+- See `AI_BUILD_GUIDE.md` for full technical approach
+- Use JSON structured output from Gemini
+- Parse and validate in backend
+- Apply via `BuildApplier` class in mod
+- Safety: Confirmation required, bounds checking, undo capability
+
+**Deliverable**: AI can generate and apply simple builds
+
 ---
 
 ## Step 9: Future Features (Post-MVP - Can Pitch as Roadmap)
