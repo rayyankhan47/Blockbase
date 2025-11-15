@@ -35,7 +35,11 @@ public class BlockTracker {
 		BlockChange change = new BlockChange(pos, null, newState, timestamp);
 		changes.add(change);
 		
-		Blockbase.LOGGER.debug("Tracked block place at {}: {}", pos, newState.getBlock().getName().getString());
+		Blockbase.LOGGER.info("Tracked block place at ({}, {}, {}): {}", 
+			pos.getX(), 
+			pos.getY(), 
+			pos.getZ(), 
+			newState.getBlock().getName().getString());
 	}
 
 	/**
@@ -51,7 +55,11 @@ public class BlockTracker {
 		BlockChange change = new BlockChange(pos, oldState, null, timestamp);
 		changes.add(change);
 		
-		Blockbase.LOGGER.debug("Tracked block break at {}: {}", pos, oldState.getBlock().getName().getString());
+		Blockbase.LOGGER.info("Tracked block break at ({}, {}, {}): {}", 
+			pos.getX(), 
+			pos.getY(), 
+			pos.getZ(), 
+			oldState.getBlock().getName().getString());
 	}
 
 	/**
@@ -68,8 +76,11 @@ public class BlockTracker {
 		BlockChange change = new BlockChange(pos, oldState, newState, timestamp);
 		changes.add(change);
 		
-		Blockbase.LOGGER.debug("Tracked block modify at {}: {} -> {}", 
-			pos, oldState.getBlock().getName().getString(), newState.getBlock().getName().getString());
+		Blockbase.LOGGER.debug("Tracked block modify at ({}, {}, {}): {} -> {}", 
+			pos.getX(), 
+			pos.getY(), 
+			pos.getZ(), 
+			oldState.getBlock().getName().getString(), newState.getBlock().getName().getString());
 	}
 
 	/**

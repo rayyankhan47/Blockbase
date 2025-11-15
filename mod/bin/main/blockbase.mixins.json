@@ -3,7 +3,8 @@
 	"package": "com.blockbase.mixin",
 	"compatibilityLevel": "JAVA_17",
 	"mixins": [
-		"ExampleMixin"
+		"ExampleMixin",
+		"BlockItemMixin"
 	],
 	"injectors": {
 		"defaultRequire": 1
