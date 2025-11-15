@@ -1,0 +1,34 @@
+{
+	"schemaVersion": 1,
+	"id": "blockbase",
+	"version": "1.0.0",
+	"name": "blockbase",
+	"description": "This is an example description! Tell everyone what your mod is about!",
+	"authors": [
+		"Me!"
+	],
+	"contact": {
+		"homepage": "https://fabricmc.net/",
+		"sources": "https://github.com/FabricMC/fabric-example-mod"
+	},
+	"license": "CC0-1.0",
+	"icon": "assets/blockbase/icon.png",
+	"environment": "*",
+	"entrypoints": {
+		"main": [
+			"com.blockbase.Blockbase"
+		]
+	},
+	"mixins": [
+		"blockbase.mixins.json"
+	],
+	"depends": {
+		"fabricloader": ">=0.17.3",
+		"minecraft": "~1.18.2",
+		"java": ">=17",
+		"fabric-api": "*"
+	},
+	"suggests": {
+		"another-mod": "*"
+	}
+}

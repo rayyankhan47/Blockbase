@@ -1,0 +1,547 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="output" path="bin/default"/>
+	<classpathentry output="bin/main" kind="src" path="src/main/java">
+		<attributes>
+			<attribute name="gradle_scope" value="main"/>
+			<attribute name="gradle_used_by_scope" value="main,test"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry output="bin/main" kind="src" path="src/main/resources">
+		<attributes>
+			<attribute name="gradle_scope" value="main"/>
+			<attribute name="gradle_used_by_scope" value="main,test"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-17/"/>
+	<classpathentry sourcepath="/Users/rayyan/.gradle/caches/modules-2/files-2.1/org.jetbrains/annotations/26.0.2/bfa27b5e683363963c8d5e2fec39d755295cbb82/annotations-26.0.2-sources.jar" kind="lib" path="/Users/rayyan/.gradle/caches/modules-2/files-2.1/org.jetbrains/annotations/26.0.2/c7ce3cdeda3d18909368dfe5977332dfad326c6d/annotations-26.0.2.jar">
+		<attributes>
+			<attribute name="gradle_used_by_scope" value=""/>
+		</attributes>
+	</classpathentry>
+	<classpathentry sourcepath="/Users/rayyan/.gradle/caches/modules-2/files-2.1/org.ow2.asm/asm/9.9/5aa89c77317a704e2e34d117b72756ff1c1530bb/asm-9.9-sources.jar" kind="lib" path="/Users/rayyan/.gradle/caches/modules-2/files-2.1/org.ow2.asm/asm/9.9/c29635c8a7afa03d74b33c1884df8abb2b3f3dcc/asm-9.9.jar">
+		<attributes>
+			<attribute name="gradle_used_by_scope" value="main,test"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry sourcepath="/Users/rayyan/.gradle/caches/modules-2/files-2.1/org.ow2.asm/asm-analysis/9.9/3ce67cca2a5bf3d1d271fb13e0011714df6c68e6/asm-analysis-9.9-sources.jar" kind="lib" path="/Users/rayyan/.gradle/caches/modules-2/files-2.1/org.ow2.asm/asm-analysis/9.9/bf4fa6e66638851c1cd22c2caea0c3ee5d5f437/asm-analysis-9.9.jar">
+		<attributes>
+			<attribute name="gradle_used_by_scope" value="main,test"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry sourcepath="/Users/rayyan/.gradle/caches/modules-2/files-2.1/org.ow2.asm/asm-commons/9.9/a51d8b4b55baa109a6c4ac1e897820ad638f63d2/asm-commons-9.9-sources.jar" kind="lib" path="/Users/rayyan/.gradle/caches/modules-2/files-2.1/org.ow2.asm/asm-commons/9.9/db9165a3bf908ded6b08612d583a15d1d0c7bda0/asm-commons-9.9.jar">
+		<attributes>
+			<attribute name="gradle_used_by_scope" value="main,test"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry sourcepath="/Users/rayyan/.gradle/caches/modules-2/files-2.1/org.ow2.asm/asm-tree/9.9/60b736062debb8f627d06fa42b962744b1e1a43a/asm-tree-9.9-sources.jar" kind="lib" path="/Users/rayyan/.gradle/caches/modules-2/files-2.1/org.ow2.asm/asm-tree/9.9/f8de6eead6d24dd0f45bd065bbe112b2cda6ea21/asm-tree-9.9.jar">
+		<attributes>
+			<attribute name="gradle_used_by_scope" value="main,test"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry sourcepath="/Users/rayyan/.gradle/caches/modules-2/files-2.1/org.ow2.asm/asm-util/9.9/4e8aceea08c648727bb173f03e6fd31fbdb86289/asm-util-9.9-sources.jar" kind="lib" path="/Users/rayyan/.gradle/caches/modules-2/files-2.1/org.ow2.asm/asm-util/9.9/42fdfc0508b43807c8078d6e82ecff2ce2112ae8/asm-util-9.9.jar">
+		<attributes>
+			<attribute name="gradle_used_by_scope" value="main,test"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry sourcepath="/Users/rayyan/.gradle/caches/modules-2/files-2.1/net.fabricmc/sponge-mixin/0.16.5+mixin.0.8.7/e04fc1ab5d733d5dcece298e0433c72e3b29b8ae/sponge-mixin-0.16.5+mixin.0.8.7-sources.jar" kind="lib" path="/Users/rayyan/.gradle/caches/modules-2/files-2.1/net.fabricmc/sponge-mixin/0.16.5+mixin.0.8.7/80fc3a9f592673cea87f4cd702f87991c6c9fe4d/sponge-mixin-0.16.5+mixin.0.8.7.jar">
+		<attributes>
+			<attribute name="gradle_used_by_scope" value="main,test"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry sourcepath="/Users/rayyan/.gradle/caches/modules-2/files-2.1/io.github.llamalad7/mixinextras-fabric/0.5.0/763194e452da1311d6e93091d431854f4a4b4c5d/mixinextras-fabric-0.5.0-sources.jar" kind="lib" path="/Users/rayyan/.gradle/caches/modules-2/files-2.1/io.github.llamalad7/mixinextras-fabric/0.5.0/91a83dfb7abd320f6236bd1fcf5c0ff143d59a13/mixinextras-fabric-0.5.0.jar">
+		<attributes>
+			<attribute name="gradle_used_by_scope" value="main,test"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry sourcepath="/Users/rayyan/.gradle/caches/modules-2/files-2.1/com.mojang/logging/1.0.0/600952f78e73b97b05b3a6e1a9c6ef049cfe0112/logging-1.0.0-sources.jar" kind="lib" path="/Users/rayyan/.gradle/caches/modules-2/files-2.1/com.mojang/logging/1.0.0/f6ca3b2eee0b80b384e8ed93d368faecb82dfb9b/logging-1.0.0.jar">
+		<attributes>
+			<attribute name="gradle_used_by_scope" value="main,test"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry sourcepath="/Users/rayyan/.gradle/caches/modules-2/files-2.1/com.mojang/blocklist/1.0.10/ef44852fa1707a833bfa8e8518659ab18f368d25/blocklist-1.0.10-sources.jar" kind="lib" path="/Users/rayyan/.gradle/caches/modules-2/files-2.1/com.mojang/blocklist/1.0.10/5c685c5ffa94c4cd39496c7184c1d122e515ecef/blocklist-1.0.10.jar">
+		<attributes>
+			<attribute name="gradle_used_by_scope" value="main,test"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="/Users/rayyan/.gradle/caches/modules-2/files-2.1/com.mojang/patchy/2.2.10/da05971b07cbb379d002cf7eaec6a2048211fefc/patchy-2.2.10.jar">
+		<attributes>
+			<attribute name="gradle_used_by_scope" value="main,test"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry sourcepath="/Users/rayyan/.gradle/caches/modules-2/files-2.1/com.github.oshi/oshi-core/5.8.5/2b307812731b13ff8b133a96322b0a8cf9b2879a/oshi-core-5.8.5-sources.jar" kind="lib" path="/Users/rayyan/.gradle/caches/modules-2/files-2.1/com.github.oshi/oshi-core/5.8.5/1d0ec654d820741327f5a9229d513732a4b7ce50/oshi-core-5.8.5.jar">
+		<attributes>
+			<attribute name="gradle_used_by_scope" value="main,test"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry sourcepath="/Users/rayyan/.gradle/caches/modules-2/files-2.1/net.java.dev.jna/jna/5.10.0/ff0287cd964354b358d49ad41e5bae9c7d1b4ae/jna-5.10.0-sources.jar" kind="lib" path="/Users/rayyan/.gradle/caches/modules-2/files-2.1/net.java.dev.jna/jna/5.10.0/7cf4c87dd802db50721db66947aa237d7ad09418/jna-5.10.0.jar">
+		<attributes>
+			<attribute name="gradle_used_by_scope" value="main,test"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry sourcepath="/Users/rayyan/.gradle/caches/modules-2/files-2.1/net.java.dev.jna/jna-platform/5.10.0/1ffcbea712326d2ada01104eb577d90a8ebf6097/jna-platform-5.10.0-sources.jar" kind="lib" path="/Users/rayyan/.gradle/caches/modules-2/files-2.1/net.java.dev.jna/jna-platform/5.10.0/fbed7d9669dba47714ad0d4f4454290a997aee69/jna-platform-5.10.0.jar">
+		<attributes>
+			<attribute name="gradle_used_by_scope" value="main,test"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry sourcepath="/Users/rayyan/.gradle/caches/modules-2/files-2.1/org.slf4j/slf4j-api/1.8.0-beta4/b36a694fefcf7c2a274765143dc63e86389b33d1/slf4j-api-1.8.0-beta4-sources.jar" kind="lib" path="/Users/rayyan/.gradle/caches/modules-2/files-2.1/org.slf4j/slf4j-api/1.8.0-beta4/83b0359d847ee053d745be7ec0d8e9e8a44304b4/slf4j-api-1.8.0-beta4.jar">
+		<attributes>
+			<attribute name="gradle_used_by_scope" value="main,test"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry sourcepath="/Users/rayyan/.gradle/caches/modules-2/files-2.1/org.apache.logging.log4j/log4j-slf4j18-impl/2.17.0/8440a408e5fae9e742a2f2d8126f05fde058e9f2/log4j-slf4j18-impl-2.17.0-sources.jar" kind="lib" path="/Users/rayyan/.gradle/caches/modules-2/files-2.1/org.apache.logging.log4j/log4j-slf4j18-impl/2.17.0/bd7f6c0b9224dd214afb4e684957e2349b529a8d/log4j-slf4j18-impl-2.17.0.jar">
+		<attributes>
+			<attribute name="gradle_used_by_scope" value="main,test"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry sourcepath="/Users/rayyan/.gradle/caches/modules-2/files-2.1/com.ibm.icu/icu4j/70.1/21551c094193ab59d284b434c1e33a3ddf4b5c0e/icu4j-70.1-sources.jar" kind="lib" path="/Users/rayyan/.gradle/caches/modules-2/files-2.1/com.ibm.icu/icu4j/70.1/dfa3a1fbc55bf5db8c6e79fc0935ac7ab1202950/icu4j-70.1.jar">
+		<attributes>
+			<attribute name="gradle_used_by_scope" value="main,test"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry sourcepath="/Users/rayyan/.gradle/caches/modules-2/files-2.1/com.mojang/javabridge/1.2.24/a9ca59eebc32c5c771075df31a0b6e31d2ed8565/javabridge-1.2.24-sources.jar" kind="lib" path="/Users/rayyan/.gradle/caches/modules-2/files-2.1/com.mojang/javabridge/1.2.24/c876796229b2ef5120f186eab5acc870699d3b9/javabridge-1.2.24.jar">
+		<attributes>
+			<attribute name="gradle_used_by_scope" value="main,test"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry sourcepath="/Users/rayyan/.gradle/caches/modules-2/files-2.1/net.sf.jopt-simple/jopt-simple/5.0.4/950831646d014c9162999019a3cb17d5fc01ac0d/jopt-simple-5.0.4-sources.jar" kind="lib" path="/Users/rayyan/.gradle/caches/modules-2/files-2.1/net.sf.jopt-simple/jopt-simple/5.0.4/4fdac2fbe92dfad86aa6e9301736f6b4342a3f5c/jopt-simple-5.0.4.jar">
+		<attributes>
+			<attribute name="gradle_used_by_scope" value="main,test"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry sourcepath="/Users/rayyan/.gradle/caches/modules-2/files-2.1/io.netty/netty-all/4.1.68.Final/7c1ff8896c8a6718848c5ba36a919672ac13d10f/netty-all-4.1.68.Final-sources.jar" kind="lib" path="/Users/rayyan/.gradle/caches/modules-2/files-2.1/io.netty/netty-all/4.1.68.Final/b8266a3c93c1c051109f71d3449e5dcd5d60b333/netty-all-4.1.68.Final.jar">
+		<attributes>
+			<attribute name="gradle_used_by_scope" value="main,test"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry sourcepath="/Users/rayyan/.gradle/caches/modules-2/files-2.1/com.google.guava/failureaccess/1.0.1/1d064e61aad6c51cc77f9b59dc2cccc78e792f5a/failureaccess-1.0.1-sources.jar" kind="lib" path="/Users/rayyan/.gradle/caches/modules-2/files-2.1/com.google.guava/failureaccess/1.0.1/1dcf1de382a0bf95a3d8b0849546c88bac1292c9/failureaccess-1.0.1.jar">
+		<attributes>
+			<attribute name="gradle_used_by_scope" value="main,test"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry sourcepath="/Users/rayyan/.gradle/caches/modules-2/files-2.1/com.google.guava/guava/31.0.1-jre/d34772c01bd6637982d1aafe895c4fcd8b42e139/guava-31.0.1-jre-sources.jar" kind="lib" path="/Users/rayyan/.gradle/caches/modules-2/files-2.1/com.google.guava/guava/31.0.1-jre/119ea2b2bc205b138974d351777b20f02b92704b/guava-31.0.1-jre.jar">
+		<attributes>
+			<attribute name="gradle_used_by_scope" value="main,test"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry sourcepath="/Users/rayyan/.gradle/caches/modules-2/files-2.1/org.apache.commons/commons-lang3/3.12.0/198b882fdc2c72c89c63401d946f6ba46c3acea3/commons-lang3-3.12.0-sources.jar" kind="lib" path="/Users/rayyan/.gradle/caches/modules-2/files-2.1/org.apache.commons/commons-lang3/3.12.0/c6842c86792ff03b9f1d1fe2aab8dc23aa6c6f0e/commons-lang3-3.12.0.jar">
+		<attributes>
+			<attribute name="gradle_used_by_scope" value="main,test"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry sourcepath="/Users/rayyan/.gradle/caches/modules-2/files-2.1/commons-io/commons-io/2.11.0/2ef0187124bbfc7aed3038d4ffdd2241e8992937/commons-io-2.11.0-sources.jar" kind="lib" path="/Users/rayyan/.gradle/caches/modules-2/files-2.1/commons-io/commons-io/2.11.0/a2503f302b11ebde7ebc3df41daebe0e4eea3689/commons-io-2.11.0.jar">
+		<attributes>
+			<attribute name="gradle_used_by_scope" value="main,test"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry sourcepath="/Users/rayyan/.gradle/caches/modules-2/files-2.1/commons-codec/commons-codec/1.15/843bc57fd042051e994846da8167bb7ca677a6d/commons-codec-1.15-sources.jar" kind="lib" path="/Users/rayyan/.gradle/caches/modules-2/files-2.1/commons-codec/commons-codec/1.15/49d94806b6e3dc933dacbd8acb0fdbab8ebd1e5d/commons-codec-1.15.jar">
+		<attributes>
+			<attribute name="gradle_used_by_scope" value="main,test"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry sourcepath="/Users/rayyan/.gradle/caches/modules-2/files-2.1/com.mojang/brigadier/1.0.18/f93ce897789cb28518ebb7a8a6bc3946922bc8b6/brigadier-1.0.18-sources.jar" kind="lib" path="/Users/rayyan/.gradle/caches/modules-2/files-2.1/com.mojang/brigadier/1.0.18/c1ef1234282716483c92183f49bef47b1a89bfa9/brigadier-1.0.18.jar">
+		<attributes>
+			<attribute name="gradle_used_by_scope" value="main,test"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry sourcepath="/Users/rayyan/.gradle/caches/modules-2/files-2.1/com.mojang/datafixerupper/4.1.27/cf91f64dcfa2eaefc3db2663192a3e146a91587a/datafixerupper-4.1.27-sources.jar" kind="lib" path="/Users/rayyan/.gradle/caches/modules-2/files-2.1/com.mojang/datafixerupper/4.1.27/a02c43824ce57c3f7a7d7e744f0d99a040398b5/datafixerupper-4.1.27.jar">
+		<attributes>
+			<attribute name="gradle_used_by_scope" value="main,test"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry sourcepath="/Users/rayyan/.gradle/caches/modules-2/files-2.1/com.google.code.gson/gson/2.8.9/e1167849f172a0b75d6ffe4e4b2f34b9259795bb/gson-2.8.9-sources.jar" kind="lib" path="/Users/rayyan/.gradle/caches/modules-2/files-2.1/com.google.code.gson/gson/2.8.9/8a432c1d6825781e21a02db2e2c33c5fde2833b9/gson-2.8.9.jar">
+		<attributes>
+			<attribute name="gradle_used_by_scope" value="main,test"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry sourcepath="/Users/rayyan/.gradle/caches/modules-2/files-2.1/com.mojang/authlib/3.3.39/95644a2af6fbf79b6fe7018630ab58d29ede08e2/authlib-3.3.39-sources.jar" kind="lib" path="/Users/rayyan/.gradle/caches/modules-2/files-2.1/com.mojang/authlib/3.3.39/289405e70c0917eaeac017f7fba9adb4427baa36/authlib-3.3.39.jar">
+		<attributes>
+			<attribute name="gradle_used_by_scope" value="main,test"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry sourcepath="/Users/rayyan/.gradle/caches/modules-2/files-2.1/org.apache.commons/commons-compress/1.21/b3e0a269baa0d05b02f9b4447be463d25da8c097/commons-compress-1.21-sources.jar" kind="lib" path="/Users/rayyan/.gradle/caches/modules-2/files-2.1/org.apache.commons/commons-compress/1.21/4ec95b60d4e86b5c95a0e919cb172a0af98011ef/commons-compress-1.21.jar">
+		<attributes>
+			<attribute name="gradle_used_by_scope" value="main,test"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry sourcepath="/Users/rayyan/.gradle/caches/modules-2/files-2.1/org.apache.httpcomponents/httpclient/4.5.13/9654e91a61d7662c36be6710ef8e720c0e3f9807/httpclient-4.5.13-sources.jar" kind="lib" path="/Users/rayyan/.gradle/caches/modules-2/files-2.1/org.apache.httpcomponents/httpclient/4.5.13/e5f6cae5ca7ecaac1ec2827a9e2d65ae2869cada/httpclient-4.5.13.jar">
+		<attributes>
+			<attribute name="gradle_used_by_scope" value="main,test"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry sourcepath="/Users/rayyan/.gradle/caches/modules-2/files-2.1/commons-logging/commons-logging/1.2/ecf26c7507d67782a3bbd148d170b31dfad001aa/commons-logging-1.2-sources.jar" kind="lib" path="/Users/rayyan/.gradle/caches/modules-2/files-2.1/commons-logging/commons-logging/1.2/4bfc12adfe4842bf07b657f0369c4cb522955686/commons-logging-1.2.jar">
+		<attributes>
+			<attribute name="gradle_used_by_scope" value="main,test"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry sourcepath="/Users/rayyan/.gradle/caches/modules-2/files-2.1/org.apache.httpcomponents/httpcore/4.4.14/9d3e55f73fedca10282469031cf6bc3a69e36711/httpcore-4.4.14-sources.jar" kind="lib" path="/Users/rayyan/.gradle/caches/modules-2/files-2.1/org.apache.httpcomponents/httpcore/4.4.14/9dd1a631c082d92ecd4bd8fd4cf55026c720a8c1/httpcore-4.4.14.jar">
+		<attributes>
+			<attribute name="gradle_used_by_scope" value="main,test"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry sourcepath="/Users/rayyan/.gradle/caches/modules-2/files-2.1/it.unimi.dsi/fastutil/8.5.6/cae16d296ddc343bfb4e20ef67fbcef07fca40e/fastutil-8.5.6-sources.jar" kind="lib" path="/Users/rayyan/.gradle/caches/modules-2/files-2.1/it.unimi.dsi/fastutil/8.5.6/76f95700418a68fbc4ac050525261f05dc681ca1/fastutil-8.5.6.jar">
+		<attributes>
+			<attribute name="gradle_used_by_scope" value="main,test"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry sourcepath="/Users/rayyan/.gradle/caches/modules-2/files-2.1/org.apache.logging.log4j/log4j-api/2.17.0/9082ee1815f0c0052e8b981159ec836cc45487cd/log4j-api-2.17.0-sources.jar" kind="lib" path="/Users/rayyan/.gradle/caches/modules-2/files-2.1/org.apache.logging.log4j/log4j-api/2.17.0/bbd791e9c8c9421e45337c4fe0a10851c086e36c/log4j-api-2.17.0.jar">
+		<attributes>
+			<attribute name="gradle_used_by_scope" value="main,test"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry sourcepath="/Users/rayyan/.gradle/caches/modules-2/files-2.1/org.apache.logging.log4j/log4j-core/2.17.0/293933e165c0f05a9c2b5a65c19d7462bf630b5/log4j-core-2.17.0-sources.jar" kind="lib" path="/Users/rayyan/.gradle/caches/modules-2/files-2.1/org.apache.logging.log4j/log4j-core/2.17.0/fe6e7a32c1228884b9691a744f953a55d0dd8ead/log4j-core-2.17.0.jar">
+		<attributes>
+			<attribute name="gradle_used_by_scope" value="main,test"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry sourcepath="/Users/rayyan/.gradle/caches/modules-2/files-2.1/org.lwjgl/lwjgl/3.2.1/106f90ac41449004a969309488aa6e3a2f7d6731/lwjgl-3.2.1-sources.jar" kind="lib" path="/Users/rayyan/.gradle/caches/modules-2/files-2.1/org.lwjgl/lwjgl/3.2.1/2bb514e444994c6fece99a21f76e0c90438e377f/lwjgl-3.2.1.jar">
+		<attributes>
+			<attribute name="gradle_used_by_scope" value=""/>
+		</attributes>
+	</classpathentry>
+	<classpathentry sourcepath="/Users/rayyan/.gradle/caches/modules-2/files-2.1/org.lwjgl/lwjgl-jemalloc/3.2.1/4450dca46228c02c51bb9bbda70e7cfc3154296d/lwjgl-jemalloc-3.2.1-sources.jar" kind="lib" path="/Users/rayyan/.gradle/caches/modules-2/files-2.1/org.lwjgl/lwjgl-jemalloc/3.2.1/7a0c583fcbec32b15784f846df536e1837d83666/lwjgl-jemalloc-3.2.1.jar">
+		<attributes>
+			<attribute name="gradle_used_by_scope" value=""/>
+		</attributes>
+	</classpathentry>
+	<classpathentry sourcepath="/Users/rayyan/.gradle/caches/modules-2/files-2.1/org.lwjgl/lwjgl-openal/3.2.1/8fe3d6e6353685164b1eb3a22980aaa1115d4a32/lwjgl-openal-3.2.1-sources.jar" kind="lib" path="/Users/rayyan/.gradle/caches/modules-2/files-2.1/org.lwjgl/lwjgl-openal/3.2.1/dc7ff2dabb40a141ee9bf2e326d9b1b19f3278fb/lwjgl-openal-3.2.1.jar">
+		<attributes>
+			<attribute name="gradle_used_by_scope" value=""/>
+		</attributes>
+	</classpathentry>
+	<classpathentry sourcepath="/Users/rayyan/.gradle/caches/modules-2/files-2.1/org.lwjgl/lwjgl-opengl/3.2.1/47930ffbef53c0f45c7e35c01b1c6ad5b2205809/lwjgl-opengl-3.2.1-sources.jar" kind="lib" path="/Users/rayyan/.gradle/caches/modules-2/files-2.1/org.lwjgl/lwjgl-opengl/3.2.1/57008c2374c5bc434b18adfef3f3653ee450ee18/lwjgl-opengl-3.2.1.jar">
+		<attributes>
+			<attribute name="gradle_used_by_scope" value=""/>
+		</attributes>
+	</classpathentry>
+	<classpathentry sourcepath="/Users/rayyan/.gradle/caches/modules-2/files-2.1/org.lwjgl/lwjgl-glfw/3.2.1/4c56ae817da75996b19601c87d7e759b846c3902/lwjgl-glfw-3.2.1-sources.jar" kind="lib" path="/Users/rayyan/.gradle/caches/modules-2/files-2.1/org.lwjgl/lwjgl-glfw/3.2.1/27abb7f64894b61cad163791acd8113f0b21296/lwjgl-glfw-3.2.1.jar">
+		<attributes>
+			<attribute name="gradle_used_by_scope" value=""/>
+		</attributes>
+	</classpathentry>
+	<classpathentry sourcepath="/Users/rayyan/.gradle/caches/modules-2/files-2.1/org.lwjgl/lwjgl-stb/3.2.1/50ac43d4c6ea5846f354f9576134c0f9264345c2/lwjgl-stb-3.2.1-sources.jar" kind="lib" path="/Users/rayyan/.gradle/caches/modules-2/files-2.1/org.lwjgl/lwjgl-stb/3.2.1/31f5eb5fce3791d58ec898bc5c1867d76d781ba1/lwjgl-stb-3.2.1.jar">
+		<attributes>
+			<attribute name="gradle_used_by_scope" value=""/>
+		</attributes>
+	</classpathentry>
+	<classpathentry sourcepath="/Users/rayyan/.gradle/caches/modules-2/files-2.1/org.lwjgl/lwjgl-tinyfd/3.2.1/c375699fd794c4c87d935e0f9a84e7d80d0de77e/lwjgl-tinyfd-3.2.1-sources.jar" kind="lib" path="/Users/rayyan/.gradle/caches/modules-2/files-2.1/org.lwjgl/lwjgl-tinyfd/3.2.1/259f1dbddb921e27e01b32458d6f584eb8bba13a/lwjgl-tinyfd-3.2.1.jar">
+		<attributes>
+			<attribute name="gradle_used_by_scope" value=""/>
+		</attributes>
+	</classpathentry>
+	<classpathentry sourcepath="/Users/rayyan/.gradle/caches/modules-2/files-2.1/com.mojang/text2speech/1.12.4/2c08f3a985dfc7f86dcd705a360e5e1a13eac068/text2speech-1.12.4-sources.jar" kind="lib" path="/Users/rayyan/.gradle/caches/modules-2/files-2.1/com.mojang/text2speech/1.12.4/1f618f522dbdd93218c270bcfd8f8dd84be31717/text2speech-1.12.4.jar">
+		<attributes>
+			<attribute name="gradle_used_by_scope" value="main,test"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry sourcepath="/Users/rayyan/.gradle/caches/modules-2/files-2.1/ca.weblite/java-objc-bridge/1.0.0/865837a198189aee737019561ece842827f24278/java-objc-bridge-1.0.0-sources.jar" kind="lib" path="/Users/rayyan/.gradle/caches/modules-2/files-2.1/ca.weblite/java-objc-bridge/1.0.0/6ef160c3133a78de015830860197602ca1c855d3/java-objc-bridge-1.0.0.jar">
+		<attributes>
+			<attribute name="gradle_used_by_scope" value=""/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="/Users/rayyan/Desktop/cs/dev/core-projects/codejam15/mod/.gradle/loom-cache/minecraftMaven/net/minecraft/minecraft-merged-bf69f4ce1c/1.18.2-loom.mappings.1_18_2.layered+hash.2198-v2/minecraft-merged-bf69f4ce1c-1.18.2-loom.mappings.1_18_2.layered+hash.2198-v2.jar">
+		<attributes>
+			<attribute name="gradle_used_by_scope" value="main,test"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry sourcepath="/Users/rayyan/.gradle/caches/modules-2/files-2.1/net.fabricmc/fabric-loader/0.17.3/834cbba1f4a77673a2fb49a01feafbccb757dd98/fabric-loader-0.17.3-sources.jar" kind="lib" path="/Users/rayyan/.gradle/caches/modules-2/files-2.1/net.fabricmc/fabric-loader/0.17.3/deafaba5de4d9bbd76105783ff4e21ce0773874f/fabric-loader-0.17.3.jar">
+		<attributes>
+			<attribute name="gradle_used_by_scope" value="main,test"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry sourcepath="/Users/rayyan/Desktop/cs/dev/core-projects/codejam15/mod/.gradle/loom-cache/remapped_mods/remapped/net/fabricmc/fabric-api/fabric-api-51aba2bb/0.77.0+1.18.2/fabric-api-51aba2bb-0.77.0+1.18.2-sources.jar" kind="lib" path="/Users/rayyan/Desktop/cs/dev/core-projects/codejam15/mod/.gradle/loom-cache/remapped_mods/remapped/net/fabricmc/fabric-api/fabric-api-51aba2bb/0.77.0+1.18.2/fabric-api-51aba2bb-0.77.0+1.18.2.jar">
+		<attributes>
+			<attribute name="gradle_used_by_scope" value="main,test"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry sourcepath="/Users/rayyan/Desktop/cs/dev/core-projects/codejam15/mod/.gradle/loom-cache/remapped_mods/remapped/net/fabricmc/fabric-api/fabric-transfer-api-v1-51aba2bb/1.6.4+f4563ac860/fabric-transfer-api-v1-51aba2bb-1.6.4+f4563ac860-sources.jar" kind="lib" path="/Users/rayyan/Desktop/cs/dev/core-projects/codejam15/mod/.gradle/loom-cache/remapped_mods/remapped/net/fabricmc/fabric-api/fabric-transfer-api-v1-51aba2bb/1.6.4+f4563ac860/fabric-transfer-api-v1-51aba2bb-1.6.4+f4563ac860.jar">
+		<attributes>
+			<attribute name="gradle_used_by_scope" value="main,test"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry sourcepath="/Users/rayyan/Desktop/cs/dev/core-projects/codejam15/mod/.gradle/loom-cache/remapped_mods/remapped/net/fabricmc/fabric-api/fabric-api-lookup-api-v1-51aba2bb/1.6.3+2373a54560/fabric-api-lookup-api-v1-51aba2bb-1.6.3+2373a54560-sources.jar" kind="lib" path="/Users/rayyan/Desktop/cs/dev/core-projects/codejam15/mod/.gradle/loom-cache/remapped_mods/remapped/net/fabricmc/fabric-api/fabric-api-lookup-api-v1-51aba2bb/1.6.3+2373a54560/fabric-api-lookup-api-v1-51aba2bb-1.6.3+2373a54560.jar">
+		<attributes>
+			<attribute name="gradle_used_by_scope" value="main,test"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry sourcepath="/Users/rayyan/Desktop/cs/dev/core-projects/codejam15/mod/.gradle/loom-cache/remapped_mods/remapped/net/fabricmc/fabric-api/fabric-blockrenderlayer-v1-51aba2bb/1.1.13+3ac43d9560/fabric-blockrenderlayer-v1-51aba2bb-1.1.13+3ac43d9560-sources.jar" kind="lib" path="/Users/rayyan/Desktop/cs/dev/core-projects/codejam15/mod/.gradle/loom-cache/remapped_mods/remapped/net/fabricmc/fabric-api/fabric-blockrenderlayer-v1-51aba2bb/1.1.13+3ac43d9560/fabric-blockrenderlayer-v1-51aba2bb-1.1.13+3ac43d9560.jar">
+		<attributes>
+			<attribute name="gradle_used_by_scope" value="main,test"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry sourcepath="/Users/rayyan/Desktop/cs/dev/core-projects/codejam15/mod/.gradle/loom-cache/remapped_mods/remapped/net/fabricmc/fabric-api/fabric-commands-v0-51aba2bb/0.2.9+b4f4f6cd60/fabric-commands-v0-51aba2bb-0.2.9+b4f4f6cd60-sources.jar" kind="lib" path="/Users/rayyan/Desktop/cs/dev/core-projects/codejam15/mod/.gradle/loom-cache/remapped_mods/remapped/net/fabricmc/fabric-api/fabric-commands-v0-51aba2bb/0.2.9+b4f4f6cd60/fabric-commands-v0-51aba2bb-0.2.9+b4f4f6cd60.jar">
+		<attributes>
+			<attribute name="gradle_used_by_scope" value="main,test"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry sourcepath="/Users/rayyan/Desktop/cs/dev/core-projects/codejam15/mod/.gradle/loom-cache/remapped_mods/remapped/net/fabricmc/fabric-api/fabric-command-api-v1-51aba2bb/1.1.10+d7c144a860/fabric-command-api-v1-51aba2bb-1.1.10+d7c144a860-sources.jar" kind="lib" path="/Users/rayyan/Desktop/cs/dev/core-projects/codejam15/mod/.gradle/loom-cache/remapped_mods/remapped/net/fabricmc/fabric-api/fabric-command-api-v1-51aba2bb/1.1.10+d7c144a860/fabric-command-api-v1-51aba2bb-1.1.10+d7c144a860.jar">
+		<attributes>
+			<attribute name="gradle_used_by_scope" value="main,test"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry sourcepath="/Users/rayyan/Desktop/cs/dev/core-projects/codejam15/mod/.gradle/loom-cache/remapped_mods/remapped/net/fabricmc/fabric-api/fabric-containers-v0-51aba2bb/0.1.24+d7c144a860/fabric-containers-v0-51aba2bb-0.1.24+d7c144a860-sources.jar" kind="lib" path="/Users/rayyan/Desktop/cs/dev/core-projects/codejam15/mod/.gradle/loom-cache/remapped_mods/remapped/net/fabricmc/fabric-api/fabric-containers-v0-51aba2bb/0.1.24+d7c144a860/fabric-containers-v0-51aba2bb-0.1.24+d7c144a860.jar">
+		<attributes>
+			<attribute name="gradle_used_by_scope" value="main,test"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry sourcepath="/Users/rayyan/Desktop/cs/dev/core-projects/codejam15/mod/.gradle/loom-cache/remapped_mods/remapped/net/fabricmc/fabric-api/fabric-content-registries-v0-51aba2bb/3.1.3+c85f2e3860/fabric-content-registries-v0-51aba2bb-3.1.3+c85f2e3860-sources.jar" kind="lib" path="/Users/rayyan/Desktop/cs/dev/core-projects/codejam15/mod/.gradle/loom-cache/remapped_mods/remapped/net/fabricmc/fabric-api/fabric-content-registries-v0-51aba2bb/3.1.3+c85f2e3860/fabric-content-registries-v0-51aba2bb-3.1.3+c85f2e3860.jar">
+		<attributes>
+			<attribute name="gradle_used_by_scope" value="main,test"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry sourcepath="/Users/rayyan/Desktop/cs/dev/core-projects/codejam15/mod/.gradle/loom-cache/remapped_mods/remapped/net/fabricmc/fabric-api/fabric-convention-tags-v1-51aba2bb/1.1.0+43ce63a460/fabric-convention-tags-v1-51aba2bb-1.1.0+43ce63a460-sources.jar" kind="lib" path="/Users/rayyan/Desktop/cs/dev/core-projects/codejam15/mod/.gradle/loom-cache/remapped_mods/remapped/net/fabricmc/fabric-api/fabric-convention-tags-v1-51aba2bb/1.1.0+43ce63a460/fabric-convention-tags-v1-51aba2bb-1.1.0+43ce63a460.jar">
+		<attributes>
+			<attribute name="gradle_used_by_scope" value="main,test"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry sourcepath="/Users/rayyan/Desktop/cs/dev/core-projects/codejam15/mod/.gradle/loom-cache/remapped_mods/remapped/net/fabricmc/fabric-api/fabric-data-generation-api-v1-51aba2bb/3.1.0+6c70b68e60/fabric-data-generation-api-v1-51aba2bb-3.1.0+6c70b68e60-sources.jar" kind="lib" path="/Users/rayyan/Desktop/cs/dev/core-projects/codejam15/mod/.gradle/loom-cache/remapped_mods/remapped/net/fabricmc/fabric-api/fabric-data-generation-api-v1-51aba2bb/3.1.0+6c70b68e60/fabric-data-generation-api-v1-51aba2bb-3.1.0+6c70b68e60.jar">
+		<attributes>
+			<attribute name="gradle_used_by_scope" value="main,test"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry sourcepath="/Users/rayyan/Desktop/cs/dev/core-projects/codejam15/mod/.gradle/loom-cache/remapped_mods/remapped/net/fabricmc/fabric-api/fabric-dimensions-v1-51aba2bb/2.1.21+489d6f8260/fabric-dimensions-v1-51aba2bb-2.1.21+489d6f8260-sources.jar" kind="lib" path="/Users/rayyan/Desktop/cs/dev/core-projects/codejam15/mod/.gradle/loom-cache/remapped_mods/remapped/net/fabricmc/fabric-api/fabric-dimensions-v1-51aba2bb/2.1.21+489d6f8260/fabric-dimensions-v1-51aba2bb-2.1.21+489d6f8260.jar">
+		<attributes>
+			<attribute name="gradle_used_by_scope" value="main,test"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry sourcepath="/Users/rayyan/Desktop/cs/dev/core-projects/codejam15/mod/.gradle/loom-cache/remapped_mods/remapped/net/fabricmc/fabric-api/fabric-entity-events-v1-51aba2bb/1.4.9+d7c144a860/fabric-entity-events-v1-51aba2bb-1.4.9+d7c144a860-sources.jar" kind="lib" path="/Users/rayyan/Desktop/cs/dev/core-projects/codejam15/mod/.gradle/loom-cache/remapped_mods/remapped/net/fabricmc/fabric-api/fabric-entity-events-v1-51aba2bb/1.4.9+d7c144a860/fabric-entity-events-v1-51aba2bb-1.4.9+d7c144a860.jar">
+		<attributes>
+			<attribute name="gradle_used_by_scope" value="main,test"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry sourcepath="/Users/rayyan/Desktop/cs/dev/core-projects/codejam15/mod/.gradle/loom-cache/remapped_mods/remapped/net/fabricmc/fabric-api/fabric-events-interaction-v0-51aba2bb/0.4.20+d7c144a860/fabric-events-interaction-v0-51aba2bb-0.4.20+d7c144a860-sources.jar" kind="lib" path="/Users/rayyan/Desktop/cs/dev/core-projects/codejam15/mod/.gradle/loom-cache/remapped_mods/remapped/net/fabricmc/fabric-api/fabric-events-interaction-v0-51aba2bb/0.4.20+d7c144a860/fabric-events-interaction-v0-51aba2bb-0.4.20+d7c144a860.jar">
+		<attributes>
+			<attribute name="gradle_used_by_scope" value="main,test"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry sourcepath="/Users/rayyan/Desktop/cs/dev/core-projects/codejam15/mod/.gradle/loom-cache/remapped_mods/remapped/net/fabricmc/fabric-api/fabric-events-lifecycle-v0-51aba2bb/0.2.22+d7c144a860/fabric-events-lifecycle-v0-51aba2bb-0.2.22+d7c144a860-sources.jar" kind="lib" path="/Users/rayyan/Desktop/cs/dev/core-projects/codejam15/mod/.gradle/loom-cache/remapped_mods/remapped/net/fabricmc/fabric-api/fabric-events-lifecycle-v0-51aba2bb/0.2.22+d7c144a860/fabric-events-lifecycle-v0-51aba2bb-0.2.22+d7c144a860.jar">
+		<attributes>
+			<attribute name="gradle_used_by_scope" value="main,test"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry sourcepath="/Users/rayyan/Desktop/cs/dev/core-projects/codejam15/mod/.gradle/loom-cache/remapped_mods/remapped/net/fabricmc/fabric-api/fabric-gametest-api-v1-51aba2bb/1.0.21+91b7aa6660/fabric-gametest-api-v1-51aba2bb-1.0.21+91b7aa6660-sources.jar" kind="lib" path="/Users/rayyan/Desktop/cs/dev/core-projects/codejam15/mod/.gradle/loom-cache/remapped_mods/remapped/net/fabricmc/fabric-api/fabric-gametest-api-v1-51aba2bb/1.0.21+91b7aa6660/fabric-gametest-api-v1-51aba2bb-1.0.21+91b7aa6660.jar">
+		<attributes>
+			<attribute name="gradle_used_by_scope" value="main,test"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry sourcepath="/Users/rayyan/Desktop/cs/dev/core-projects/codejam15/mod/.gradle/loom-cache/remapped_mods/remapped/net/fabricmc/fabric-api/fabric-item-api-v1-51aba2bb/1.6.2+8165403660/fabric-item-api-v1-51aba2bb-1.6.2+8165403660-sources.jar" kind="lib" path="/Users/rayyan/Desktop/cs/dev/core-projects/codejam15/mod/.gradle/loom-cache/remapped_mods/remapped/net/fabricmc/fabric-api/fabric-item-api-v1-51aba2bb/1.6.2+8165403660/fabric-item-api-v1-51aba2bb-1.6.2+8165403660.jar">
+		<attributes>
+			<attribute name="gradle_used_by_scope" value="main,test"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry sourcepath="/Users/rayyan/Desktop/cs/dev/core-projects/codejam15/mod/.gradle/loom-cache/remapped_mods/remapped/net/fabricmc/fabric-api/fabric-item-groups-v0-51aba2bb/0.3.16+91896a4960/fabric-item-groups-v0-51aba2bb-0.3.16+91896a4960-sources.jar" kind="lib" path="/Users/rayyan/Desktop/cs/dev/core-projects/codejam15/mod/.gradle/loom-cache/remapped_mods/remapped/net/fabricmc/fabric-api/fabric-item-groups-v0-51aba2bb/0.3.16+91896a4960/fabric-item-groups-v0-51aba2bb-0.3.16+91896a4960.jar">
+		<attributes>
+			<attribute name="gradle_used_by_scope" value="main,test"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry sourcepath="/Users/rayyan/Desktop/cs/dev/core-projects/codejam15/mod/.gradle/loom-cache/remapped_mods/remapped/net/fabricmc/fabric-api/fabric-mining-level-api-v1-51aba2bb/2.1.6+cc71601c60/fabric-mining-level-api-v1-51aba2bb-2.1.6+cc71601c60-sources.jar" kind="lib" path="/Users/rayyan/Desktop/cs/dev/core-projects/codejam15/mod/.gradle/loom-cache/remapped_mods/remapped/net/fabricmc/fabric-api/fabric-mining-level-api-v1-51aba2bb/2.1.6+cc71601c60/fabric-mining-level-api-v1-51aba2bb-2.1.6+cc71601c60.jar">
+		<attributes>
+			<attribute name="gradle_used_by_scope" value="main,test"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry sourcepath="/Users/rayyan/Desktop/cs/dev/core-projects/codejam15/mod/.gradle/loom-cache/remapped_mods/remapped/net/fabricmc/fabric-api/fabric-lifecycle-events-v1-51aba2bb/2.1.1+cc71601c60/fabric-lifecycle-events-v1-51aba2bb-2.1.1+cc71601c60-sources.jar" kind="lib" path="/Users/rayyan/Desktop/cs/dev/core-projects/codejam15/mod/.gradle/loom-cache/remapped_mods/remapped/net/fabricmc/fabric-api/fabric-lifecycle-events-v1-51aba2bb/2.1.1+cc71601c60/fabric-lifecycle-events-v1-51aba2bb-2.1.1+cc71601c60.jar">
+		<attributes>
+			<attribute name="gradle_used_by_scope" value="main,test"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry sourcepath="/Users/rayyan/Desktop/cs/dev/core-projects/codejam15/mod/.gradle/loom-cache/remapped_mods/remapped/net/fabricmc/fabric-api/fabric-loot-tables-v1-51aba2bb/1.1.4+e747827960/fabric-loot-tables-v1-51aba2bb-1.1.4+e747827960-sources.jar" kind="lib" path="/Users/rayyan/Desktop/cs/dev/core-projects/codejam15/mod/.gradle/loom-cache/remapped_mods/remapped/net/fabricmc/fabric-api/fabric-loot-tables-v1-51aba2bb/1.1.4+e747827960/fabric-loot-tables-v1-51aba2bb-1.1.4+e747827960.jar">
+		<attributes>
+			<attribute name="gradle_used_by_scope" value="main,test"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry sourcepath="/Users/rayyan/Desktop/cs/dev/core-projects/codejam15/mod/.gradle/loom-cache/remapped_mods/remapped/net/fabricmc/fabric-api/fabric-loot-api-v2-51aba2bb/1.1.2+1997ad1260/fabric-loot-api-v2-51aba2bb-1.1.2+1997ad1260-sources.jar" kind="lib" path="/Users/rayyan/Desktop/cs/dev/core-projects/codejam15/mod/.gradle/loom-cache/remapped_mods/remapped/net/fabricmc/fabric-api/fabric-loot-api-v2-51aba2bb/1.1.2+1997ad1260/fabric-loot-api-v2-51aba2bb-1.1.2+1997ad1260.jar">
+		<attributes>
+			<attribute name="gradle_used_by_scope" value="main,test"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry sourcepath="/Users/rayyan/Desktop/cs/dev/core-projects/codejam15/mod/.gradle/loom-cache/remapped_mods/remapped/net/fabricmc/fabric-api/fabric-models-v0-51aba2bb/0.3.7+d7c144a860/fabric-models-v0-51aba2bb-0.3.7+d7c144a860-sources.jar" kind="lib" path="/Users/rayyan/Desktop/cs/dev/core-projects/codejam15/mod/.gradle/loom-cache/remapped_mods/remapped/net/fabricmc/fabric-api/fabric-models-v0-51aba2bb/0.3.7+d7c144a860/fabric-models-v0-51aba2bb-0.3.7+d7c144a860.jar">
+		<attributes>
+			<attribute name="gradle_used_by_scope" value="main,test"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry sourcepath="/Users/rayyan/Desktop/cs/dev/core-projects/codejam15/mod/.gradle/loom-cache/remapped_mods/remapped/net/fabricmc/fabric-api/fabric-networking-v0-51aba2bb/0.3.11+b4f4f6cd60/fabric-networking-v0-51aba2bb-0.3.11+b4f4f6cd60-sources.jar" kind="lib" path="/Users/rayyan/Desktop/cs/dev/core-projects/codejam15/mod/.gradle/loom-cache/remapped_mods/remapped/net/fabricmc/fabric-api/fabric-networking-v0-51aba2bb/0.3.11+b4f4f6cd60/fabric-networking-v0-51aba2bb-0.3.11+b4f4f6cd60.jar">
+		<attributes>
+			<attribute name="gradle_used_by_scope" value="main,test"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry sourcepath="/Users/rayyan/Desktop/cs/dev/core-projects/codejam15/mod/.gradle/loom-cache/remapped_mods/remapped/net/fabricmc/fabric-api/fabric-registry-sync-v0-51aba2bb/0.9.12+bb2e047760/fabric-registry-sync-v0-51aba2bb-0.9.12+bb2e047760-sources.jar" kind="lib" path="/Users/rayyan/Desktop/cs/dev/core-projects/codejam15/mod/.gradle/loom-cache/remapped_mods/remapped/net/fabricmc/fabric-api/fabric-registry-sync-v0-51aba2bb/0.9.12+bb2e047760/fabric-registry-sync-v0-51aba2bb-0.9.12+bb2e047760.jar">
+		<attributes>
+			<attribute name="gradle_used_by_scope" value="main,test"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry sourcepath="/Users/rayyan/Desktop/cs/dev/core-projects/codejam15/mod/.gradle/loom-cache/remapped_mods/remapped/net/fabricmc/fabric-api/fabric-screen-handler-api-v1-51aba2bb/1.2.3+1f6558e860/fabric-screen-handler-api-v1-51aba2bb-1.2.3+1f6558e860-sources.jar" kind="lib" path="/Users/rayyan/Desktop/cs/dev/core-projects/codejam15/mod/.gradle/loom-cache/remapped_mods/remapped/net/fabricmc/fabric-api/fabric-screen-handler-api-v1-51aba2bb/1.2.3+1f6558e860/fabric-screen-handler-api-v1-51aba2bb-1.2.3+1f6558e860.jar">
+		<attributes>
+			<attribute name="gradle_used_by_scope" value="main,test"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry sourcepath="/Users/rayyan/Desktop/cs/dev/core-projects/codejam15/mod/.gradle/loom-cache/remapped_mods/remapped/net/fabricmc/fabric-api/fabric-networking-api-v1-51aba2bb/1.0.24+2d30af4b60/fabric-networking-api-v1-51aba2bb-1.0.24+2d30af4b60-sources.jar" kind="lib" path="/Users/rayyan/Desktop/cs/dev/core-projects/codejam15/mod/.gradle/loom-cache/remapped_mods/remapped/net/fabricmc/fabric-api/fabric-networking-api-v1-51aba2bb/1.0.24+2d30af4b60/fabric-networking-api-v1-51aba2bb-1.0.24+2d30af4b60.jar">
+		<attributes>
+			<attribute name="gradle_used_by_scope" value="main,test"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry sourcepath="/Users/rayyan/Desktop/cs/dev/core-projects/codejam15/mod/.gradle/loom-cache/remapped_mods/remapped/net/fabricmc/fabric-api/fabric-object-builder-api-v1-51aba2bb/2.1.5+032c981d60/fabric-object-builder-api-v1-51aba2bb-2.1.5+032c981d60-sources.jar" kind="lib" path="/Users/rayyan/Desktop/cs/dev/core-projects/codejam15/mod/.gradle/loom-cache/remapped_mods/remapped/net/fabricmc/fabric-api/fabric-object-builder-api-v1-51aba2bb/2.1.5+032c981d60/fabric-object-builder-api-v1-51aba2bb-2.1.5+032c981d60.jar">
+		<attributes>
+			<attribute name="gradle_used_by_scope" value="main,test"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry sourcepath="/Users/rayyan/Desktop/cs/dev/core-projects/codejam15/mod/.gradle/loom-cache/remapped_mods/remapped/net/fabricmc/fabric-api/fabric-particles-v1-51aba2bb/0.2.13+526dc1ac60/fabric-particles-v1-51aba2bb-0.2.13+526dc1ac60-sources.jar" kind="lib" path="/Users/rayyan/Desktop/cs/dev/core-projects/codejam15/mod/.gradle/loom-cache/remapped_mods/remapped/net/fabricmc/fabric-api/fabric-particles-v1-51aba2bb/0.2.13+526dc1ac60/fabric-particles-v1-51aba2bb-0.2.13+526dc1ac60.jar">
+		<attributes>
+			<attribute name="gradle_used_by_scope" value="main,test"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry sourcepath="/Users/rayyan/Desktop/cs/dev/core-projects/codejam15/mod/.gradle/loom-cache/remapped_mods/remapped/net/fabricmc/fabric-api/fabric-renderer-indigo-51aba2bb/0.6.1+03e2b68760/fabric-renderer-indigo-51aba2bb-0.6.1+03e2b68760-sources.jar" kind="lib" path="/Users/rayyan/Desktop/cs/dev/core-projects/codejam15/mod/.gradle/loom-cache/remapped_mods/remapped/net/fabricmc/fabric-api/fabric-renderer-indigo-51aba2bb/0.6.1+03e2b68760/fabric-renderer-indigo-51aba2bb-0.6.1+03e2b68760.jar">
+		<attributes>
+			<attribute name="gradle_used_by_scope" value="main,test"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry sourcepath="/Users/rayyan/Desktop/cs/dev/core-projects/codejam15/mod/.gradle/loom-cache/remapped_mods/remapped/net/fabricmc/fabric-api/fabric-renderer-api-v1-51aba2bb/0.5.0+bf48649860/fabric-renderer-api-v1-51aba2bb-0.5.0+bf48649860-sources.jar" kind="lib" path="/Users/rayyan/Desktop/cs/dev/core-projects/codejam15/mod/.gradle/loom-cache/remapped_mods/remapped/net/fabricmc/fabric-api/fabric-renderer-api-v1-51aba2bb/0.5.0+bf48649860/fabric-renderer-api-v1-51aba2bb-0.5.0+bf48649860.jar">
+		<attributes>
+			<attribute name="gradle_used_by_scope" value="main,test"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry sourcepath="/Users/rayyan/Desktop/cs/dev/core-projects/codejam15/mod/.gradle/loom-cache/remapped_mods/remapped/net/fabricmc/fabric-api/fabric-renderer-registries-v1-51aba2bb/3.2.13+b4f4f6cd60/fabric-renderer-registries-v1-51aba2bb-3.2.13+b4f4f6cd60-sources.jar" kind="lib" path="/Users/rayyan/Desktop/cs/dev/core-projects/codejam15/mod/.gradle/loom-cache/remapped_mods/remapped/net/fabricmc/fabric-api/fabric-renderer-registries-v1-51aba2bb/3.2.13+b4f4f6cd60/fabric-renderer-registries-v1-51aba2bb-3.2.13+b4f4f6cd60.jar">
+		<attributes>
+			<attribute name="gradle_used_by_scope" value="main,test"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry sourcepath="/Users/rayyan/Desktop/cs/dev/core-projects/codejam15/mod/.gradle/loom-cache/remapped_mods/remapped/net/fabricmc/fabric-api/fabric-rendering-data-attachment-v1-51aba2bb/0.3.9+ee3621fc60/fabric-rendering-data-attachment-v1-51aba2bb-0.3.9+ee3621fc60-sources.jar" kind="lib" path="/Users/rayyan/Desktop/cs/dev/core-projects/codejam15/mod/.gradle/loom-cache/remapped_mods/remapped/net/fabricmc/fabric-api/fabric-rendering-data-attachment-v1-51aba2bb/0.3.9+ee3621fc60/fabric-rendering-data-attachment-v1-51aba2bb-0.3.9+ee3621fc60.jar">
+		<attributes>
+			<attribute name="gradle_used_by_scope" value="main,test"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry sourcepath="/Users/rayyan/Desktop/cs/dev/core-projects/codejam15/mod/.gradle/loom-cache/remapped_mods/remapped/net/fabricmc/fabric-api/fabric-rendering-fluids-v1-51aba2bb/2.0.3+54e5b2ec60/fabric-rendering-fluids-v1-51aba2bb-2.0.3+54e5b2ec60-sources.jar" kind="lib" path="/Users/rayyan/Desktop/cs/dev/core-projects/codejam15/mod/.gradle/loom-cache/remapped_mods/remapped/net/fabricmc/fabric-api/fabric-rendering-fluids-v1-51aba2bb/2.0.3+54e5b2ec60/fabric-rendering-fluids-v1-51aba2bb-2.0.3+54e5b2ec60.jar">
+		<attributes>
+			<attribute name="gradle_used_by_scope" value="main,test"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry sourcepath="/Users/rayyan/Desktop/cs/dev/core-projects/codejam15/mod/.gradle/loom-cache/remapped_mods/remapped/net/fabricmc/fabric-api/fabric-rendering-v0-51aba2bb/1.1.15+b4f4f6cd60/fabric-rendering-v0-51aba2bb-1.1.15+b4f4f6cd60-sources.jar" kind="lib" path="/Users/rayyan/Desktop/cs/dev/core-projects/codejam15/mod/.gradle/loom-cache/remapped_mods/remapped/net/fabricmc/fabric-api/fabric-rendering-v0-51aba2bb/1.1.15+b4f4f6cd60/fabric-rendering-v0-51aba2bb-1.1.15+b4f4f6cd60.jar">
+		<attributes>
+			<attribute name="gradle_used_by_scope" value="main,test"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry sourcepath="/Users/rayyan/Desktop/cs/dev/core-projects/codejam15/mod/.gradle/loom-cache/remapped_mods/remapped/net/fabricmc/fabric-api/fabric-rendering-v1-51aba2bb/1.11.0+b7f3cf3460/fabric-rendering-v1-51aba2bb-1.11.0+b7f3cf3460-sources.jar" kind="lib" path="/Users/rayyan/Desktop/cs/dev/core-projects/codejam15/mod/.gradle/loom-cache/remapped_mods/remapped/net/fabricmc/fabric-api/fabric-rendering-v1-51aba2bb/1.11.0+b7f3cf3460/fabric-rendering-v1-51aba2bb-1.11.0+b7f3cf3460.jar">
+		<attributes>
+			<attribute name="gradle_used_by_scope" value="main,test"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry sourcepath="/Users/rayyan/Desktop/cs/dev/core-projects/codejam15/mod/.gradle/loom-cache/remapped_mods/remapped/net/fabricmc/fabric-api/fabric-screen-api-v1-51aba2bb/1.0.11+d882b91560/fabric-screen-api-v1-51aba2bb-1.0.11+d882b91560-sources.jar" kind="lib" path="/Users/rayyan/Desktop/cs/dev/core-projects/codejam15/mod/.gradle/loom-cache/remapped_mods/remapped/net/fabricmc/fabric-api/fabric-screen-api-v1-51aba2bb/1.0.11+d882b91560/fabric-screen-api-v1-51aba2bb-1.0.11+d882b91560.jar">
+		<attributes>
+			<attribute name="gradle_used_by_scope" value="main,test"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry sourcepath="/Users/rayyan/Desktop/cs/dev/core-projects/codejam15/mod/.gradle/loom-cache/remapped_mods/remapped/net/fabricmc/fabric-api/fabric-textures-v0-51aba2bb/1.0.13+3ac43d9560/fabric-textures-v0-51aba2bb-1.0.13+3ac43d9560-sources.jar" kind="lib" path="/Users/rayyan/Desktop/cs/dev/core-projects/codejam15/mod/.gradle/loom-cache/remapped_mods/remapped/net/fabricmc/fabric-api/fabric-textures-v0-51aba2bb/1.0.13+3ac43d9560/fabric-textures-v0-51aba2bb-1.0.13+3ac43d9560.jar">
+		<attributes>
+			<attribute name="gradle_used_by_scope" value="main,test"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry sourcepath="/Users/rayyan/Desktop/cs/dev/core-projects/codejam15/mod/.gradle/loom-cache/remapped_mods/remapped/net/fabricmc/fabric-api/fabric-api-base-51aba2bb/0.4.5+64b7c69360/fabric-api-base-51aba2bb-0.4.5+64b7c69360-sources.jar" kind="lib" path="/Users/rayyan/Desktop/cs/dev/core-projects/codejam15/mod/.gradle/loom-cache/remapped_mods/remapped/net/fabricmc/fabric-api/fabric-api-base-51aba2bb/0.4.5+64b7c69360/fabric-api-base-51aba2bb-0.4.5+64b7c69360.jar">
+		<attributes>
+			<attribute name="gradle_used_by_scope" value="main,test"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry sourcepath="/Users/rayyan/Desktop/cs/dev/core-projects/codejam15/mod/.gradle/loom-cache/remapped_mods/remapped/net/fabricmc/fabric-api/fabric-biome-api-v1-51aba2bb/8.0.7+e83becad60/fabric-biome-api-v1-51aba2bb-8.0.7+e83becad60-sources.jar" kind="lib" path="/Users/rayyan/Desktop/cs/dev/core-projects/codejam15/mod/.gradle/loom-cache/remapped_mods/remapped/net/fabricmc/fabric-api/fabric-biome-api-v1-51aba2bb/8.0.7+e83becad60/fabric-biome-api-v1-51aba2bb-8.0.7+e83becad60.jar">
+		<attributes>
+			<attribute name="gradle_used_by_scope" value="main,test"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry sourcepath="/Users/rayyan/Desktop/cs/dev/core-projects/codejam15/mod/.gradle/loom-cache/remapped_mods/remapped/net/fabricmc/fabric-api/fabric-block-api-v1-51aba2bb/1.0.0+ee3621fc60/fabric-block-api-v1-51aba2bb-1.0.0+ee3621fc60-sources.jar" kind="lib" path="/Users/rayyan/Desktop/cs/dev/core-projects/codejam15/mod/.gradle/loom-cache/remapped_mods/remapped/net/fabricmc/fabric-api/fabric-block-api-v1-51aba2bb/1.0.0+ee3621fc60/fabric-block-api-v1-51aba2bb-1.0.0+ee3621fc60.jar">
+		<attributes>
+			<attribute name="gradle_used_by_scope" value="main,test"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry sourcepath="/Users/rayyan/Desktop/cs/dev/core-projects/codejam15/mod/.gradle/loom-cache/remapped_mods/remapped/net/fabricmc/fabric-api/fabric-crash-report-info-v1-51aba2bb/0.2.1+ee261a3e60/fabric-crash-report-info-v1-51aba2bb-0.2.1+ee261a3e60-sources.jar" kind="lib" path="/Users/rayyan/Desktop/cs/dev/core-projects/codejam15/mod/.gradle/loom-cache/remapped_mods/remapped/net/fabricmc/fabric-api/fabric-crash-report-info-v1-51aba2bb/0.2.1+ee261a3e60/fabric-crash-report-info-v1-51aba2bb-0.2.1+ee261a3e60.jar">
+		<attributes>
+			<attribute name="gradle_used_by_scope" value="main,test"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry sourcepath="/Users/rayyan/Desktop/cs/dev/core-projects/codejam15/mod/.gradle/loom-cache/remapped_mods/remapped/net/fabricmc/fabric-api/fabric-game-rule-api-v1-51aba2bb/1.0.13+d7c144a860/fabric-game-rule-api-v1-51aba2bb-1.0.13+d7c144a860-sources.jar" kind="lib" path="/Users/rayyan/Desktop/cs/dev/core-projects/codejam15/mod/.gradle/loom-cache/remapped_mods/remapped/net/fabricmc/fabric-api/fabric-game-rule-api-v1-51aba2bb/1.0.13+d7c144a860/fabric-game-rule-api-v1-51aba2bb-1.0.13+d7c144a860.jar">
+		<attributes>
+			<attribute name="gradle_used_by_scope" value="main,test"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry sourcepath="/Users/rayyan/Desktop/cs/dev/core-projects/codejam15/mod/.gradle/loom-cache/remapped_mods/remapped/net/fabricmc/fabric-api/fabric-keybindings-v0-51aba2bb/0.2.10+b4f4f6cd60/fabric-keybindings-v0-51aba2bb-0.2.10+b4f4f6cd60-sources.jar" kind="lib" path="/Users/rayyan/Desktop/cs/dev/core-projects/codejam15/mod/.gradle/loom-cache/remapped_mods/remapped/net/fabricmc/fabric-api/fabric-keybindings-v0-51aba2bb/0.2.10+b4f4f6cd60/fabric-keybindings-v0-51aba2bb-0.2.10+b4f4f6cd60.jar">
+		<attributes>
+			<attribute name="gradle_used_by_scope" value="main,test"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry sourcepath="/Users/rayyan/Desktop/cs/dev/core-projects/codejam15/mod/.gradle/loom-cache/remapped_mods/remapped/net/fabricmc/fabric-api/fabric-key-binding-api-v1-51aba2bb/1.0.12+54e5b2ec60/fabric-key-binding-api-v1-51aba2bb-1.0.12+54e5b2ec60-sources.jar" kind="lib" path="/Users/rayyan/Desktop/cs/dev/core-projects/codejam15/mod/.gradle/loom-cache/remapped_mods/remapped/net/fabricmc/fabric-api/fabric-key-binding-api-v1-51aba2bb/1.0.12+54e5b2ec60/fabric-key-binding-api-v1-51aba2bb-1.0.12+54e5b2ec60.jar">
+		<attributes>
+			<attribute name="gradle_used_by_scope" value="main,test"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry sourcepath="/Users/rayyan/Desktop/cs/dev/core-projects/codejam15/mod/.gradle/loom-cache/remapped_mods/remapped/net/fabricmc/fabric-api/fabric-resource-conditions-api-v1-51aba2bb/2.0.3+91b7aa6660/fabric-resource-conditions-api-v1-51aba2bb-2.0.3+91b7aa6660-sources.jar" kind="lib" path="/Users/rayyan/Desktop/cs/dev/core-projects/codejam15/mod/.gradle/loom-cache/remapped_mods/remapped/net/fabricmc/fabric-api/fabric-resource-conditions-api-v1-51aba2bb/2.0.3+91b7aa6660/fabric-resource-conditions-api-v1-51aba2bb-2.0.3+91b7aa6660.jar">
+		<attributes>
+			<attribute name="gradle_used_by_scope" value="main,test"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry sourcepath="/Users/rayyan/Desktop/cs/dev/core-projects/codejam15/mod/.gradle/loom-cache/remapped_mods/remapped/net/fabricmc/fabric-api/fabric-resource-loader-v0-51aba2bb/0.5.3+047a5ecb60/fabric-resource-loader-v0-51aba2bb-0.5.3+047a5ecb60-sources.jar" kind="lib" path="/Users/rayyan/Desktop/cs/dev/core-projects/codejam15/mod/.gradle/loom-cache/remapped_mods/remapped/net/fabricmc/fabric-api/fabric-resource-loader-v0-51aba2bb/0.5.3+047a5ecb60/fabric-resource-loader-v0-51aba2bb-0.5.3+047a5ecb60.jar">
+		<attributes>
+			<attribute name="gradle_used_by_scope" value="main,test"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry sourcepath="/Users/rayyan/Desktop/cs/dev/core-projects/codejam15/mod/.gradle/loom-cache/remapped_mods/remapped/net/fabricmc/fabric-api/fabric-transitive-access-wideners-v1-51aba2bb/1.1.0+e747827960/fabric-transitive-access-wideners-v1-51aba2bb-1.1.0+e747827960-sources.jar" kind="lib" path="/Users/rayyan/Desktop/cs/dev/core-projects/codejam15/mod/.gradle/loom-cache/remapped_mods/remapped/net/fabricmc/fabric-api/fabric-transitive-access-wideners-v1-51aba2bb/1.1.0+e747827960/fabric-transitive-access-wideners-v1-51aba2bb-1.1.0+e747827960.jar">
+		<attributes>
+			<attribute name="gradle_used_by_scope" value="main,test"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="/Users/rayyan/.gradle/caches/modules-2/files-2.1/net.fabricmc/dev-launch-injector/0.2.1+build.8/da8bef7e6e2f952da707f282bdb46882a0fce5e3/dev-launch-injector-0.2.1+build.8.jar">
+		<attributes>
+			<attribute name="gradle_used_by_scope" value="main,test"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry sourcepath="/Users/rayyan/.gradle/caches/modules-2/files-2.1/net.fabricmc/fabric-log4j-util/1.0.2/201d8a3ecff0b60ef3aba97140dde83c22801a36/fabric-log4j-util-1.0.2-sources.jar" kind="lib" path="/Users/rayyan/.gradle/caches/modules-2/files-2.1/net.fabricmc/fabric-log4j-util/1.0.2/ef0b3fb613356feb75a67d54f2fad6f03a006648/fabric-log4j-util-1.0.2.jar">
+		<attributes>
+			<attribute name="gradle_used_by_scope" value="main,test"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry sourcepath="/Users/rayyan/.gradle/caches/modules-2/files-2.1/org.lwjgl/lwjgl/3.3.2/aff949f8180d6d1e26a47c7a2bca8163f5b987fe/lwjgl-3.3.2-sources.jar" kind="lib" path="/Users/rayyan/.gradle/caches/modules-2/files-2.1/org.lwjgl/lwjgl/3.3.2/4421d94af68e35dcaa31737a6fc59136a1e61b94/lwjgl-3.3.2.jar">
+		<attributes>
+			<attribute name="gradle_used_by_scope" value="main,test"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry sourcepath="/Users/rayyan/.gradle/caches/modules-2/files-2.1/org.lwjgl/lwjgl-jemalloc/3.3.2/1d953086a319cfb09d0703e50011849a95ab2277/lwjgl-jemalloc-3.3.2-sources.jar" kind="lib" path="/Users/rayyan/.gradle/caches/modules-2/files-2.1/org.lwjgl/lwjgl-jemalloc/3.3.2/877e17e39ebcd58a9c956dc3b5b777813de0873a/lwjgl-jemalloc-3.3.2.jar">
+		<attributes>
+			<attribute name="gradle_used_by_scope" value="main,test"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry sourcepath="/Users/rayyan/.gradle/caches/modules-2/files-2.1/org.lwjgl/lwjgl-openal/3.3.2/534195bc70b8ff83c270c1d618cdafe76e9be2c4/lwjgl-openal-3.3.2-sources.jar" kind="lib" path="/Users/rayyan/.gradle/caches/modules-2/files-2.1/org.lwjgl/lwjgl-openal/3.3.2/ae5357ed6d934546d3533993ea84c0cfb75eed95/lwjgl-openal-3.3.2.jar">
+		<attributes>
+			<attribute name="gradle_used_by_scope" value="main,test"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry sourcepath="/Users/rayyan/.gradle/caches/modules-2/files-2.1/org.lwjgl/lwjgl-opengl/3.3.2/1301ff0d9814ac96d7020f5912d5f0f72c039fca/lwjgl-opengl-3.3.2-sources.jar" kind="lib" path="/Users/rayyan/.gradle/caches/modules-2/files-2.1/org.lwjgl/lwjgl-opengl/3.3.2/ee8e95be0b438602038bc1f02dc5e3d011b1b216/lwjgl-opengl-3.3.2.jar">
+		<attributes>
+			<attribute name="gradle_used_by_scope" value="main,test"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry sourcepath="/Users/rayyan/.gradle/caches/modules-2/files-2.1/org.lwjgl/lwjgl-glfw/3.3.2/bdd2ae91adb35fd7809b7ecf2d677546b26fe4f/lwjgl-glfw-3.3.2-sources.jar" kind="lib" path="/Users/rayyan/.gradle/caches/modules-2/files-2.1/org.lwjgl/lwjgl-glfw/3.3.2/757920418805fb90bfebb3d46b1d9e7669fca2eb/lwjgl-glfw-3.3.2.jar">
+		<attributes>
+			<attribute name="gradle_used_by_scope" value="main,test"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry sourcepath="/Users/rayyan/.gradle/caches/modules-2/files-2.1/org.lwjgl/lwjgl-stb/3.3.2/dda437f20ae0c920c1c744984b4093889982b994/lwjgl-stb-3.3.2-sources.jar" kind="lib" path="/Users/rayyan/.gradle/caches/modules-2/files-2.1/org.lwjgl/lwjgl-stb/3.3.2/a2550795014d622b686e9caac50b14baa87d2c70/lwjgl-stb-3.3.2.jar">
+		<attributes>
+			<attribute name="gradle_used_by_scope" value="main,test"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry sourcepath="/Users/rayyan/.gradle/caches/modules-2/files-2.1/org.lwjgl/lwjgl-tinyfd/3.3.2/bd33407b8cdbac1161c759656034d283f4708051/lwjgl-tinyfd-3.3.2-sources.jar" kind="lib" path="/Users/rayyan/.gradle/caches/modules-2/files-2.1/org.lwjgl/lwjgl-tinyfd/3.3.2/9f65c248dd77934105274fcf8351abb75b34327c/lwjgl-tinyfd-3.3.2.jar">
+		<attributes>
+			<attribute name="gradle_used_by_scope" value="main,test"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry sourcepath="/Users/rayyan/.gradle/caches/modules-2/files-2.1/ca.weblite/java-objc-bridge/1.1/d2bf7869433d8d152fade87ac898f84b1b876837/java-objc-bridge-1.1-sources.jar" kind="lib" path="/Users/rayyan/.gradle/caches/modules-2/files-2.1/ca.weblite/java-objc-bridge/1.1/1227f9e0666314f9de41477e3ec277e542ed7f7b/java-objc-bridge-1.1.jar">
+		<attributes>
+			<attribute name="gradle_used_by_scope" value="main,test"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry sourcepath="/Users/rayyan/Desktop/cs/dev/core-projects/codejam15/mod/.gradle/loom-cache/remapped_mods/remapped/net/fabricmc/fabric-loom-native-support-51aba2bb/1.0.1/fabric-loom-native-support-51aba2bb-1.0.1-sources.jar" kind="lib" path="/Users/rayyan/Desktop/cs/dev/core-projects/codejam15/mod/.gradle/loom-cache/remapped_mods/remapped/net/fabricmc/fabric-loom-native-support-51aba2bb/1.0.1/fabric-loom-native-support-51aba2bb-1.0.1.jar">
+		<attributes>
+			<attribute name="gradle_used_by_scope" value="main,test"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="/Users/rayyan/.gradle/caches/fabric-loom/1.18.2/loom.mappings.1_18_2.layered+hash.2198-v2/mappings.jar">
+		<attributes>
+			<attribute name="gradle_used_by_scope" value="main,test"/>
+		</attributes>
+	</classpathentry>
+</classpath>

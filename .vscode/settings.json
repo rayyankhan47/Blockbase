@@ -1,0 +1,15 @@
+{
+  "java.configuration.updateBuildConfiguration": "automatic",
+  "java.import.gradle.enabled": true,
+  "java.import.gradle.wrapper.enabled": true,
+  "java.import.gradle.version": "9.1.0",
+  "java.project.sourcePaths": [
+    "mod/src/main/java"
+  ],
+  "java.project.outputPath": "mod/build/classes",
+  "java.project.referencedLibraries": [
+    "mod/build/libs/**/*.jar"
+  ],
+  "java.compile.nullAnalysis.mode": "automatic"
+}
+
