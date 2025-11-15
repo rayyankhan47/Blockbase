@@ -248,14 +248,29 @@ Blockbase is a version control system for Minecraft builds with AI assistance. T
 
 **Deliverable**: Can intercept block rendering
 
-#### 4.3 Overlay Rendering
-- [ ] Implement overlay system (red for removed, green for added)
-- [ ] Use transparent colored boxes or particles
-- [ ] Render overlays only for diff blocks
-- [ ] Toggle diff view: `/blockbase diff <commit1> <commit2>`
-- [ ] Clear diff view: `/blockbase diff clear`
+#### 4.3 Sky Duplicate Diff Rendering
+**Approach**: Create a duplicate build 30 blocks above the original in the sky to visualize changes.
 
-**Deliverable**: Visual diffing with color overlays in-game
+- [ ] Calculate offset position (30 blocks above build)
+- [ ] Place duplicate blocks in sky:
+  - Added blocks: Place with green color overlay/tint
+  - Removed blocks: Place with red color overlay/tint  
+  - Modified blocks: Place with yellow color overlay/tint
+  - Unchanged blocks: Place normally (or skip for performance)
+- [ ] Track which blocks are "diff blocks" (for cleanup)
+- [ ] Implement diff command: `/blockbase diff <commit1> <commit2>`
+  - Default: Compare latest commit to previous commit
+  - Places duplicate build in sky with color overlays
+- [ ] Implement clear command: `/blockbase diff clear`
+  - Removes all diff blocks from sky
+  - Cleans up tracked diff blocks
+
+**Color Overlay Implementation:**
+- Option 1: Use colored glass blocks (stained glass)
+- Option 2: Use Mixin to tint block rendering
+- Option 3: Place colored blocks behind/around diff blocks
+
+**Deliverable**: Visual diffing with sky duplicate showing color-coded changes
 
 ---
 
@@ -363,12 +378,40 @@ Blockbase is a version control system for Minecraft builds with AI assistance. T
 
 ### Mod Development (Java/Fabric)
 
+**What is Fabric?**
+- Fabric is a mod loader for Minecraft (like Forge, but lighter)
+- It provides the framework/APIs we use to interact with Minecraft
+- We write Java code that uses Fabric's APIs
+
+**Development Process:**
+1. **Setup**: Use Fabric's template generator to create mod project structure
+2. **Code**: Write Java classes using Fabric APIs:
+   - Event listeners (block placement, commands, etc.)
+   - Mixins (to modify Minecraft's rendering/behavior)
+   - HTTP clients (to communicate with backend)
+3. **Build**: Gradle compiles Java code into a `.jar` file
+4. **Test**: Place `.jar` in Minecraft's `mods` folder and launch game
+5. **Fabric loads our mod** when Minecraft starts
+
+**Key Technologies:**
+- **Language**: Java 17
+- **Framework**: Fabric Loader + Fabric API
+- **Build Tool**: Gradle
+- **Mixin**: Library for modifying Minecraft code at runtime
+- **Minecraft Version**: 1.18.2
+
+**What We Actually Write:**
+- Java classes extending Fabric's base classes
+- Event handlers (e.g., `BlockPlaceCallback`, `ServerCommandSource`)
+- Mixin classes to hook into rendering
+- HTTP client code (Java's `HttpClient` or library like OkHttp)
+
 **Key Classes:**
 - `BlockbaseMod` - Main mod class
 - `BlockTracker` - Tracks block changes
 - `CommitManager` - Manages commits locally
 - `ApiClient` - HTTP client for backend
-- `DiffRenderer` - Handles visual diffing
+- `DiffRenderer` - Handles sky duplicate diff rendering (places blocks 30 blocks above)
 - `AiContextManager` - Manages block selection for AI
 - `BlockbaseCommands` - Command registration
 
@@ -438,6 +481,47 @@ block_changes (id, commit_id, x, y, z, old_block, new_block)
 - ✅ Can select blocks and ask AI questions
 - ✅ Can create branches and pull requests
 - ✅ Demo-able end-to-end flow
+
+## Future Enhancements (Post-Hackathon)
+
+### Git Pull/Fetch - Live World Updates
+**The Vision:** Pull changes from remote repository directly into your Minecraft world without downloading a new world file.
+
+**Why It's Powerful:**
+- Complete version control workflow (like real Git)
+- Real-time collaboration - teammates' changes appear in your world
+- No more manual world downloads
+- True distributed version control for Minecraft
+
+**How It Would Work:**
+1. Player runs: `/blockbase pull` or `/blockbase fetch`
+2. Mod requests latest commits from backend
+3. Backend returns block changes (added/removed/modified)
+4. Mod applies changes to current world:
+   - Place new blocks at specified positions
+   - Remove blocks that were deleted
+   - Update modified blocks
+5. Handle conflicts (if player has local changes)
+6. Show summary: "Pulled 150 blocks, removed 23 blocks"
+
+**Technical Challenges:**
+- Conflict resolution (local changes vs remote changes)
+- Chunk loading (ensure chunks are loaded before placing blocks)
+- Performance (applying thousands of block changes)
+- Safety checks (don't break player's build accidentally)
+- Undo capability (in case pull goes wrong)
+
+**Implementation Approach:**
+- Store local changes before pulling
+- Apply remote changes in batches
+- Show diff preview before applying
+- Allow selective pulling (specific commits or branches)
+- Create backup before pulling (safety net)
+
+**Demo Impact:** Low (hard to show compellingly in short demo)
+**Real-World Impact:** High (makes it a complete solution)
+
+This feature would truly make Blockbase "Git for Minecraft" - not just tracking changes, but actually syncing worlds.
 
 ## Notes
 
