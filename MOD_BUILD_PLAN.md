@@ -1,5 +1,27 @@
 # Blockbase Mod - Build Plan
 
+## MVP Priority: Core Version Control + Visual Diffing
+
+**Core Features for MVP:**
+1. ✅ **Staging** (`/blockbase stage`) - Select changes to commit
+2. ✅ **Committing** (`/blockbase commit`) - Save snapshots
+3. ✅ **Pushing** (`/blockbase push`) - Upload to remote
+4. ✅ **Resetting** (`/blockbase reset`) - Rollback to previous commit
+5. ✅ **Visual Diffing** (`/blockbase diff`) - 3D diff visualization (THE KILLER FEATURE)
+6. ✅ **AI Agent** (`/blockbase ai`) - AI assistance with block context
+
+**Future Features (Post-MVP):**
+- Branching (can pitch as roadmap)
+- Pull Requests (can pitch as roadmap)
+- Pulling from remote (already decided as future)
+
+**Why This Focus:**
+- 3D diffing is the most useful for redstone engineering (see exactly what changed)
+- Core git operations prove the concept works
+- Reset is essential for fixing mistakes
+- AI adds the "wow" factor
+- Can demo end-to-end workflow without branching complexity
+
 ## Step 1: Mod Setup & Foundation
 
 ### 1.1 Generate Fabric Mod Template
@@ -159,35 +181,22 @@
   - Timestamp
 - [ ] Test: Make multiple commits, run `/blockbase log`
 
----
-
-## Step 5: Branch System
-
-### 5.1 Create Branch Data Structure
-- [ ] Create `Branch` class:
-  - Branch name
-  - Commit ID it points to
-- [ ] Store branches in `.blockbase/branches.json`
-- [ ] Track current branch in repository
-
-### 5.2 Implement Branch Commands
-- [ ] Add `/blockbase branch <name>` - create new branch
-- [ ] Add `/blockbase branch --list` - list all branches
-- [ ] Add `/blockbase checkout <branch>` - switch branch
-- [ ] Update current branch pointer
-- [ ] Test: Create branch, switch branches, verify branch pointer
-
-### 5.3 Handle Branch-Specific Changes
-- [ ] Store commits per branch
-- [ ] Track which branch changes belong to
-- [ ] When switching branches, show branch-specific commits
-- [ ] Test: Make commits on different branches, verify isolation
+### 4.6 Implement Reset Command (Rollback)
+- [ ] Add `/blockbase reset --hard <commitId>` command
+- [ ] Calculate diff: current world state → target commit state
+- [ ] Apply block changes to match target commit:
+  - Remove blocks that don't exist in target
+  - Add blocks that exist in target but not current
+  - Modify blocks that changed
+- [ ] Update HEAD pointer to target commit
+- [ ] Add safety warning if uncommitted changes exist
+- [ ] Test: Make commits, make mistake, reset to previous commit, verify blocks changed
 
 ---
 
-## Step 6: Backend API Communication
+## Step 5: Backend API Communication (MVP: Push Only)
 
-### 6.1 Set Up HTTP Client
+### 5.1 Set Up HTTP Client
 - [ ] Add HTTP client dependency to `build.gradle` (OkHttp or Java HttpClient)
 - [ ] Create `ApiClient` class
 - [ ] Add base URL configuration (config file or command argument)
@@ -197,14 +206,14 @@
   - `POST /api/repos/:id/commits` - create commit
   - `GET /api/repos/:id/commits` - list commits
 
-### 6.2 Implement Repository Creation on Backend
+### 5.2 Implement Repository Creation on Backend
 - [ ] Add `/blockbase remote add <url>` command
 - [ ] Store remote URL in repo config
 - [ ] On init, optionally create repo on backend
 - [ ] Send repository data to backend API
 - [ ] Test: Create repo locally, push to backend
 
-### 6.3 Implement Push Command
+### 5.3 Implement Push Command
 - [ ] Add `/blockbase push` command
 - [ ] Get all local commits not on remote
 - [ ] Send commits to backend API
@@ -212,7 +221,7 @@
 - [ ] Handle errors (network, authentication)
 - [ ] Test: Make commits, push to backend, verify on backend
 
-### 6.4 Add Authentication
+### 5.4 Add Authentication
 - [ ] Add API key configuration
 - [ ] Store API key in config file (`.blockbase/config.json`)
 - [ ] Add API key to HTTP requests (header)
@@ -221,7 +230,7 @@
 
 ---
 
-## Step 7: Visual Diffing - Sky Duplicate
+## Step 7: Visual Diffing - Sky Duplicate (THE KILLER FEATURE)
 
 ### 7.1 Implement Diff Calculation
 - [ ] Create `DiffCalculator` class
@@ -272,7 +281,7 @@
 
 ---
 
-## Step 8: AI Agent Integration
+## Step 8: AI Agent Integration (Differentiating Feature)
 
 ### 8.1 Implement Block Context Selection
 - [ ] Create `AiContextManager` class
@@ -311,31 +320,16 @@
 
 ---
 
-## Step 9: Pull Requests (Basic)
+## Step 9: Future Features (Post-MVP - Can Pitch as Roadmap)
 
-### 9.1 Create PR Data Structure
-- [ ] Create `PullRequest` class:
-  - PR ID
-  - Title
-  - Description
-  - From branch
-  - To branch
-  - Status (open/merged/closed)
-  - List of commit IDs
-- [ ] Store PRs on backend (not in mod)
+### 9.1 Branching System (Future)
+- [ ] Create and switch branches
+- [ ] Track commits per branch
+- [ ] Merge branches
 
-### 9.2 Implement PR Commands
-- [ ] Add `/blockbase pr create <title>` command
-  - Get current branch
-  - Get target branch (default: main)
-  - Send PR data to backend
-- [ ] Add `/blockbase pr list` command
-  - Fetch PRs from backend
-  - Display in chat
-- [ ] Add `/blockbase pr view <id>` command
-  - Fetch PR details
-  - Show diff
-- [ ] Test: Create branch, make changes, create PR
+### 9.2 Pull Requests (Future)
+- [ ] Pull Requests for collaboration
+- [ ] Pulling from remote (sync world with remote)
 
 ---
 
@@ -372,13 +366,19 @@
 **MVP Complete When:**
 - ✅ Can initialize repository
 - ✅ Can track block changes
-- ✅ Can stage, commit, and push changes
-- ✅ Can create and switch branches
-- ✅ Can see visual diffing (sky duplicate with color tints)
-- ✅ Can select blocks and ask AI questions
-- ✅ Can create pull requests
+- ✅ Can stage changes (`/blockbase stage`)
+- ✅ Can commit changes (`/blockbase commit "message"`)
+- ✅ Can push to remote (`/blockbase push`)
+- ✅ Can reset/rollback to previous commit (`/blockbase reset --hard <commit>`)
+- ✅ Can see visual diffing (sky duplicate with color tints) - **THE KILLER FEATURE**
+- ✅ Can select blocks with wooden axe and ask AI questions (`/blockbase ai`)
 - ✅ All commands work without crashes
-- ✅ Demo-able end-to-end flow
+- ✅ Demo-able end-to-end workflow
+
+**Not Required for MVP:**
+- ❌ Branching (can pitch as future roadmap)
+- ❌ Pull Requests (can pitch as future roadmap)
+- ❌ Pulling from remote (already decided as future)
 
 ---
 
