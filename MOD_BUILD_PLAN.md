@@ -35,20 +35,24 @@
 - [ ] Extract ZIP contents to `codejam15/mod/` folder
 - [ ] Verify structure: `mod/src/main/java/com/blockbase/` exists
 
-### 1.2 Open Project in IDE
-- [ ] Open IntelliJ IDEA (or VS Code)
-- [ ] Open the `mod/` folder as a project
-- [ ] If IntelliJ asks to "Import Gradle Project", click Yes
-- [ ] Wait for Gradle sync to complete (downloads dependencies)
-- [ ] Verify: Bottom status bar shows "BUILD SUCCESSFUL"
+### 1.2 Open Project in Cursor IDE
+- [ ] Open Cursor IDE
+- [ ] Install "Extension Pack for Java" (Extensions panel: Cmd+Shift+X)
+- [ ] File → Open Folder → Navigate to `codejam15/mod/`
+- [ ] Cursor will detect Java/Gradle project
+- [ ] Wait for Java language server to install and index
+- [ ] Open integrated terminal: `` Ctrl+` `` (backtick)
+- [ ] Run: `./gradlew build` (to test Gradle works)
+- [ ] Verify: Build completes successfully
 
 ### 1.3 Test Basic Mod Loading
 - [ ] Find `BlockbaseMod.java` in `src/main/java/com/blockbase/`
 - [ ] Verify it has basic structure (mod initialization)
-- [ ] Click Run button (green play icon) or press Shift+F10
+- [ ] In terminal, run: `./gradlew runClient`
 - [ ] Minecraft should launch with mod loaded
 - [ ] Check chat for mod initialization message
 - [ ] **Success criteria**: Mod loads without errors
+- [ ] **Alternative**: Build JAR and copy to `~/.minecraft/mods/` folder
 
 ### 1.4 Understand Project Structure
 - [ ] Review `fabric.mod.json` (mod metadata)

@@ -2,7 +2,16 @@
 
 ## Project Overview
 
-Blockbase is a version control system for Minecraft builds with AI assistance. Think GitHub + Cursor for Minecraft.
+Blockbase is a version control system for **all Minecraft builds** with AI assistance. Think GitHub + Cursor for Minecraft.
+
+**Use Cases:**
+- 🏗️ **Large Builds**: Track changes to massive bases, cities, castles
+- ⚡ **Redstone Engineering**: Version control for complex circuits, CPUs, ALUs
+- 🌾 **Farms & Automation**: Track improvements to automated systems
+- 🎨 **Creative Projects**: Collaborate on artistic builds
+- 🏛️ **Architecture**: Manage complex structural projects
+
+**Redstone Engineering** is one compelling use case that demonstrates the power of version control and visual diffing for complex builds.
 
 ## Priority Order
 
@@ -454,28 +463,37 @@ block_changes (id, commit_id, x, y, z, old_block, new_block)
 
 ## Demo Flow
 
+**Option 1: Redstone Engineering (Complex Use Case)**
 1. **Setup** (30s)
-   - Show existing redstone build
+   - Show existing redstone CPU/ALU build
    - Initialize repository: `/blockbase init`
+   - "This is a complex redstone circuit - perfect for showing version control"
 
 2. **Version Control** (60s)
    - Make changes to build
    - Stage changes: `/blockbase stage`
    - Commit: `/blockbase commit "Added 4-bit adder"`
    - Show visual diff: `/blockbase diff HEAD~1 HEAD`
+   - "See exactly what changed - green for added, red for removed"
    - Push: `/blockbase push`
 
 3. **AI Assistant** (60s)
    - Select blocks with wooden axe
    - Ask AI: `/blockbase ai "explain why this circuit doesn't work"`
    - Show AI response
-   - Ask AI to optimize: `/blockbase ai "optimize this circuit"`
+   - "AI understands your build and can help debug"
 
-4. **Collaboration** (30s)
-   - Create branch: `/blockbase branch feature`
-   - Make changes
-   - Create PR: `/blockbase pr create "New feature"`
-   - Show web interface (if time permits)
+4. **Reset/Rollback** (30s)
+   - "I made a mistake, let me roll back"
+   - `/blockbase reset --hard <previousCommit>`
+   - Show blocks changing back
+
+**Option 2: General Build (Broader Appeal)**
+- Show a large base/castle build
+- Demonstrate same workflow
+- Emphasize: "Works for any Minecraft build - redstone, architecture, farms, anything"
+
+**Key Message**: "Version control isn't just for code - it's for any complex build in Minecraft"
 
 ## Success Criteria
 
