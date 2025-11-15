@@ -266,11 +266,16 @@ Blockbase is a version control system for Minecraft builds with AI assistance. T
   - Cleans up tracked diff blocks
 
 **Color Overlay Implementation:**
-- Option 1: Use colored glass blocks (stained glass)
-- Option 2: Use Mixin to tint block rendering
-- Option 3: Place colored blocks behind/around diff blocks
+- **Use Mixin to tint block rendering** (chosen approach)
+  - Create Mixin that intercepts block rendering
+  - Apply color tint based on block's diff status:
+    - Green tint for added blocks
+    - Red tint for removed blocks
+    - Yellow tint for modified blocks
+  - Store diff status for each block position
+  - Clear tints when exiting diff mode
 
-**Deliverable**: Visual diffing with sky duplicate showing color-coded changes
+**Deliverable**: Visual diffing with sky duplicate showing color-coded changes (tinted blocks via Mixin)
 
 ---
 
@@ -523,6 +528,104 @@ block_changes (id, commit_id, x, y, z, old_block, new_block)
 
 This feature would truly make Blockbase "Git for Minecraft" - not just tracking changes, but actually syncing worlds.
 
+## Beginner-Friendly Mod Development Guide
+
+**Important**: This guide assumes you've never made Minecraft mods before. Every step will be explained in detail.
+
+### Prerequisites Setup
+
+1. **Install Java 17**
+   - Download from: https://adoptium.net/ (choose Java 17)
+   - Verify: Run `java -version` in terminal (should show version 17)
+
+2. **Install IntelliJ IDEA** (recommended) or VS Code
+   - IntelliJ: https://www.jetbrains.com/idea/download/
+   - VS Code: https://code.visualstudio.com/
+
+3. **Get Minecraft 1.18.2**
+   - You'll need the game installed (for testing)
+
+### Creating the Mod Project (Step-by-Step)
+
+**Step 1: Generate Fabric Template**
+- Go to: https://fabricmc.net/develop/template/
+- Fill in:
+  - Mod Name: `blockbase`
+  - Package Name: `com.blockbase`
+  - Minecraft Version: `1.18.2`
+  - Mod Loader: `Fabric`
+- Click "Generate" and download the ZIP
+
+**Step 2: Extract and Open**
+- Extract the ZIP to your project folder: `codejam15/mod/`
+- Open the `mod/` folder in IntelliJ IDEA
+- IntelliJ will ask to "Import Gradle Project" - click Yes
+
+**Step 3: Wait for Gradle Sync**
+- IntelliJ will download dependencies (this takes a few minutes)
+- Wait until you see "BUILD SUCCESSFUL" in the bottom status bar
+
+**Step 4: Test the Mod**
+- In IntelliJ, find `src/main/java` folder
+- Look for the main mod class (usually `BlockbaseMod.java`)
+- Click the green "Run" button or press Shift+F10
+- This will launch Minecraft with your mod loaded
+- You should see a message in chat when the mod loads
+
+### Project Structure Explained
+
+```
+mod/
+├── src/
+│   ├── main/
+│   │   ├── java/
+│   │   │   └── com/blockbase/
+│   │   │       └── BlockbaseMod.java  ← Main mod class
+│   │   └── resources/
+│   │       └── fabric.mod.json       ← Mod metadata
+│   └── test/                          ← Test code (ignore for now)
+├── build.gradle                       ← Build configuration
+└── settings.gradle                    ← Project settings
+```
+
+### Key Files You'll Edit
+
+1. **`fabric.mod.json`** - Mod metadata (name, version, dependencies)
+2. **`BlockbaseMod.java`** - Main mod class (where initialization happens)
+3. **`build.gradle`** - Dependencies and build settings
+
+### Common Tasks - Step by Step
+
+**Adding a Command:**
+1. Create new file: `src/main/java/com/blockbase/BlockbaseCommands.java`
+2. Register command in `BlockbaseMod.java` (I'll show you exactly where)
+3. Build: Run `./gradlew build` in terminal (or use IntelliJ's Gradle panel)
+4. Find the `.jar` file in `build/libs/`
+5. Copy `.jar` to `~/.minecraft/mods/` folder
+6. Launch Minecraft
+
+**Adding a Mixin:**
+1. Create mixin file: `src/main/java/com/blockbase/mixins/BlockRenderMixin.java`
+2. Add mixin to `fabric.mod.json` (I'll show you exactly how)
+3. Build and test
+
+**Testing Changes:**
+- Every time you make changes, you need to:
+  1. Build the mod (`./gradlew build`)
+  2. Copy the new `.jar` to `mods/` folder
+  3. Restart Minecraft
+
+### When I Say "Try This" or "Test It"
+
+I will provide:
+- Exact file paths to edit
+- Exact code to add
+- Exact commands to run
+- Exact locations to place files
+- Screenshots or detailed descriptions if needed
+
+**You should never have to guess where something goes!**
+
 ## Notes
 
 - Focus on mod first, web dashboard is nice-to-have
@@ -530,4 +633,5 @@ This feature would truly make Blockbase "Git for Minecraft" - not just tracking 
 - AI integration is differentiating feature
 - Keep it simple - hackathon constraints
 - SQLite for speed, can migrate to PostgreSQL later
+- **User has no modding experience - provide detailed step-by-step instructions**
 
