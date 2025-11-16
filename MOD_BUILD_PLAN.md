@@ -235,25 +235,25 @@
 ## Step 7: Visual Diffing - In-Place Toggle (THE KILLER FEATURE)
 
 ### 7.1 Implement Diff Calculation
-- [ ] Create `DiffCalculator` (client or shared)
-- [ ] Compare Current world vs target commit:
+- [x] Create `DiffCalculator` (client or shared)
+- [x] Compare Current world vs target commit:
   - Target: latest commit if ≥2; if exactly 1, compare to that; if 0, block diff mode
   - Limit comparison to a player-centered radius (e.g., 96–128 blocks)
   - Added: in Current not in Previous
   - Removed: in Previous not in Current
   - Modified: same pos, different state
-- [ ] Return `Diff` with categorized positions and previous states
+- [x] Return `Diff` with categorized positions and previous states
 - [ ] Test: Compare current vs previous commit in a small area
 
 ### 7.2 Client DiffView + Keybinds
-- [ ] Create `DiffViewManager` (client) to hold:
+- [x] Create `DiffViewManager` (client) to hold:
   - Mode: Diff → Current → Previous
   - Maps: pos → previous state; pos → status (added/removed/modified)
   - Radius and player anchor
-- [ ] Keybinds:
+- [x] Keybinds:
   - P to cycle modes
   - Shift+P to exit/clear
-- [ ] Compute diff once on enter; recompute on re-enter or on demand
+- [x] Compute diff once on enter; recompute on re-enter or on demand
 
 ### 7.3 Rendering Hooks/Mixins (non-destructive)
 - [ ] Confirm mixin setup (client)
