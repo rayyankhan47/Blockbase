@@ -30,24 +30,21 @@ public class BlockbaseClient implements ClientModInitializer {
 		ClientTickEvents.END_CLIENT_TICK.register(client -> {
 			if (client.player == null || client.level == null) return;
 
-			// Shift+G exits
-			if (exitDiffKey.consumeClick() && hasShift()) {
-				DiffViewManager.exit();
-				Blockbase.LOGGER.info("[blockbase] Exited diff mode");
-				return;
-			}
-
-			// G cycles modes
-			if (toggleModeKey.consumeClick() && !hasShift()) {
-				DiffViewManager.cycle(client.level, client.player.blockPosition());
-				Blockbase.LOGGER.info("[blockbase] Diff mode: {}", DiffViewManager.getMode());
+			// Use single keybinding: Shift+G exits; G cycles
+			if (toggleModeKey.consumeClick()) {
+				if (hasShift(client)) {
+					DiffViewManager.exit();
+					Blockbase.LOGGER.info("[blockbase] Exited diff mode");
+				} else {
+					DiffViewManager.cycle(client.level, client.player.blockPosition());
+					Blockbase.LOGGER.info("[blockbase] Toggled diff mode: {}", DiffViewManager.getMode());
+				}
 			}
 		});
 	}
 
-	private boolean hasShift() {
-		return org.lwjgl.glfw.GLFW.glfwGetKey(org.lwjgl.glfw.GLFW.glfwGetCurrentContext(), GLFW.GLFW_KEY_LEFT_SHIFT) == GLFW.GLFW_PRESS
-			|| org.lwjgl.glfw.GLFW.glfwGetKey(org.lwjgl.glfw.GLFW.glfwGetCurrentContext(), GLFW.GLFW_KEY_RIGHT_SHIFT) == GLFW.GLFW_PRESS;
+	private boolean hasShift(net.minecraft.client.Minecraft client) {
+		return client.options.keyShift.isDown();
 	}
 }
 

@@ -19,7 +19,7 @@ public class DiffViewManager {
 	private static final AtomicReference<Mode> mode = new AtomicReference<>(Mode.OFF);
 	private static DiffCalculator.DiffResult lastResult;
 	private static BlockPos anchor;
-	private static int radius = 128;
+	private static int radius = 256;
 
 	public static Mode getMode() {
 		return mode.get();
@@ -46,6 +46,8 @@ public class DiffViewManager {
 			case OFF -> {
 				anchor = center;
 				lastResult = DiffCalculator.compute(world, center, radius);
+				Blockbase.LOGGER.info("[blockbase] Diff computed: added={}, removed={}, modified={}",
+					lastResult.added.size(), lastResult.removed.size(), lastResult.modified.size());
 				mode.set(Mode.DIFF);
 			}
 			case DIFF -> mode.set(Mode.CURRENT);
