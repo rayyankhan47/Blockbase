@@ -2,6 +2,8 @@ package com.blockbase;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Registry;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.world.level.storage.LevelResource;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 
@@ -126,6 +128,34 @@ public class DiffCalculator {
 			return files.get(1); // previous commit
 		} catch (IOException e) {
 			return null;
+		} catch (Throwable t) {
+			// Fallback for client singleplayer where world.getServer() may be null
+			try {
+				net.minecraft.client.Minecraft mc = net.minecraft.client.Minecraft.getInstance();
+				MinecraftServer server = mc.getSingleplayerServer();
+				if (server == null) return null;
+				Path worldDir = server.getWorldPath(LevelResource.ROOT);
+				if (worldDir == null) return null;
+				Path altCommits = worldDir.resolve(".blockbase").resolve("commits");
+				if (!Files.exists(altCommits)) return null;
+				List<Path> files = Files.list(altCommits)
+					.filter(p -> p.getFileName().toString().endsWith(".json"))
+					.sorted((a, b) -> {
+						try {
+							long at = Files.getLastModifiedTime(a).toMillis();
+							long bt = Files.getLastModifiedTime(b).toMillis();
+							return Long.compare(bt, at); // newest first
+						} catch (IOException e) {
+							return 0;
+						}
+					})
+					.toList();
+				if (files.isEmpty()) return null;
+				if (files.size() == 1) return files.get(0);
+				return files.get(1);
+			} catch (Throwable ignore) {
+				return null;
+			}
 		}
 	}
 }
