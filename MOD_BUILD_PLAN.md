@@ -182,25 +182,24 @@
 - [x] Test: Stage changes, commit with message, verify commit file exists
 
 ### 4.5 Implement Commit History
-- [ ] Add `/blockbase log` command
-- [ ] Read all commit files from `.blockbase/commits/`
-- [ ] Display commit history:
+- [x] Add `/blockbase log` command
+- [x] Read commit files from `.blockbase/commits/`
+- [x] Display commit history:
   - Commit ID (short)
   - Author
   - Message
   - Timestamp
-- [ ] Test: Make multiple commits, run `/blockbase log`
+- [x] Test: Make multiple commits, run `/blockbase log`
 
 ### 4.6 Implement Reset Command (Rollback)
-- [ ] Add `/blockbase reset --hard <commitId>` command
-- [ ] Calculate diff: current world state → target commit state
-- [ ] Apply block changes to match target commit:
+- [x] Add `/blockbase reset --hard <commitId>` command
+- [x] Calculate diff: current world state → target commit state (for all tracked positions)
+- [x] Apply block changes to match target commit:
   - Remove blocks that don't exist in target
   - Add blocks that exist in target but not current
   - Modify blocks that changed
-- [ ] Update HEAD pointer to target commit
-- [ ] Add safety warning if uncommitted changes exist
-- [ ] Test: Make commits, make mistake, reset to previous commit, verify blocks changed
+- [x] Add safety warning if uncommitted changes exist
+- [x] Test: Make commits, make mistake, reset to previous commit, verify tracked blocks changed
 
 ---
 

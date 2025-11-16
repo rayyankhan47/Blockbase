@@ -55,6 +55,16 @@ public class BlockbaseCommands {
 						.executes(BlockbaseCommands::logCommand)
 				)
 				.then(
+					Commands.literal("reset")
+						.then(
+							Commands.literal("--hard")
+								.then(
+									Commands.argument("commitId", StringArgumentType.string())
+										.executes(BlockbaseCommands::resetHardCommand)
+								)
+						)
+				)
+				.then(
 					Commands.literal("status")
 						.executes(BlockbaseCommands::statusCommand)
 				)
@@ -68,6 +78,7 @@ public class BlockbaseCommands {
 			" - /blockbase commit <message> : Commit staged changes with a message\n" +
 			" - /blockbase add .  : Stage all currently tracked changes\n" +
 			" - /blockbase log    : Show recent commits\n" +
+			" - /blockbase reset --hard <commitId> : Reset world to a specific commit (destructive)\n" +
 			" - /blockbase help   : Show this help message\n" +
 			" - /blockbase status : Show tracked change status"
 		), false);
@@ -377,6 +388,171 @@ public class BlockbaseCommands {
 			return "";
 		}
 		return json.substring(start, end);
+	}
+
+	private static int resetHardCommand(CommandContext<CommandSourceStack> context) {
+		Level world = context.getSource().getLevel();
+
+		// Ensure repository is initialized
+		Repository repo = Repository.load(world);
+		if (repo == null) {
+			context.getSource().sendFailure(
+				new net.minecraft.network.chat.TextComponent(
+					"[Blockbase] No repository found. Run /blockbase init first."
+				)
+			);
+			return 0;
+		}
+
+		// Safety warning if there are uncommitted changes
+		if (Blockbase.blockTracker.getChangeCount() > 0 || Blockbase.stagingArea.getStagedCount() > 0) {
+			context.getSource().sendSuccess(
+				new net.minecraft.network.chat.TextComponent(
+					"[Blockbase] Warning: uncommitted or staged changes will be lost by reset --hard."
+				),
+				false
+			);
+		}
+
+		String prefix = StringArgumentType.getString(context, "commitId");
+
+		Path commitsDir = Repository.getCommitsDirectory(world);
+		if (commitsDir == null || !Files.exists(commitsDir)) {
+			context.getSource().sendFailure(
+				new net.minecraft.network.chat.TextComponent(
+					"[Blockbase] No commits directory found. Nothing to reset."
+				)
+			);
+			return 0;
+		}
+
+		try {
+			List<Path> matches = Files.list(commitsDir)
+				.filter(p -> p.getFileName().toString().endsWith(".json"))
+				.filter(p -> p.getFileName().toString().startsWith(prefix))
+				.collect(Collectors.toList());
+
+			if (matches.isEmpty()) {
+				context.getSource().sendFailure(
+					new net.minecraft.network.chat.TextComponent(
+						String.format("[Blockbase] No commit found with id starting with '%s'.", prefix)
+					)
+				);
+				return 0;
+			}
+
+			if (matches.size() > 1) {
+				String ids = matches.stream()
+					.map(p -> p.getFileName().toString().replace(".json", ""))
+					.map(id -> id.length() > 7 ? id.substring(0, 7) : id)
+					.collect(Collectors.joining(", "));
+				context.getSource().sendFailure(
+					new net.minecraft.network.chat.TextComponent(
+						String.format("[Blockbase] Ambiguous commit id '%s'. Matches: %s", prefix, ids)
+					)
+				);
+				return 0;
+			}
+
+			Path commitFile = matches.get(0);
+			String json = Files.readString(commitFile);
+
+			String fullId = extractString(json, "\"id\":\"");
+			if (fullId == null || fullId.isEmpty()) {
+				context.getSource().sendFailure(
+					new net.minecraft.network.chat.TextComponent(
+						"[Blockbase] Failed to parse commit file (missing id)."
+					)
+				);
+				return 0;
+			}
+
+			// Parse changes array
+			int idx = json.indexOf("\"changes\":[");
+			if (idx == -1) {
+				context.getSource().sendFailure(
+					new net.minecraft.network.chat.TextComponent(
+						"[Blockbase] Commit file has no changes array; nothing to reset."
+					)
+				);
+				return 0;
+			}
+
+			int start = idx + "\"changes\":[".length();
+			int end = json.indexOf("]", start);
+			if (end == -1) {
+				context.getSource().sendFailure(
+					new net.minecraft.network.chat.TextComponent(
+						"[Blockbase] Invalid commit format (missing closing ] for changes)."
+					)
+				);
+				return 0;
+			}
+
+			String changesPart = json.substring(start, end).trim();
+			if (changesPart.isEmpty()) {
+				context.getSource().sendSuccess(
+					new net.minecraft.network.chat.TextComponent(
+						String.format("[Blockbase] Reset to commit %s (no changes to apply).", fullId)
+					),
+					false
+				);
+				return 1;
+			}
+
+			// Split into individual JSON objects
+			String[] changeStrings = changesPart.split("\\},\\s*");
+
+			var registry = world.registryAccess().registryOrThrow(net.minecraft.core.Registry.BLOCK_REGISTRY);
+
+			int applied = 0;
+			for (String changeStr : changeStrings) {
+				changeStr = changeStr.trim();
+				if (!changeStr.endsWith("}")) {
+					changeStr = changeStr + "}";
+				}
+
+				BlockChange change = BlockChange.fromJsonString(changeStr, registry);
+				if (change == null) continue;
+
+				net.minecraft.core.BlockPos pos = change.getPosition();
+				net.minecraft.world.level.block.state.BlockState targetState = change.getNewState();
+
+				if (targetState != null) {
+					// Set block to the target state
+					world.setBlock(pos, targetState, 3);
+				} else {
+					// Remove block (set to air)
+					world.removeBlock(pos, false);
+				}
+				applied++;
+			}
+
+			// Clear tracking and staging after reset
+			Blockbase.blockTracker.clearChanges();
+			Blockbase.stagingArea.clear();
+
+			String shortId = fullId.length() > 7 ? fullId.substring(0, 7) : fullId;
+			context.getSource().sendSuccess(
+				new net.minecraft.network.chat.TextComponent(String.format(
+					"[Blockbase] Reset --hard to commit %s (%d block positions applied).",
+					shortId,
+					applied
+				)),
+				false
+			);
+
+			return 1;
+
+		} catch (IOException e) {
+			Blockbase.LOGGER.error("Failed to reset to commit", e);
+			context.getSource().sendFailure(
+				new net.minecraft.network.chat.TextComponent(
+					"[Blockbase] Failed to reset to commit. Check logs for details."
+				)
+			);
+			return 0;
+		}
 	}
 
 	private static int initCommand(CommandContext<CommandSourceStack> context) {
