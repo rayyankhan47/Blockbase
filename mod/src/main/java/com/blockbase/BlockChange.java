@@ -5,6 +5,7 @@ import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.properties.Property;
 
 /**
  * Represents a single block change (placement, break, or modification).
@@ -66,7 +67,13 @@ public class BlockChange {
 	
 	/**
 	 * Serialize to a simple JSON-like string representation.
-	 * Format: {"x":1,"y":2,"z":3,"oldState":"minecraft:stone","newState":"minecraft:dirt","timestamp":123,"type":"MODIFIED"}
+	 * Format:
+	 * {
+	 *   "x":1,"y":2,"z":3,
+	 *   "oldStateId":"minecraft:stone","oldProps":{"facing":"north","powered":"true"},
+	 *   "newStateId":"minecraft:dirt","newProps":{...},
+	 *   "timestamp":123,"type":"MODIFIED"
+	 * }
 	 */
 	public String toJsonString(Registry<Block> blockRegistry) {
 		StringBuilder json = new StringBuilder();
@@ -77,22 +84,48 @@ public class BlockChange {
 		
 		if (oldState != null) {
 			ResourceLocation oldId = blockRegistry.getKey(oldState.getBlock());
-			json.append("\"oldState\":\"").append(oldId != null ? oldId.toString() : "unknown").append("\",");
+			json.append("\"oldStateId\":\"").append(oldId != null ? oldId.toString() : "unknown").append("\",");
+			json.append("\"oldProps\":").append(serializeProperties(oldState)).append(",");
 		} else {
-			json.append("\"oldState\":null,");
+			json.append("\"oldStateId\":null,");
+			json.append("\"oldProps\":null,");
 		}
 		
 		if (newState != null) {
 			ResourceLocation newId = blockRegistry.getKey(newState.getBlock());
-			json.append("\"newState\":\"").append(newId != null ? newId.toString() : "unknown").append("\",");
+			json.append("\"newStateId\":\"").append(newId != null ? newId.toString() : "unknown").append("\",");
+			json.append("\"newProps\":").append(serializeProperties(newState)).append(",");
 		} else {
-			json.append("\"newState\":null,");
+			json.append("\"newStateId\":null,");
+			json.append("\"newProps\":null,");
 		}
 		
 		json.append("\"timestamp\":").append(timestamp).append(",");
 		json.append("\"type\":\"").append(type.name()).append("\"");
 		json.append("}");
 		return json.toString();
+	}
+
+	private static String serializeProperties(BlockState state) {
+		if (state == null) return "null";
+		StringBuilder sb = new StringBuilder();
+		sb.append("{");
+		boolean first = true;
+		for (Property<?> prop : state.getProperties()) {
+			String name = prop.getName();
+			String value = getPropertyValueAsString(state, prop);
+			if (!first) sb.append(",");
+			sb.append("\"").append(escape(name)).append("\":\"").append(escape(value)).append("\"");
+			first = false;
+		}
+		sb.append("}");
+		return sb.toString();
+	}
+
+	@SuppressWarnings("unchecked")
+	private static <T extends Comparable<T>> String getPropertyValueAsString(BlockState state, Property<T> prop) {
+		T val = state.getValue(prop);
+		return val.toString();
 	}
 	
 	/**
@@ -111,28 +144,30 @@ public class BlockChange {
 			
 			BlockPos pos = new BlockPos(x, y, z);
 			
-			String oldStateStr = extractStringOrNull(json, "\"oldState\":");
-			String newStateStr = extractStringOrNull(json, "\"newState\":");
+			String oldStateId = extractStringOrNull(json, "\"oldStateId\":");
+			String newStateId = extractStringOrNull(json, "\"newStateId\":");
+			String oldPropsStr = extractObjectOrNull(json, "\"oldProps\":");
+			String newPropsStr = extractObjectOrNull(json, "\"newProps\":");
 			
 			BlockState oldState = null;
 			BlockState newState = null;
 			
-			if (oldStateStr != null && !oldStateStr.equals("null")) {
-				ResourceLocation oldId = ResourceLocation.tryParse(oldStateStr);
+			if (oldStateId != null && !oldStateId.equals("null")) {
+				ResourceLocation oldId = ResourceLocation.tryParse(oldStateId);
 				if (oldId != null) {
 					Block oldBlock = blockRegistry.get(oldId);
 					if (oldBlock != null) {
-						oldState = oldBlock.defaultBlockState();
+						oldState = applyProperties(oldBlock.defaultBlockState(), oldPropsStr);
 					}
 				}
 			}
 			
-			if (newStateStr != null && !newStateStr.equals("null")) {
-				ResourceLocation newId = ResourceLocation.tryParse(newStateStr);
+			if (newStateId != null && !newStateId.equals("null")) {
+				ResourceLocation newId = ResourceLocation.tryParse(newStateId);
 				if (newId != null) {
 					Block newBlock = blockRegistry.get(newId);
 					if (newBlock != null) {
-						newState = newBlock.defaultBlockState();
+						newState = applyProperties(newBlock.defaultBlockState(), newPropsStr);
 					}
 				}
 			}
@@ -166,6 +201,7 @@ public class BlockChange {
 	
 	private static String extractStringOrNull(String json, String key) {
 		int start = json.indexOf(key) + key.length();
+		if (start < 0 || start >= json.length()) return null;
 		if (json.charAt(start) == '"') {
 			int end = json.indexOf("\"", start + 1);
 			return json.substring(start + 1, end);
@@ -175,6 +211,58 @@ public class BlockChange {
 			if (end == -1) end = json.indexOf("}", start);
 			return json.substring(start, end).trim();
 		}
+	}
+
+	private static String extractObjectOrNull(String json, String key) {
+		int idx = json.indexOf(key);
+		if (idx == -1) return null;
+		int start = idx + key.length();
+		if (start < json.length() && json.charAt(start) == 'n') { // null
+			return "null";
+		}
+		int objStart = json.indexOf("{", start);
+		if (objStart == -1) return null;
+		int depth = 0;
+		for (int i = objStart; i < json.length(); i++) {
+			char c = json.charAt(i);
+			if (c == '{') depth++;
+			else if (c == '}') {
+				depth--;
+				if (depth == 0) {
+					return json.substring(objStart, i + 1);
+				}
+			}
+		}
+		return null;
+	}
+
+	private static String escape(String value) {
+		return value.replace("\\", "\\\\").replace("\"", "\\\"");
+	}
+
+	private static BlockState applyProperties(BlockState base, String propsJson) {
+		if (base == null || propsJson == null || propsJson.equals("null")) return base;
+		for (Property<?> prop : base.getProperties()) {
+			String key = "\"" + prop.getName() + "\":\"";
+			int idx = propsJson.indexOf(key);
+			if (idx == -1) continue;
+			int start = idx + key.length();
+			int end = propsJson.indexOf("\"", start);
+			if (end == -1) continue;
+			String valueStr = propsJson.substring(start, end);
+			base = setPropertyFromString(base, prop, valueStr);
+		}
+		return base;
+	}
+
+	@SuppressWarnings("unchecked")
+	private static <T extends Comparable<T>> BlockState setPropertyFromString(BlockState state, Property<T> prop, String valueStr) {
+		for (T allowed : prop.getPossibleValues()) {
+			if (allowed.toString().equals(valueStr)) {
+				return state.setValue(prop, allowed);
+			}
+		}
+		return state;
 	}
 }
 

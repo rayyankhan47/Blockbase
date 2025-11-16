@@ -24,9 +24,14 @@ import java.util.stream.Collectors;
 public class BlockbaseCommands {
 
 	public static void register(CommandDispatcher<CommandSourceStack> dispatcher) {
-		// Root command: /blockbase
+		// Register under both /bb and /blockbase (alias), prefer /bb in help text
+		registerRoot(dispatcher, "bb");
+		registerRoot(dispatcher, "blockbase");
+	}
+
+	private static void registerRoot(CommandDispatcher<CommandSourceStack> dispatcher, String root) {
 		dispatcher.register(
-			Commands.literal("blockbase")
+			Commands.literal(root)
 				.executes(BlockbaseCommands::rootCommand)
 				.then(
 					Commands.literal("init")
@@ -74,13 +79,13 @@ public class BlockbaseCommands {
 	private static int helpCommand(CommandContext<CommandSourceStack> context) {
 		context.getSource().sendSuccess(new net.minecraft.network.chat.TextComponent(
 			"[Blockbase] Commands:\n" +
-			" - /blockbase init   : Initialize Blockbase repository in this world\n" +
-			" - /blockbase commit <message> : Commit staged changes with a message\n" +
-			" - /blockbase add .  : Stage all currently tracked changes\n" +
-			" - /blockbase log    : Show recent commits\n" +
-			" - /blockbase reset --hard <commitId> : Reset world to a specific commit (destructive)\n" +
-			" - /blockbase help   : Show this help message\n" +
-			" - /blockbase status : Show tracked change status"
+			" - /bb init   : Initialize Blockbase repository in this world\n" +
+			" - /bb commit \"message\" : Commit staged changes with a message\n" +
+			" - /bb add .  : Stage all currently tracked changes\n" +
+			" - /bb log    : Show recent commits\n" +
+			" - /bb reset --hard <commitId> : Reset world to a specific commit (destructive)\n" +
+			" - /bb help   : Show this help message\n" +
+			" - /bb status : Show tracked change status"
 		), false);
 		return 1;
 	}
@@ -158,7 +163,7 @@ public class BlockbaseCommands {
 	private static int rootCommand(CommandContext<CommandSourceStack> context) {
 		// No subcommand: show basic usage hint
 		context.getSource().sendSuccess(
-			new net.minecraft.network.chat.TextComponent("[Blockbase] Use /blockbase help for available commands."),
+			new net.minecraft.network.chat.TextComponent("[Blockbase] Use /bb help for available commands."),
 			false
 		);
 		return 1;
@@ -172,7 +177,7 @@ public class BlockbaseCommands {
 		if (repo == null) {
 			context.getSource().sendFailure(
 				new net.minecraft.network.chat.TextComponent(
-					"[Blockbase] No repository found. Run /blockbase init first."
+					"[Blockbase] No repository found. Run /bb init first."
 				)
 			);
 			return 0;
@@ -191,7 +196,7 @@ public class BlockbaseCommands {
 
 		context.getSource().sendSuccess(
 			new net.minecraft.network.chat.TextComponent(String.format(
-				"[Blockbase] Added %d changes to staging (use /blockbase status to view details).",
+				"[Blockbase] Added %d changes to staging (use /bb status to view details).",
 				changes.size()
 			)),
 			false
@@ -208,7 +213,7 @@ public class BlockbaseCommands {
 		if (repo == null) {
 			context.getSource().sendFailure(
 				new net.minecraft.network.chat.TextComponent(
-					"[Blockbase] No repository found. Run /blockbase init first."
+					"[Blockbase] No repository found. Run /bb init first."
 				)
 			);
 			return 0;
@@ -218,7 +223,7 @@ public class BlockbaseCommands {
 		if (staged.isEmpty()) {
 			context.getSource().sendFailure(
 				new net.minecraft.network.chat.TextComponent(
-					"[Blockbase] No staged changes. Use /blockbase add . first."
+					"[Blockbase] No staged changes. Use /bb add . first."
 				)
 			);
 			return 0;
@@ -229,7 +234,7 @@ public class BlockbaseCommands {
 		if (!rawInput.contains("\"")) {
 			context.getSource().sendFailure(
 				new net.minecraft.network.chat.TextComponent(
-					"[Blockbase] Please wrap the commit message in double quotes, e.g. /blockbase commit \"my message\""
+					"[Blockbase] Please wrap the commit message in double quotes, e.g. /bb commit \"my message\""
 				)
 			);
 			return 0;
@@ -248,8 +253,19 @@ public class BlockbaseCommands {
 		// Determine parent commit ID (if any)
 		String parentId = Repository.getLatestCommitId(world);
 
-		// Author: use the command source's display name
-		String author = context.getSource().getTextName();
+		// Author: prefer integrated server's singleplayer name, then player's GameProfile, then text name
+		String author;
+		try {
+			String spName = world.getServer() != null ? world.getServer().getSingleplayerName() : null;
+			if (spName != null && !spName.isEmpty()) {
+				author = spName;
+			} else {
+				var player = context.getSource().getPlayerOrException();
+				author = player.getGameProfile().getName();
+			}
+		} catch (Exception e) {
+			author = context.getSource().getTextName();
+		}
 
 		// Create commit and compute its ID
 		Commit commit = Commit.create(message.trim(), author, parentId, staged, world);
@@ -323,33 +339,27 @@ public class BlockbaseCommands {
 				return 1;
 			}
 
-			SimpleDateFormat fmt = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-			StringBuilder sb = new StringBuilder();
-			sb.append("[Blockbase] Commit log (latest first):\n");
-
 			for (Path path : commitFiles) {
 				String json = Files.readString(path);
 
 				String id = extractString(json, "\"id\":\"");
 				String message = extractString(json, "\"message\":\"");
 				String author = extractString(json, "\"author\":\"");
-				long timestamp = extractLong(json, "\"timestamp\":");
 
 				String shortId = id != null && id.length() > 7 ? id.substring(0, 7) : id;
-				String dateStr = fmt.format(new Date(timestamp));
 
-				sb.append(String.format(" - %s | %s | %s | %s\n",
+				String line = String.format("commit %s | %s | %s",
 					shortId,
 					author,
-					dateStr,
 					message
-				));
+				);
+
+				context.getSource().sendSuccess(
+					new net.minecraft.network.chat.TextComponent(line),
+					false
+				);
 			}
 
-			context.getSource().sendSuccess(
-				new net.minecraft.network.chat.TextComponent(sb.toString()),
-				false
-			);
 			return 1;
 
 		} catch (IOException e) {
@@ -427,12 +437,39 @@ public class BlockbaseCommands {
 		}
 
 		try {
-			List<Path> matches = Files.list(commitsDir)
+			// Load all commit files sorted by time (oldest first)
+			List<Path> allCommits = Files.list(commitsDir)
 				.filter(p -> p.getFileName().toString().endsWith(".json"))
-				.filter(p -> p.getFileName().toString().startsWith(prefix))
+				.sorted(Comparator.comparing(p -> {
+					try {
+						return Files.getLastModifiedTime(p).toMillis();
+					} catch (IOException e) {
+						return 0L;
+					}
+				}))
 				.collect(Collectors.toList());
 
-			if (matches.isEmpty()) {
+			if (allCommits.isEmpty()) {
+				context.getSource().sendFailure(
+					new net.minecraft.network.chat.TextComponent(
+						"[Blockbase] No commits found. Nothing to reset."
+					)
+				);
+				return 0;
+			}
+
+			// Find target commit by prefix (match against id inside JSON)
+			List<Path> matching = allCommits.stream().filter(p -> {
+				try {
+					String json = Files.readString(p);
+					String id = extractString(json, "\"id\":\"");
+					return id != null && id.startsWith(prefix);
+				} catch (IOException e) {
+					return false;
+				}
+			}).collect(Collectors.toList());
+
+			if (matching.isEmpty()) {
 				context.getSource().sendFailure(
 					new net.minecraft.network.chat.TextComponent(
 						String.format("[Blockbase] No commit found with id starting with '%s'.", prefix)
@@ -441,10 +478,17 @@ public class BlockbaseCommands {
 				return 0;
 			}
 
-			if (matches.size() > 1) {
-				String ids = matches.stream()
-					.map(p -> p.getFileName().toString().replace(".json", ""))
-					.map(id -> id.length() > 7 ? id.substring(0, 7) : id)
+			if (matching.size() > 1) {
+				String ids = matching.stream().map(p -> {
+						try {
+							String json = Files.readString(p);
+							String id = extractString(json, "\"id\":\"");
+							if (id == null) return "?";
+							return id.length() > 7 ? id.substring(0, 7) : id;
+						} catch (IOException e) {
+							return "?";
+						}
+					})
 					.collect(Collectors.joining(", "));
 				context.getSource().sendFailure(
 					new net.minecraft.network.chat.TextComponent(
@@ -454,10 +498,9 @@ public class BlockbaseCommands {
 				return 0;
 			}
 
-			Path commitFile = matches.get(0);
-			String json = Files.readString(commitFile);
-
-			String fullId = extractString(json, "\"id\":\"");
+			Path targetPath = matching.get(0);
+			String targetJson = Files.readString(targetPath);
+			String fullId = extractString(targetJson, "\"id\":\"");
 			if (fullId == null || fullId.isEmpty()) {
 				context.getSource().sendFailure(
 					new net.minecraft.network.chat.TextComponent(
@@ -467,77 +510,95 @@ public class BlockbaseCommands {
 				return 0;
 			}
 
-			// Parse changes array
-			int idx = json.indexOf("\"changes\":[");
-			if (idx == -1) {
+			// Find index of target in ordered list
+			int targetIndex = allCommits.indexOf(targetPath);
+			if (targetIndex == -1) {
 				context.getSource().sendFailure(
 					new net.minecraft.network.chat.TextComponent(
-						"[Blockbase] Commit file has no changes array; nothing to reset."
+						"[Blockbase] Internal error: target commit not in commit list."
 					)
 				);
 				return 0;
 			}
 
-			int start = idx + "\"changes\":[".length();
-			int end = json.indexOf("]", start);
-			if (end == -1) {
-				context.getSource().sendFailure(
-					new net.minecraft.network.chat.TextComponent(
-						"[Blockbase] Invalid commit format (missing closing ] for changes)."
-					)
-				);
-				return 0;
-			}
-
-			String changesPart = json.substring(start, end).trim();
-			if (changesPart.isEmpty()) {
+			// Commits after the target need to be reverted (from newest to oldest)
+			List<Path> toRevert = allCommits.subList(targetIndex + 1, allCommits.size());
+			if (toRevert.isEmpty()) {
 				context.getSource().sendSuccess(
 					new net.minecraft.network.chat.TextComponent(
-						String.format("[Blockbase] Reset to commit %s (no changes to apply).", fullId)
+						"[Blockbase] Already at the specified commit; nothing to reset."
 					),
 					false
 				);
 				return 1;
 			}
 
-			// Split into individual JSON objects
-			String[] changeStrings = changesPart.split("\\},\\s*");
-
 			var registry = world.registryAccess().registryOrThrow(net.minecraft.core.Registry.BLOCK_REGISTRY);
-
 			int applied = 0;
-			for (String changeStr : changeStrings) {
-				changeStr = changeStr.trim();
-				if (!changeStr.endsWith("}")) {
-					changeStr = changeStr + "}";
+
+			for (int i = toRevert.size() - 1; i >= 0; i--) {
+				Path commitPath = toRevert.get(i);
+				String json = Files.readString(commitPath);
+
+				// Parse changes array
+				int idx = json.indexOf("\"changes\":[");
+				if (idx == -1) {
+					continue;
+				}
+				int start = idx + "\"changes\":[".length();
+				int end = json.indexOf("]", start);
+				if (end == -1) {
+					continue;
+				}
+				String changesPart = json.substring(start, end).trim();
+				if (changesPart.isEmpty()) {
+					continue;
 				}
 
-				BlockChange change = BlockChange.fromJsonString(changeStr, registry);
-				if (change == null) continue;
+				String[] changeStrings = changesPart.split("\\},\\s*");
 
-				net.minecraft.core.BlockPos pos = change.getPosition();
-				net.minecraft.world.level.block.state.BlockState targetState = change.getNewState();
+				for (String changeStr : changeStrings) {
+					changeStr = changeStr.trim();
+					if (!changeStr.endsWith("}")) {
+						changeStr = changeStr + "}";
+					}
 
-				if (targetState != null) {
-					// Set block to the target state
-					world.setBlock(pos, targetState, 3);
-				} else {
-					// Remove block (set to air)
-					world.removeBlock(pos, false);
+					BlockChange change = BlockChange.fromJsonString(changeStr, registry);
+					if (change == null) continue;
+
+					net.minecraft.core.BlockPos pos = change.getPosition();
+					net.minecraft.world.level.block.state.BlockState oldState = change.getOldState();
+
+					if (oldState != null) {
+						// Revert to old state
+						world.setBlock(pos, oldState, 3);
+					} else {
+						// Old state was null -> block did not exist before this commit, so set to AIR
+						world.setBlock(pos, net.minecraft.world.level.block.Blocks.AIR.defaultBlockState(), 3);
+					}
+					applied++;
 				}
-				applied++;
 			}
 
 			// Clear tracking and staging after reset
 			Blockbase.blockTracker.clearChanges();
 			Blockbase.stagingArea.clear();
 
+			// Prune commits newer than the target (like git reset --hard)
+			for (Path p : toRevert) {
+				try {
+					Files.deleteIfExists(p);
+				} catch (IOException ignore) {
+				}
+			}
+
 			String shortId = fullId.length() > 7 ? fullId.substring(0, 7) : fullId;
 			context.getSource().sendSuccess(
 				new net.minecraft.network.chat.TextComponent(String.format(
-					"[Blockbase] Reset --hard to commit %s (%d block positions applied).",
+					"[Blockbase] Reset --hard to commit %s (%d block changes reverted). Pruned %d commits.",
 					shortId,
-					applied
+					applied,
+					toRevert.size()
 				)),
 				false
 			);
