@@ -129,6 +129,113 @@ public class Commit {
 		return sb.toString();
 	}
 
+	/**
+	 * Parse a Commit from its JSON string (as we serialize it), using the block registry
+	 * to reconstruct BlockChange states.
+	 */
+	public static Commit fromJson(String json, Registry<Block> blockRegistry) {
+		try {
+			String id = extractString(json, "\"id\":\"");
+			String message = unescapeJson(extractString(json, "\"message\":\""));
+			String author = extractString(json, "\"author\":\"");
+			long timestamp = extractLong(json, "\"timestamp\":");
+			String parentId = extractNullableString(json, "\"parentId\":");
+
+			// Parse changes array
+			int idx = json.indexOf("\"changes\":[");
+			List<BlockChange> changes = new ArrayList<>();
+			if (idx != -1) {
+				int start = idx + "\"changes\":".length();
+				int bracket = json.indexOf("[", start);
+				if (bracket != -1) {
+					int depth = 0;
+					int end = -1;
+					for (int i = bracket; i < json.length(); i++) {
+						char c = json.charAt(i);
+						if (c == '[') depth++;
+						else if (c == ']') {
+							depth--;
+							if (depth == 0) { end = i; break; }
+						}
+					}
+					if (end != -1) {
+						String inner = json.substring(bracket + 1, end).trim();
+						if (!inner.isEmpty()) {
+							for (String obj : splitTopLevelJsonObjects(inner)) {
+								BlockChange ch = BlockChange.fromJsonString(obj, blockRegistry);
+								if (ch != null) changes.add(ch);
+							}
+						}
+					}
+				}
+			}
+			return new Commit(id, message, author, timestamp, parentId, changes);
+		} catch (Exception e) {
+			Blockbase.LOGGER.error("Failed to parse commit JSON", e);
+			return null;
+		}
+	}
+
+	private static long extractLong(String json, String key) {
+		int start = json.indexOf(key);
+		if (start == -1) return 0L;
+		start += key.length();
+		int end = json.indexOf(",", start);
+		if (end == -1) end = json.indexOf("}", start);
+		return Long.parseLong(json.substring(start, end).trim());
+	}
+
+	private static String extractString(String json, String key) {
+		int start = json.indexOf(key);
+		if (start == -1) return "";
+		start += key.length();
+		int end = json.indexOf("\"", start);
+		if (end == -1) return "";
+		return json.substring(start, end);
+	}
+
+	private static String extractNullableString(String json, String key) {
+		int idx = json.indexOf(key);
+		if (idx == -1) return null;
+		int start = idx + key.length();
+		// Could be null or "value"
+		if (json.startsWith("null", start)) return null;
+		int q = json.indexOf("\"", start);
+		if (q == -1) return null;
+		int end = json.indexOf("\"", q + 1);
+		if (end == -1) return null;
+		return json.substring(q + 1, end);
+	}
+
+	private static String unescapeJson(String s) {
+		if (s == null || s.isEmpty()) return s;
+		return s.replace("\\\\", "\\")
+			.replace("\\\"", "\"")
+			.replace("\\n", "\n")
+			.replace("\\t", "\t")
+			.replace("\\r", "\r");
+	}
+
+	private static List<String> splitTopLevelJsonObjects(String arrayInner) {
+		ArrayList<String> out = new ArrayList<>();
+		int depth = 0;
+		int start = -1;
+		for (int i = 0; i < arrayInner.length(); i++) {
+			char c = arrayInner.charAt(i);
+			if (c == '{') {
+				if (depth == 0) start = i;
+				depth++;
+			} else if (c == '}') {
+				depth--;
+				if (depth == 0 && start != -1) {
+					out.add(arrayInner.substring(start, i + 1).trim());
+					start = -1;
+				}
+			}
+		}
+		return out;
+	}
+
 	private static String sha1Hex(String input) {
 		try {
 			MessageDigest digest = MessageDigest.getInstance("SHA-1");

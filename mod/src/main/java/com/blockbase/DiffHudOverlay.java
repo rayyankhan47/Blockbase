@@ -3,7 +3,7 @@ package com.blockbase;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback;
 import net.minecraft.client.Minecraft;
-import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextComponent;
 
 public class DiffHudOverlay {
 	public static void init() {
@@ -24,13 +24,13 @@ public class DiffHudOverlay {
 			int x = 12;
 			int y = 12;
 			int color = 0xE5E5E5; // light gray
-			mc.font.draw(ps, Component.literal(title), x, y, color);
+			mc.font.draw(ps, new TextComponent(title), x, y, color);
 
 			if (mode == DiffViewManager.Mode.DIFF) {
 				int added = DiffViewManager.getAdded().size();
 				int removed = DiffViewManager.getRemoved().size();
 				int modified = DiffViewManager.getModified().size();
-				mc.font.draw(ps, Component.literal(String.format("Added: %d  Removed: %d  Modified: %d", added, removed, modified)), x, y + 12, color);
+				mc.font.draw(ps, new TextComponent(String.format("Added: %d  Removed: %d  Modified: %d", added, removed, modified)), x, y + 12, color);
 			}
 		});
 	}

@@ -243,7 +243,7 @@
   - Removed: in Previous not in Current
   - Modified: same pos, different state
 - [x] Return `Diff` with categorized positions and previous states
-- [ ] Test: Compare current vs previous commit in a small area
+- [x] Test: Compare current vs previous commit in a small area
 
 ### 7.2 Client DiffView + Keybinds
 - [x] Create `DiffViewManager` (client) to hold:
@@ -256,25 +256,25 @@
 - [x] Compute diff once on enter; recompute on re-enter or on demand
 
 ### 7.3 Rendering Hooks/Mixins (non-destructive)
-- [ ] Confirm mixin setup (client)
-- [ ] Previous mode: for positions in diff map, render previous state (no world mutation)
-- [ ] Current mode: pass-through
-- [ ] Diff mode: render real world with tinted overlays for changed blocks
-- [ ] Test: toggle modes; verify visuals without changing blocks
+- [x] Confirm mixin setup (client)
+- [x] Previous mode: for positions in diff map, render previous state (no world mutation)
+- [x] Current mode: pass-through
+- [x] Diff mode: render real world with tinted overlays for changed blocks
+- [x] Test: toggle modes; verify visuals without changing blocks
 
 ### 7.4 Implement Color Tinting via Mixin
-- [ ] In `BlockRenderMixin`, check diff status for position in Diff mode
-- [ ] Apply color tint based on status:
+- [x] In `BlockRenderMixin`, check diff status for position in Diff mode
+- [x] Apply color tint based on status:
   - Green tint for added blocks
   - Red tint for removed blocks
   - Yellow tint for modified blocks
-- [ ] Use Minecraft's color overlay/quad tinting
-- [ ] Test: verify overlays on changed blocks in Diff mode
+- [x] Use Minecraft's color overlay/quad tinting
+- [x] Test: verify overlays on changed blocks in Diff mode
 
 ### 7.5 Diff Commands (enter/exit)
-- [ ] Add `/blockbase diff` to enter and compute diff (using rules above)
-- [ ] Add `/blockbase diff clear` to exit/clear diff mode
-- [ ] Test: Make changes, commit, enter diff, cycle P to view Diff/Current/Previous, exit with Shift+P or clear command
+- [x] Add `/blockbase diff` to enter and compute diff (using rules above)
+- [x] Add `/blockbase diff clear` to exit/clear diff mode
+- [x] Test: Make changes, commit, enter diff, cycle P to view Diff/Current/Previous, exit with Shift+P or clear command
 
 ---
 
