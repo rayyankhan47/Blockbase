@@ -4,6 +4,7 @@ import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.context.CommandContext;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
+import net.minecraft.world.level.Level;
 
 import java.util.HashMap;
 import java.util.List;
@@ -20,6 +21,10 @@ public class BlockbaseCommands {
 			Commands.literal("blockbase")
 				.executes(BlockbaseCommands::rootCommand)
 				.then(
+					Commands.literal("init")
+						.executes(BlockbaseCommands::initCommand)
+				)
+				.then(
 					Commands.literal("help")
 						.executes(BlockbaseCommands::helpCommand)
 				)
@@ -33,6 +38,7 @@ public class BlockbaseCommands {
 	private static int helpCommand(CommandContext<CommandSourceStack> context) {
 		context.getSource().sendSuccess(new net.minecraft.network.chat.TextComponent(
 			"[Blockbase] Commands:\n" +
+			" - /blockbase init   : Initialize Blockbase repository in this world\n" +
 			" - /blockbase help   : Show this help message\n" +
 			" - /blockbase status : Show tracked change status"
 		), false);
@@ -88,6 +94,32 @@ public class BlockbaseCommands {
 		// No subcommand: show basic usage hint
 		context.getSource().sendSuccess(
 			new net.minecraft.network.chat.TextComponent("[Blockbase] Use /blockbase help for available commands."),
+			false
+		);
+		return 1;
+	}
+
+	private static int initCommand(CommandContext<CommandSourceStack> context) {
+		Level world = context.getSource().getLevel();
+
+		Repository repo = Repository.init(world);
+		if (repo == null) {
+			context.getSource().sendFailure(
+				new net.minecraft.network.chat.TextComponent("[Blockbase] Failed to initialize repository. Check logs for details.")
+			);
+			return 0;
+		}
+
+		context.getSource().sendSuccess(
+			new net.minecraft.network.chat.TextComponent(String.format(
+				"[Blockbase] Repository initialized.\n" +
+				" - Name: %s\n" +
+				" - ID: %s\n" +
+				" - Default branch: %s",
+				repo.getName(),
+				repo.getId(),
+				repo.getDefaultBranch()
+			)),
 			false
 		);
 		return 1;

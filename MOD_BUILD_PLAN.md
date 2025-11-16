@@ -107,25 +107,25 @@
 ## Step 3: Basic Command System
 
 ### 3.1 Set Up Command Registration
-- [ ] Create new file: `src/main/java/com/blockbase/BlockbaseCommands.java`
-- [ ] Create command registration method
-- [ ] In `BlockbaseMod.java`, call command registration on initialization
-- [ ] Verify: `/blockbase` command exists (should show error about missing subcommand)
+- [x] Create new file: `src/main/java/com/blockbase/BlockbaseCommands.java`
+- [x] Create command registration method
+- [x] In `BlockbaseMod.java`, call command registration on initialization
+- [x] Verify: `/blockbase` command exists (should show error about missing subcommand)
 
 ### 3.2 Implement Help Command
-- [ ] Add `/blockbase help` command
-- [ ] List all available commands
-- [ ] Show usage examples
-- [ ] Test: Run `/blockbase help` in-game
+- [x] Add `/blockbase help` command
+- [x] List all available commands
+- [x] Show usage examples
+- [x] Test: Run `/blockbase help` in-game
 
 ### 3.3 Implement Status Command
-- [ ] Add `/blockbase status` command
-- [ ] Show:
+- [x] Add `/blockbase status` command
+- [x] Show:
   - Number of tracked changes
   - Number of staged changes
   - Current branch
   - Repository status
-- [ ] Test: Run `/blockbase status` after making changes
+- [x] Test: Run `/blockbase status` after making changes
 
 ---
 
