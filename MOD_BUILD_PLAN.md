@@ -223,19 +223,12 @@
 - [x] Test: Create repo locally, push to backend
 
 ### 5.3 Implement Push Command
-- [ ] Add `/blockbase push` command
-- [ ] Get all local commits not on remote
-- [ ] Send commits to backend API
-- [ ] Include all block change data
-- [ ] Handle errors (network, authentication)
-- [ ] Test: Make commits, push to backend, verify on backend
-
-### 5.4 Add Authentication
-- [ ] Add API key configuration
-- [ ] Store API key in config file (`.blockbase/config.json`)
-- [ ] Add API key to HTTP requests (header)
-- [ ] Handle authentication errors
-- [ ] Test: Push with valid/invalid API key
+- [x] Add `/blockbase push` command
+- [x] Get all local commits not on remote
+- [x] Send commits to backend API
+- [x] Include all block change data
+- [x] Handle errors (network, authentication)
+- [x] Test: Make commits, push to backend, verify on backend
 
 ---
 
