@@ -1,8 +1,7 @@
- 'use client';
+'use client';
 import { use, useEffect, useState } from 'react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
-import { getRepoById, Repo, updateRepo } from '@/lib/repoStore';
 import { getApiBase } from '@/lib/config';
 
 type Commit = {
@@ -12,11 +11,12 @@ type Commit = {
   timestamp: string;
 };
 
-const mockCommits: Commit[] = [
-  { id: 'b7f3a21', author: 'rayyan', message: 'Add piston clock and tidy wiring', timestamp: '2025-11-16T18:18:00Z' },
-  { id: 'a152c9e', author: 'rayyan', message: 'Lay foundation for control room', timestamp: '2025-11-16T17:40:00Z' },
-  { id: '5f91d0a', author: 'rayyan', message: 'Initial repo setup', timestamp: '2025-11-16T16:05:00Z' },
-];
+type Repo = {
+  id: string;
+  name: string;
+  default_branch: string;
+  created_at: string;
+};
 
 export default function RepoPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = use(params);
@@ -24,11 +24,36 @@ export default function RepoPage({ params }: { params: Promise<{ id: string }> }
   const [tab, setTab] = useState<'readme' | 'commits'>('readme');
   const [editing, setEditing] = useState(false);
   const [draft, setDraft] = useState('');
+  const [commits, setCommits] = useState<Commit[]>([]);
+  const [initialized, setInitialized] = useState(false);
 
   useEffect(() => {
-    const r = getRepoById(id);
-    setRepo(r);
-    if (r?.hasReadme) setDraft(r.readme || '');
+    const load = async () => {
+      try {
+        const [repoRes, readmeRes, commitsRes] = await Promise.all([
+          fetch(`${getApiBase()}/repos/${id}`, { cache: 'no-store' }),
+          fetch(`${getApiBase()}/repos/${id}/readme`, { cache: 'no-store' }),
+          fetch(`${getApiBase()}/repos/${id}/commits`, { cache: 'no-store' }),
+        ]);
+        if (repoRes.ok) {
+          const r = await repoRes.json();
+          setRepo(r);
+        }
+        if (readmeRes.ok) {
+          const rd = await readmeRes.json();
+          if (typeof rd?.content === 'string') setDraft(rd.content);
+        }
+        if (commitsRes.ok) {
+          const cs = await commitsRes.json();
+          if (Array.isArray(cs)) setCommits(cs);
+        }
+      } catch {
+        // no-op
+      }
+      // We don't track "initialized" server-side yet; keep false to show connect block for now.
+      setInitialized(false);
+    };
+    load();
   }, [id]);
 
   if (!repo) {
@@ -41,10 +66,17 @@ export default function RepoPage({ params }: { params: Promise<{ id: string }> }
     );
   }
 
-  const saveReadme = () => {
-    const updated = updateRepo(repo.id, { hasReadme: true, readme: draft });
-    if (updated) setRepo(updated);
-    setEditing(false);
+  const saveReadme = async () => {
+    try {
+      await fetch(`${getApiBase()}/repos/${id}/readme`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ content: draft }),
+      });
+      setEditing(false);
+    } catch {
+      // no-op
+    }
   };
 
   return (
@@ -52,12 +84,8 @@ export default function RepoPage({ params }: { params: Promise<{ id: string }> }
       <div className="mx-auto max-w-6xl">
         <header className="mb-8">
           <h1 className="text-5xl font-bold">{repo.name}</h1>
-          <p className="mt-3 text-xl text-[var(--muted)]">
-            World: {repo.worldName || '—'}
-          </p>
-          <p className="mt-1 text-md text-[var(--muted)]">
-            Updated: {new Date(repo.updatedAt).toLocaleString()}
-          </p>
+          <p className="mt-3 text-xl text-[var(--muted)]">Default branch: {repo.default_branch}</p>
+          <p className="mt-1 text-md text-[var(--muted)]">Created: {new Date(repo.created_at).toLocaleString()}</p>
         </header>
 
         <div className="mb-6 flex items-center gap-3">
@@ -79,7 +107,7 @@ export default function RepoPage({ params }: { params: Promise<{ id: string }> }
 
         {tab === 'readme' ? (
           <section className="space-y-4">
-            {!repo.initialized && (
+            {!initialized && (
               <ConnectBlock />
             )}
             <div className="card p-5">
@@ -151,7 +179,7 @@ export default function RepoPage({ params }: { params: Promise<{ id: string }> }
                       hr: ({ node, ...props }) => <hr className="my-6 border-[var(--accent-weak)]" {...props} />,
                     }}
                   >
-                    {repo.readme || '_No README yet._'}
+                    {draft || '_No README yet._'}
                   </ReactMarkdown>
                 </article>
               ) : (
@@ -168,7 +196,7 @@ export default function RepoPage({ params }: { params: Promise<{ id: string }> }
           <section className="space-y-5">
             <h2 className="text-3xl font-semibold">Commits</h2>
             <ul className="space-y-4">
-              {mockCommits.map((c) => (
+              {commits.map((c) => (
                 <li key={c.id} className="card p-6">
                   <a href={`/repo/${repo.id}/commit/${c.id}`} className="block">
                     <div className="flex items-center justify-between">

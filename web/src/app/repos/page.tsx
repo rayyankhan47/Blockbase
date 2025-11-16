@@ -1,6 +1,13 @@
 "use client";
 import { useEffect, useState } from 'react';
-import { createRepo, getRepos, Repo } from '@/lib/repoStore';
+import { getApiBase } from '@/lib/config';
+
+type Repo = {
+  id: string;
+  name: string;
+  default_branch: string;
+  created_at: string;
+};
 
 export default function ReposPage() {
   const [repos, setRepos] = useState<Repo[]>([]);
@@ -9,16 +16,41 @@ export default function ReposPage() {
   const [withReadme, setWithReadme] = useState(true);
 
   useEffect(() => {
-    setRepos(getRepos());
+    const load = async () => {
+      try {
+        const res = await fetch(`${getApiBase()}/repos`, { cache: 'no-store' });
+        const data = await res.json();
+        setRepos(Array.isArray(data) ? data : []);
+      } catch {
+        setRepos([]);
+      }
+    };
+    load();
   }, []);
 
-  const onCreate = () => {
-    const r = createRepo(name.trim(), withReadme);
-    setRepos(getRepos());
-    setOpen(false);
-    setName('');
-    setWithReadme(true);
-    window.location.href = `/repo/${r.id}`;
+  const onCreate = async () => {
+    const idBase = name.trim().toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+    const id = idBase || `repo-${Math.random().toString(36).slice(2, 8)}`;
+    try {
+      await fetch(`${getApiBase()}/repos`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id, name: name || 'Untitled Repo', default_branch: 'main' }),
+      });
+      if (withReadme) {
+        await fetch(`${getApiBase()}/repos/${id}/readme`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ content: '# README\n\nDescribe your project here.' }),
+        });
+      }
+      setOpen(false);
+      setName('');
+      setWithReadme(true);
+      window.location.href = `/repo/${id}`;
+    } catch {
+      // no-op
+    }
   };
 
   return (
@@ -49,11 +81,10 @@ export default function ReposPage() {
             >
               <h2 className="text-3xl font-semibold">{repo.name}</h2>
               <div className="mt-4 text-lg text-[var(--muted)]">
-                <div>World: {repo.worldName || '—'}</div>
-                <div>Commits: {repo.commits}</div>
+                <div>Default branch: {repo.default_branch}</div>
               </div>
               <div className="mt-6 text-md text-[var(--muted)]">
-                Updated: {new Date(repo.updatedAt).toLocaleString()}
+                Created: {new Date(repo.created_at).toLocaleString()}
               </div>
             </a>
           ))}
