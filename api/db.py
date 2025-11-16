@@ -51,10 +51,18 @@ def init_db() -> None:
     conn = get_conn()
     try:
         conn.executescript(SCHEMA)
+        _migrate_add_readme_column(conn)
         conn.commit()
     finally:
         conn.close()
 
+def _migrate_add_readme_column(conn: sqlite3.Connection) -> None:
+    # Add repos.readme TEXT if not present
+    cur = conn.execute("PRAGMA table_info(repos)")
+    cols = [row["name"] for row in cur.fetchall()]
+    if "readme" not in cols:
+        conn.execute("ALTER TABLE repos ADD COLUMN readme TEXT")
+        conn.commit()
 
 def with_conn() -> Iterator[sqlite3.Connection]:
     conn = get_conn()

@@ -3,10 +3,10 @@ from fastapi import APIRouter, HTTPException
 # Support running as package (api.routers) or module (routers)
 try:
 	from . import db  # type: ignore
-	from .models import RepoCreate, RepoOut, CommitCreate, CommitOut, CommitWithChangesOut, ChangeIn  # type: ignore
+	from .models import RepoCreate, RepoOut, CommitCreate, CommitOut, CommitWithChangesOut, ChangeIn, RepoReadmeIn, RepoReadmeOut  # type: ignore
 except ImportError:
 	import db  # type: ignore
-	from models import RepoCreate, RepoOut, CommitCreate, CommitOut, CommitWithChangesOut, ChangeIn  # type: ignore
+	from models import RepoCreate, RepoOut, CommitCreate, CommitOut, CommitWithChangesOut, ChangeIn, RepoReadmeIn, RepoReadmeOut  # type: ignore
 
 router = APIRouter(prefix="/api")
 
@@ -45,6 +45,25 @@ def list_repos():
             "SELECT id, name, default_branch, created_at FROM repos ORDER BY created_at DESC"
         ).fetchall()
         return [RepoOut(**dict(r)) for r in rows]
+
+@router.get("/repos/{repo_id}/readme", response_model=RepoReadmeOut)
+def get_readme(repo_id: str):
+    with db.get_conn() as conn:
+        row = conn.execute("SELECT readme FROM repos WHERE id = ?", (repo_id,)).fetchone()
+        if row is None:
+            raise HTTPException(status_code=404, detail="Repository not found")
+        content = row["readme"] or ""
+        return RepoReadmeOut(content=content)
+
+@router.put("/repos/{repo_id}/readme", response_model=RepoReadmeOut)
+def put_readme(repo_id: str, body: RepoReadmeIn):
+    with db.get_conn() as conn:
+        repo = conn.execute("SELECT id FROM repos WHERE id = ?", (repo_id,)).fetchone()
+        if repo is None:
+            raise HTTPException(status_code=404, detail="Repository not found")
+        conn.execute("UPDATE repos SET readme = ? WHERE id = ?", (body.content, repo_id))
+        conn.commit()
+        return RepoReadmeOut(content=body.content)
 
 
 @router.post("/repos/{repo_id}/commits")

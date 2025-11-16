@@ -14,6 +14,12 @@ class RepoOut(BaseModel):
     default_branch: str
     created_at: str
 
+class RepoReadmeOut(BaseModel):
+    content: str
+
+class RepoReadmeIn(BaseModel):
+    content: str
+
 
 class ChangeIn(BaseModel):
     pos_x: int
