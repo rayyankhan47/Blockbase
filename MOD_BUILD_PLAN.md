@@ -232,54 +232,49 @@
 
 ---
 
-## Step 7: Visual Diffing - Sky Duplicate (THE KILLER FEATURE)
+## Step 7: Visual Diffing - In-Place Toggle (THE KILLER FEATURE)
 
 ### 7.1 Implement Diff Calculation
-- [ ] Create `DiffCalculator` class
-- [ ] Add method to compare two commits:
-  - Added blocks (in new, not in old)
-  - Removed blocks (in old, not in new)
-  - Modified blocks (same position, different type)
-- [ ] Return `Diff` object with categorized changes
-- [ ] Test: Compare two commits, verify diff calculation
+- [ ] Create `DiffCalculator` (client or shared)
+- [ ] Compare Current world vs target commit:
+  - Target: latest commit if ≥2; if exactly 1, compare to that; if 0, block diff mode
+  - Limit comparison to a player-centered radius (e.g., 96–128 blocks)
+  - Added: in Current not in Previous
+  - Removed: in Previous not in Current
+  - Modified: same pos, different state
+- [ ] Return `Diff` with categorized positions and previous states
+- [ ] Test: Compare current vs previous commit in a small area
 
-### 7.2 Implement Sky Duplicate Placement
-- [ ] Create `DiffRenderer` class
-- [ ] Add method to place duplicate blocks in sky:
-  - Calculate build bounding box
-  - Calculate offset (30 blocks above)
-  - Place blocks at offset positions
-- [ ] Track which blocks are "diff blocks" (for cleanup)
-- [ ] Test: Place duplicate build in sky
+### 7.2 Client DiffView + Keybinds
+- [ ] Create `DiffViewManager` (client) to hold:
+  - Mode: Diff → Current → Previous
+  - Maps: pos → previous state; pos → status (added/removed/modified)
+  - Radius and player anchor
+- [ ] Keybinds:
+  - P to cycle modes
+  - Shift+P to exit/clear
+- [ ] Compute diff once on enter; recompute on re-enter or on demand
 
-### 7.3 Set Up Mixin for Block Rendering
-- [ ] Add Mixin dependency to `build.gradle` (if not already present)
-- [ ] Create `src/main/resources/blockbase.mixins.json` file
-- [ ] Create mixin class: `src/main/java/com/blockbase/mixins/BlockRenderMixin.java`
-- [ ] Hook into block rendering method
-- [ ] Add mixin to `fabric.mod.json`
-- [ ] Test: Mixin loads without errors
+### 7.3 Rendering Hooks/Mixins (non-destructive)
+- [ ] Confirm mixin setup (client)
+- [ ] Previous mode: for positions in diff map, render previous state (no world mutation)
+- [ ] Current mode: pass-through
+- [ ] Diff mode: render real world with tinted overlays for changed blocks
+- [ ] Test: toggle modes; verify visuals without changing blocks
 
 ### 7.4 Implement Color Tinting via Mixin
-- [ ] In `BlockRenderMixin`, check if block is a "diff block"
-- [ ] Store diff status (added/removed/modified) for each block position
+- [ ] In `BlockRenderMixin`, check diff status for position in Diff mode
 - [ ] Apply color tint based on status:
   - Green tint for added blocks
   - Red tint for removed blocks
   - Yellow tint for modified blocks
-- [ ] Use Minecraft's color overlay system
-- [ ] Test: Place diff blocks, verify color tints appear
+- [ ] Use Minecraft's color overlay/quad tinting
+- [ ] Test: verify overlays on changed blocks in Diff mode
 
-### 7.5 Implement Diff Command
-- [ ] Add `/blockbase diff <commit1> <commit2>` command
-  - Default: Compare latest commit to previous
-  - Calculate diff
-  - Place duplicate in sky
-  - Apply color tints
-- [ ] Add `/blockbase diff clear` command
-  - Remove all diff blocks from sky
-  - Clear diff status tracking
-- [ ] Test: Make changes, commit, run diff, verify sky duplicate with colors
+### 7.5 Diff Commands (enter/exit)
+- [ ] Add `/blockbase diff` to enter and compute diff (using rules above)
+- [ ] Add `/blockbase diff clear` to exit/clear diff mode
+- [ ] Test: Make changes, commit, enter diff, cycle P to view Diff/Current/Previous, exit with Shift+P or clear command
 
 ---
 
