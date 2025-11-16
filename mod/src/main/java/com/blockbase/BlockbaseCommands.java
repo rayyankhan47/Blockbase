@@ -78,6 +78,14 @@ public class BlockbaseCommands {
 						.executes(BlockbaseCommands::pushCommand)
 				)
 				.then(
+					Commands.literal("diff")
+						.executes(BlockbaseCommands::diffEnterCommand)
+						.then(
+							Commands.literal("clear")
+								.executes(BlockbaseCommands::diffClearCommand)
+						)
+				)
+				.then(
 					Commands.literal("remote")
 						.then(
 							Commands.literal("add")
@@ -106,6 +114,8 @@ public class BlockbaseCommands {
 			" - /bb log    : Show recent commits\n" +
 			" - /bb reset --hard <commitId> : Reset world to a specific commit (destructive)\n" +
 			" - /bb push   : Push local commits to remote backend\n" +
+			" - /bb diff   : Enter visual diff mode (P to cycle modes, Shift+P to exit)\n" +
+			" - /bb diff clear : Exit visual diff mode\n" +
 			" - /bb remote add origin <url> : Set remote backend URL for this repo\n" +
 			" - /bb remote show : Display current remote URL\n" +
 			" - /bb help   : Show this help message\n" +
@@ -229,6 +239,30 @@ public class BlockbaseCommands {
 			false
 		);
 		return 1;
+	}
+
+	private static int diffEnterCommand(CommandContext<CommandSourceStack> context) {
+		try {
+			var player = context.getSource().getPlayerOrException();
+			DiffNetwork.send((net.minecraft.server.level.ServerPlayer) player, DiffNetwork.Action.ENTER);
+			context.getSource().sendSuccess(new net.minecraft.network.chat.TextComponent("[Blockbase] Entered diff mode. Press P to cycle, Shift+P to exit."), false);
+			return 1;
+		} catch (Exception e) {
+			context.getSource().sendFailure(new net.minecraft.network.chat.TextComponent("[Blockbase] Failed to enter diff mode: " + e.getMessage()));
+			return 0;
+		}
+	}
+
+	private static int diffClearCommand(CommandContext<CommandSourceStack> context) {
+		try {
+			var player = context.getSource().getPlayerOrException();
+			DiffNetwork.send((net.minecraft.server.level.ServerPlayer) player, DiffNetwork.Action.CLEAR);
+			context.getSource().sendSuccess(new net.minecraft.network.chat.TextComponent("[Blockbase] Exited diff mode."), false);
+			return 1;
+		} catch (Exception e) {
+			context.getSource().sendFailure(new net.minecraft.network.chat.TextComponent("[Blockbase] Failed to exit diff mode: " + e.getMessage()));
+			return 0;
+		}
 	}
 
 	private static int rootCommand(CommandContext<CommandSourceStack> context) {
