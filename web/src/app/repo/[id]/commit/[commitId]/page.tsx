@@ -1,35 +1,27 @@
 import Image from "next/image";
 import { getBlockIconPath } from "@/lib/blockIcons";
+import { getApiBase } from "@/lib/config";
+
 type BlockDelta = {
 	id: string; // e.g., minecraft:redstone_wire
 	name: string; // e.g., Redstone Dust
 	count: number;
 };
 
-type CommitDetail = {
+type CommitFromApi = {
 	id: string;
+	repo_id: string;
 	message: string;
 	author: string;
 	timestamp: string;
-	added: BlockDelta[];
-	removed: BlockDelta[];
+	changes: RawChange[];
 };
 
-const mockCommitDetail = (commitId: string): CommitDetail => ({
-	id: commitId,
-	message: "Add piston clock and tidy wiring",
-	author: "rayyan",
-	timestamp: "2025-11-16T18:18:00Z",
-	added: [
-		{ id: "minecraft:redstone_wire", name: "Redstone Dust", count: 18 },
-		{ id: "minecraft:lever", name: "Lever", count: 2 },
-		{ id: "minecraft:observer", name: "Observer", count: 1 },
-	],
-	removed: [
-		{ id: "minecraft:cobblestone", name: "Cobblestone", count: 12 },
-		{ id: "minecraft:torch", name: "Torch", count: 3 },
-	],
-});
+type RawChange = {
+	oldStateId?: string | null;
+	newStateId?: string | null;
+	type?: "PLACED" | "BROKEN" | "MODIFIED" | string;
+};
 
 function DeltaList({
 	title,
@@ -99,8 +91,33 @@ export default async function CommitPage({
 }: {
 	params: Promise<{ id: string; commitId: string }>;
 }) {
-	const { commitId } = await params;
-	const data = mockCommitDetail(commitId);
+	const { id, commitId } = await params;
+
+	const res = await fetch(`${getApiBase()}/repos/${id}/commits/${commitId}`, {
+		cache: "no-store",
+	});
+
+	if (!res.ok) {
+		return (
+			<div className="min-h-screen w-full px-8 py-14">
+				<div className="mx-auto max-w-6xl">
+					<p>Commit not found.</p>
+				</div>
+			</div>
+		);
+	}
+
+	const apiCommit = (await res.json()) as CommitFromApi;
+	const { added, removed } = summarizeChanges(apiCommit.changes);
+
+	const data = {
+		id: apiCommit.id,
+		message: apiCommit.message,
+		author: apiCommit.author,
+		timestamp: apiCommit.timestamp,
+		added,
+		removed,
+	};
 
 	return (
 		<div className="min-h-screen w-full px-8 py-14">
@@ -123,5 +140,54 @@ export default async function CommitPage({
 			</div>
 		</div>
 	);
+}
+
+function summarizeChanges(changes: RawChange[]): {
+	added: BlockDelta[];
+	removed: BlockDelta[];
+} {
+	const addedMap = new Map<string, number>();
+	const removedMap = new Map<string, number>();
+
+	for (const ch of changes || []) {
+		const t = ch.type || "";
+		if (t === "PLACED" && ch.newStateId) {
+			const id = ch.newStateId;
+			addedMap.set(id, (addedMap.get(id) || 0) + 1);
+		} else if (t === "BROKEN" && ch.oldStateId) {
+			const id = ch.oldStateId;
+			removedMap.set(id, (removedMap.get(id) || 0) + 1);
+		} else if (t === "MODIFIED") {
+			// Optional: treat modified as removed old + added new
+			if (ch.oldStateId) {
+				const id = ch.oldStateId;
+				removedMap.set(id, (removedMap.get(id) || 0) + 1);
+			}
+			if (ch.newStateId) {
+				const id = ch.newStateId;
+				addedMap.set(id, (addedMap.get(id) || 0) + 1);
+			}
+		}
+	}
+
+	const toDeltas = (m: Map<string, number>): BlockDelta[] =>
+		Array.from(m.entries()).map(([id, count]) => ({
+			id,
+			name: humanizeId(id),
+			count,
+		}));
+
+	return {
+		added: toDeltas(addedMap),
+		removed: toDeltas(removedMap),
+	};
+}
+
+function humanizeId(id: string): string {
+	const bare = id.includes(":") ? id.split(":")[1] : id;
+	return bare
+		.split("_")
+		.map((p) => p.charAt(0).toUpperCase() + p.slice(1))
+		.join(" ");
 }
 

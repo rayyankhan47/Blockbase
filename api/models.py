@@ -22,9 +22,11 @@ class RepoReadmeIn(BaseModel):
 
 
 class ChangeIn(BaseModel):
-    pos_x: int
-    pos_y: int
-    pos_z: int
+    # Placeholder for future structured changes; for now we accept arbitrary objects
+    # coming from the mod and don't persist them in this API.
+    pos_x: Optional[int] = None
+    pos_y: Optional[int] = None
+    pos_z: Optional[int] = None
     old_state: Optional[str] = None
     new_state: Optional[str] = None
 

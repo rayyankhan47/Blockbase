@@ -1,5 +1,6 @@
 from typing import List, Optional
 from fastapi import APIRouter, HTTPException
+import json
 # Support running as package (api.routers) or module (routers)
 try:
 	from . import db  # type: ignore
@@ -76,18 +77,11 @@ def create_commit(repo_id: str, body: CommitCreate):
         if exists is not None:
             # Idempotent: accept existing
             return {"ok": True, "id": body.id}
+        changes_json = json.dumps([c.dict() for c in body.changes]) if body.changes else "[]"
         conn.execute(
-            "INSERT INTO commits(id, repo_id, message, author, timestamp) VALUES (?,?,?,?,?)",
-            (body.id, repo_id, body.message, body.author, body.timestamp),
+            "INSERT INTO commits(id, repo_id, message, author, timestamp, changes_json) VALUES (?,?,?,?,?,?)",
+            (body.id, repo_id, body.message, body.author, body.timestamp, changes_json),
         )
-        if body.changes:
-            conn.executemany(
-                "INSERT INTO changes(commit_id, pos_x, pos_y, pos_z, old_state, new_state) VALUES (?,?,?,?,?,?)",
-                [
-                    (body.id, c.pos_x, c.pos_y, c.pos_z, c.old_state, c.new_state)
-                    for c in body.changes
-                ],
-            )
         conn.commit()
         return {"ok": True, "id": body.id}
 
@@ -109,18 +103,29 @@ def list_commits(repo_id: str):
 def get_commit(repo_id: str, commit_id: str):
     with db.get_conn() as conn:
         commit = conn.execute(
-            "SELECT id, repo_id, message, author, timestamp FROM commits WHERE id = ? AND repo_id = ?",
+            "SELECT id, repo_id, message, author, timestamp, changes_json FROM commits WHERE id = ? AND repo_id = ?",
             (commit_id, repo_id),
         ).fetchone()
         if commit is None:
             raise HTTPException(status_code=404, detail="Commit not found")
-        rows = conn.execute(
-            "SELECT pos_x, pos_y, pos_z, old_state, new_state FROM changes WHERE commit_id = ?",
-            (commit_id,),
-        ).fetchall()
+        raw_changes = commit["changes_json"] or "[]"
+        try:
+            parsed = json.loads(raw_changes)
+        except Exception:
+            parsed = []
+        # Map to ChangeIn models if possible
+        changes = []
+        if isinstance(parsed, list):
+            for item in parsed:
+                if isinstance(item, dict):
+                    try:
+                        changes.append(ChangeIn(**item))
+                    except Exception:
+                        # if it doesn't match our schema, skip
+                        pass
         return CommitWithChangesOut(
             **dict(commit),
-            changes=[ChangeIn(**dict(r)) for r in rows],
+            changes=changes,
         )
 
 

@@ -52,6 +52,7 @@ def init_db() -> None:
     try:
         conn.executescript(SCHEMA)
         _migrate_add_readme_column(conn)
+        _migrate_add_changes_json_column(conn)
         conn.commit()
     finally:
         conn.close()
@@ -62,6 +63,14 @@ def _migrate_add_readme_column(conn: sqlite3.Connection) -> None:
     cols = [row["name"] for row in cur.fetchall()]
     if "readme" not in cols:
         conn.execute("ALTER TABLE repos ADD COLUMN readme TEXT")
+        conn.commit()
+
+def _migrate_add_changes_json_column(conn: sqlite3.Connection) -> None:
+    # Add commits.changes_json TEXT if not present
+    cur = conn.execute("PRAGMA table_info(commits)")
+    cols = [row["name"] for row in cur.fetchall()]
+    if "changes_json" not in cols:
+        conn.execute("ALTER TABLE commits ADD COLUMN changes_json TEXT")
         conn.commit()
 
 def with_conn() -> Iterator[sqlite3.Connection]:
