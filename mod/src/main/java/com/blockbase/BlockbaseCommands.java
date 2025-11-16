@@ -73,6 +73,23 @@ public class BlockbaseCommands {
 					Commands.literal("status")
 						.executes(BlockbaseCommands::statusCommand)
 				)
+				.then(
+					Commands.literal("remote")
+						.then(
+							Commands.literal("add")
+								.then(
+									Commands.literal("origin")
+										.then(
+											Commands.argument("url", StringArgumentType.greedyString())
+												.executes(BlockbaseCommands::remoteAddCommand)
+										)
+								)
+						)
+						.then(
+							Commands.literal("show")
+								.executes(BlockbaseCommands::remoteShowCommand)
+						)
+				)
 		);
 	}
 
@@ -84,6 +101,8 @@ public class BlockbaseCommands {
 			" - /bb add .  : Stage all currently tracked changes\n" +
 			" - /bb log    : Show recent commits\n" +
 			" - /bb reset --hard <commitId> : Reset world to a specific commit (destructive)\n" +
+			" - /bb remote add origin <url> : Set remote backend URL for this repo\n" +
+			" - /bb remote show : Display current remote URL\n" +
 			" - /bb help   : Show this help message\n" +
 			" - /bb status : Show tracked change status"
 		), false);
@@ -712,6 +731,55 @@ public class BlockbaseCommands {
 			)),
 			false
 		);
+		return 1;
+	}
+
+	private static int remoteShowCommand(CommandContext<CommandSourceStack> context) {
+		Level world = context.getSource().getLevel();
+		Repository repo = Repository.load(world);
+		if (repo == null) {
+			context.getSource().sendFailure(new net.minecraft.network.chat.TextComponent("[Blockbase] No repository found. Run /bb init first."));
+			return 0;
+		}
+		String url = repo.getRemoteUrl();
+		if (url == null || url.isEmpty()) {
+			context.getSource().sendSuccess(new net.minecraft.network.chat.TextComponent("[Blockbase] No remote set. Use /bb remote add <url>"), false);
+		} else {
+			context.getSource().sendSuccess(new net.minecraft.network.chat.TextComponent("[Blockbase] Remote: " + url), false);
+		}
+		return 1;
+	}
+
+	private static int remoteAddCommand(CommandContext<CommandSourceStack> context) {
+		Level world = context.getSource().getLevel();
+		Repository repo = Repository.load(world);
+		if (repo == null) {
+			context.getSource().sendFailure(new net.minecraft.network.chat.TextComponent("[Blockbase] No repository found. Run /bb init first."));
+			return 0;
+		}
+		String url = StringArgumentType.getString(context, "url").trim();
+		if (url.isEmpty()) {
+			context.getSource().sendFailure(new net.minecraft.network.chat.TextComponent("[Blockbase] Remote URL cannot be empty."));
+			return 0;
+		}
+
+		Repository updated = repo.withRemoteUrl(url);
+		Repository.save(world, updated);
+
+		// Optionally attempt to create repo on backend
+		try {
+			ApiClient client = ApiClient.fromConfig();
+			ApiClient.ApiResult result = client.createRepository(updated.getId(), updated.getName(), java.util.Map.of("branch", updated.getDefaultBranch()));
+			if (result.ok) {
+				context.getSource().sendSuccess(new net.minecraft.network.chat.TextComponent("[Blockbase] Remote set and repository created on backend."), false);
+			} else {
+				context.getSource().sendSuccess(new net.minecraft.network.chat.TextComponent("[Blockbase] Remote set. Backend create returned " + result.status + (result.body != null ? (": " + result.body) : "")), false);
+			}
+		} catch (Exception e) {
+			// Non-fatal: remote set locally even if backend failed
+			context.getSource().sendSuccess(new net.minecraft.network.chat.TextComponent("[Blockbase] Remote set. Failed to reach backend: " + e.getMessage()), false);
+		}
+
 		return 1;
 	}
 }

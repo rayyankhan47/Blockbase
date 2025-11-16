@@ -20,12 +20,18 @@ public class Repository {
 	private final String name;
 	private final String defaultBranch;
 	private final long createdAt;
+	private final String remoteUrl;
 
 	public Repository(String id, String name, String defaultBranch, long createdAt) {
+		this(id, name, defaultBranch, createdAt, null);
+	}
+
+	public Repository(String id, String name, String defaultBranch, long createdAt, String remoteUrl) {
 		this.id = id;
 		this.name = name;
 		this.defaultBranch = defaultBranch;
 		this.createdAt = createdAt;
+		this.remoteUrl = remoteUrl;
 	}
 
 	public String getId() {
@@ -42,6 +48,14 @@ public class Repository {
 
 	public long getCreatedAt() {
 		return createdAt;
+	}
+
+	public String getRemoteUrl() {
+		return remoteUrl;
+	}
+
+	public Repository withRemoteUrl(String url) {
+		return new Repository(this.id, this.name, this.defaultBranch, this.createdAt, url);
 	}
 
 	/**
@@ -107,6 +121,24 @@ public class Repository {
 		} catch (IOException e) {
 			Blockbase.LOGGER.error("Failed to load Blockbase repository", e);
 			return null;
+		}
+	}
+
+	/**
+	 * Persist repository metadata to disk.
+	 */
+	public static void save(Level world, Repository repo) {
+		Path repoFile = getRepoFile(world);
+		if (repoFile == null) {
+			Blockbase.LOGGER.error("Cannot save repository: world directory not available");
+			return;
+		}
+		try {
+			Files.createDirectories(repoFile.getParent());
+			Files.writeString(repoFile, repo.toJson());
+			Blockbase.LOGGER.info("Saved repository metadata at {}", repoFile);
+		} catch (IOException e) {
+			Blockbase.LOGGER.error("Failed to save repo.json", e);
 		}
 	}
 
@@ -210,6 +242,9 @@ public class Repository {
 		sb.append("\"name\":\"").append(escape(name)).append("\",");
 		sb.append("\"defaultBranch\":\"").append(escape(defaultBranch)).append("\",");
 		sb.append("\"createdAt\":").append(createdAt);
+		if (remoteUrl != null && !remoteUrl.isEmpty()) {
+			sb.append(",\"remoteUrl\":\"").append(escape(remoteUrl)).append("\"");
+		}
 		sb.append("}");
 		return sb.toString();
 	}
@@ -220,7 +255,12 @@ public class Repository {
 			String name = extractString(json, "\"name\":\"");
 			String defaultBranch = extractString(json, "\"defaultBranch\":\"");
 			long createdAt = extractLong(json, "\"createdAt\":");
-			return new Repository(id, name, defaultBranch, createdAt);
+			String remoteUrl = null;
+			int idx = json.indexOf("\"remoteUrl\":\"");
+			if (idx != -1) {
+				remoteUrl = extractString(json, "\"remoteUrl\":\"");
+			}
+			return new Repository(id, name, defaultBranch, createdAt, remoteUrl);
 		} catch (Exception e) {
 			Blockbase.LOGGER.error("Failed to parse repo.json: {}", json, e);
 			return null;
