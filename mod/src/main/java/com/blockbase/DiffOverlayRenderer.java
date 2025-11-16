@@ -8,6 +8,7 @@ import com.mojang.blaze3d.vertex.Tesselator;
 import com.mojang.blaze3d.vertex.VertexFormat;
 import net.fabricmc.fabric.api.client.rendering.v1.WorldRenderEvents;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.phys.Vec3;
 
@@ -30,6 +31,7 @@ public class DiffOverlayRenderer {
 			RenderSystem.lineWidth(2.0F);
 
 			if (mode == DiffViewManager.Mode.DIFF) {
+				RenderSystem.setShader(GameRenderer::getPositionShader);
 				for (BlockPos p : DiffViewManager.getAdded()) {
 					drawBox(poseStack, camPos, p, 0f, 1f, 0f, 0.45f); // green
 				}
@@ -40,6 +42,7 @@ public class DiffOverlayRenderer {
 					drawBox(poseStack, camPos, p, 1f, 1f, 0f, 0.45f); // yellow
 				}
 			} else if (mode == DiffViewManager.Mode.PREVIOUS) {
+				RenderSystem.setShader(GameRenderer::getPositionShader);
 				for (BlockPos p : DiffViewManager.getPreviousStates().keySet()) {
 					drawBox(poseStack, camPos, p, 0.3f, 0.7f, 1f, 0.35f); // cyan-ish ghost
 				}

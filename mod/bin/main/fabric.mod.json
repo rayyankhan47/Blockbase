@@ -17,6 +17,9 @@
 	"entrypoints": {
 		"main": [
 			"com.blockbase.Blockbase"
+		],
+		"client": [
+			"com.blockbase.BlockbaseClient"
 		]
 	},
 	"mixins": [

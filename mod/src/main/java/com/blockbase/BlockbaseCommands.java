@@ -245,7 +245,7 @@ public class BlockbaseCommands {
 		try {
 			var player = context.getSource().getPlayerOrException();
 			DiffNetwork.send((net.minecraft.server.level.ServerPlayer) player, DiffNetwork.Action.ENTER);
-			context.getSource().sendSuccess(new net.minecraft.network.chat.TextComponent("[Blockbase] Entered diff mode. Press P to cycle, Shift+P to exit."), false);
+			context.getSource().sendSuccess(new net.minecraft.network.chat.TextComponent("[Blockbase] Entered diff mode. Press G to cycle, Shift+G to exit."), false);
 			return 1;
 		} catch (Exception e) {
 			context.getSource().sendFailure(new net.minecraft.network.chat.TextComponent("[Blockbase] Failed to enter diff mode: " + e.getMessage()));
