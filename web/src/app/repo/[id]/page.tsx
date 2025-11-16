@@ -26,6 +26,7 @@ export default function RepoPage({ params }: { params: Promise<{ id: string }> }
   const [draft, setDraft] = useState('');
   const [commits, setCommits] = useState<Commit[]>([]);
   const [initialized, setInitialized] = useState(false);
+  const [deleting, setDeleting] = useState(false);
 
   useEffect(() => {
     const load = async () => {
@@ -79,13 +80,40 @@ export default function RepoPage({ params }: { params: Promise<{ id: string }> }
     }
   };
 
+  const deleteRepo = async () => {
+    if (!window.confirm('Delete this repository from the remote? This will remove its commits from the dashboard.')) {
+      return;
+    }
+    setDeleting(true);
+    try {
+      await fetch(`${getApiBase()}/repos/${id}`, {
+        method: 'DELETE',
+      });
+      window.location.href = '/repos';
+    } catch {
+      setDeleting(false);
+    }
+  };
+
   return (
     <div className="min-h-screen w-full px-8 py-14">
       <div className="mx-auto max-w-6xl">
         <header className="mb-8">
-          <h1 className="text-5xl font-bold">{repo.name}</h1>
-          <p className="mt-3 text-xl text-[var(--muted)]">Default branch: {repo.default_branch}</p>
-          <p className="mt-1 text-md text-[var(--muted)]">Created: {new Date(repo.created_at).toLocaleString()}</p>
+          <div className="flex items-start justify-between gap-4">
+            <div>
+              <h1 className="text-5xl font-bold">{repo.name}</h1>
+              <p className="mt-3 text-xl text-[var(--muted)]">Default branch: {repo.default_branch}</p>
+              <p className="mt-1 text-md text-[var(--muted)]">Created: {new Date(repo.created_at).toLocaleString()}</p>
+            </div>
+            <button
+              onClick={deleteRepo}
+              disabled={deleting}
+              className="rounded-md border px-4 py-2 text-sm"
+              style={{ borderColor: 'var(--accent-weak)', color: 'var(--muted)' }}
+            >
+              {deleting ? 'Deleting…' : 'Delete remote'}
+            </button>
+          </div>
         </header>
 
         <div className="mb-6 flex items-center gap-3">

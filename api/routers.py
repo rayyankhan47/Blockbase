@@ -47,6 +47,18 @@ def list_repos():
         ).fetchall()
         return [RepoOut(**dict(r)) for r in rows]
 
+
+@router.delete("/repos/{repo_id}")
+def delete_repo(repo_id: str):
+    """Delete a repository and all its commits."""
+    with db.get_conn() as conn:
+        cur = conn.execute("SELECT id FROM repos WHERE id = ?", (repo_id,))
+        if cur.fetchone() is None:
+            raise HTTPException(status_code=404, detail="Repository not found")
+        conn.execute("DELETE FROM repos WHERE id = ?", (repo_id,))
+        conn.commit()
+        return {"ok": True, "id": repo_id}
+
 @router.get("/repos/{repo_id}/readme", response_model=RepoReadmeOut)
 def get_readme(repo_id: str):
     with db.get_conn() as conn:
