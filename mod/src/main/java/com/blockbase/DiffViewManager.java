@@ -42,17 +42,25 @@ public class DiffViewManager {
 	}
 
 	public static void cycle(Level world, BlockPos center) {
-		switch (mode.get()) {
-			case OFF -> {
-				anchor = center;
-				lastResult = DiffCalculator.compute(world, center, radius);
-				Blockbase.LOGGER.info("[blockbase] Diff computed: added={}, removed={}, modified={}",
-					lastResult.added.size(), lastResult.removed.size(), lastResult.modified.size());
-				mode.set(Mode.DIFF);
-			}
-			case DIFF -> mode.set(Mode.CURRENT);
-			case CURRENT -> mode.set(Mode.PREVIOUS);
-			case PREVIOUS -> mode.set(Mode.DIFF);
+		Mode current = mode.get();
+		if (current == Mode.OFF) {
+			anchor = center;
+			lastResult = DiffCalculator.compute(world, center, radius);
+			Blockbase.LOGGER.info("[blockbase] Diff computed: added={}, removed={}, modified={}",
+				lastResult.added.size(), lastResult.removed.size(), lastResult.modified.size());
+			mode.set(Mode.DIFF);
+			return;
+		}
+		if (current == Mode.DIFF) {
+			mode.set(Mode.CURRENT);
+		} else if (current == Mode.CURRENT) {
+			mode.set(Mode.PREVIOUS);
+		} else if (current == Mode.PREVIOUS) {
+			anchor = center;
+			lastResult = DiffCalculator.compute(world, center, radius);
+			Blockbase.LOGGER.info("[blockbase] Diff recomputed: added={}, removed={}, modified={}",
+				lastResult.added.size(), lastResult.removed.size(), lastResult.modified.size());
+			mode.set(Mode.DIFF);
 		}
 	}
 
