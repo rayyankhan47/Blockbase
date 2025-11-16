@@ -22,13 +22,16 @@ class RepoReadmeIn(BaseModel):
 
 
 class ChangeIn(BaseModel):
-    # Placeholder for future structured changes; for now we accept arbitrary objects
-    # coming from the mod and don't persist them in this API.
-    pos_x: Optional[int] = None
-    pos_y: Optional[int] = None
-    pos_z: Optional[int] = None
-    old_state: Optional[str] = None
-    new_state: Optional[str] = None
+    # Shape mirrors BlockChange.toJsonString in the mod
+    x: Optional[int] = None
+    y: Optional[int] = None
+    z: Optional[int] = None
+    oldStateId: Optional[str] = None
+    newStateId: Optional[str] = None
+    type: Optional[str] = None
+    # We ignore props for now but keep them loosely typed
+    oldProps: Optional[dict] = None
+    newProps: Optional[dict] = None
 
 
 class CommitCreate(BaseModel):

@@ -1,12 +1,12 @@
 # Blockbase
 
-**Version Control for Minecraft Builds - Like Git/GitHub for Your Creations**
+**Version Control for Minecraft Builds – Git for Your Worlds**
 
 Blockbase brings the power of modern software development tools to Minecraft. Whether you're building a redstone CPU, a massive castle, an automated farm, or any complex structure, Blockbase helps you track changes, collaborate, and never lose your work.
 
 ## What is Blockbase?
 
-Think **GitHub + Cursor for Minecraft**. Blockbase is a complete version control system with AI assistance, designed for all types of Minecraft builds.
+Think **Git meets Minecraft**. Blockbase is a complete version control system for all types of Minecraft builds, with Git‑like commands available directly inside the game.
 
 ### Use Cases
 
@@ -25,25 +25,19 @@ Think **GitHub + Cursor for Minecraft**. Blockbase is a complete version control
 - **Resetting**: Rollback to previous commits (undo mistakes!)
 - **Visual Diffing**: See exactly what changed with 3D visualization
 
-### AI Assistant
-- Select blocks with wooden axe for context
-- Ask AI questions about your build
-- Get suggestions and explanations
-- Like Copilot/Cursor, but for Minecraft
-
 ### Visual Diffing (The Killer Feature)
-- See a duplicate of your build 30 blocks in the sky
+- Toggle an in‑place diff view inside your current world
 - Color-coded changes:
   - 🟢 Green = Added blocks
   - 🔴 Red = Removed blocks
-  - 🟡 Yellow = Modified blocks
-- Perfect for understanding what changed in complex builds
+  - 🟡 Yellow = Modified blocks (optional)
+- Perfect for understanding what changed in complex builds without leaving Minecraft
 
 ## Architecture
 
-- **Minecraft Mod** (Fabric 1.18.2) - In-game version control
-- **Backend API** (Python + FastAPI) - Version control logic & AI integration
-- **Web Dashboard** (Next.js) - Repository browser (future)
+- **Minecraft Mod** (Fabric 1.18.2) – In-game tracking, commits, diffing, and Git‑like commands
+- **Backend API** (Python + FastAPI + SQLite) – Remote repositories and commit storage
+- **Web Dashboard** (Next.js) – GitHub‑style interface for browsing repos, commits, and READMEs
 
 ## Getting Started
 
@@ -60,45 +54,43 @@ Think **GitHub + Cursor for Minecraft**. Blockbase is a complete version control
 ### Basic Usage
 
 ```bash
-# Initialize repository
-/blockbase init
+# Initialize repository for the current world
+/bb init
 
-# Stage changes
-/blockbase stage
+# Stage tracked changes
+/bb add .
 
 # Commit changes
-/blockbase commit "Added new wing to castle"
+/bb commit "Added new wing to castle"
 
 # View commit history
-/blockbase log
+/bb log
 
-# See what changed (visual diff)
-/blockbase diff HEAD~1 HEAD
+# Enter visual diff mode (compare unstaged changes to latest commit)
+/bb diff
 
-# Rollback to previous commit
-/blockbase reset --hard <commitId>
+# Rollback to previous commit (destructive)
+/bb reset --hard <commitId>
 
-# Push to remote
-/blockbase push
+# Configure remote (from web dashboard)
+/bb remote add origin http://localhost:8000/api/repos/<repoId>
 
-# Ask AI about your build
-/blockbase ai "explain why this doesn't work"
+# Push commits to remote
+/bb push
 ```
 
 ## Demo
 
-Blockbase is perfect for demonstrating version control with complex builds. Our demo uses a redstone CPU/ALU to show:
+Blockbase is perfect for demonstrating version control with complex builds. A redstone CPU/ALU is a great showcase:
 - How visual diffing helps understand complex changes
-- How AI can assist with debugging
 - How version control prevents lost work
 
-But Blockbase works for **any Minecraft build** - from redstone circuits to massive castles!
+But Blockbase works for **any Minecraft build** – from redstone circuits to massive castles!
 
 ## Tech Stack
 
 - **Mod**: Fabric (Java)
 - **Backend**: Python + FastAPI
-- **AI**: Gemini API
 - **Database**: SQLite
 
 ## License
