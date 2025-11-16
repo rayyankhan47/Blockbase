@@ -20,7 +20,7 @@ export default function Home() {
             className="accent-ring inline-flex items-center justify-center rounded-xl border px-8 py-5 text-lg"
             style={{ borderColor: "var(--accent-weak)" }}
           >
-            {/* Placeholder: will become \"View Your Repositories\" if logged in */}
+            {/* Placeholder: will become "View Your Repositories" if logged in */}
             Login
           </a>
         </div>
