@@ -91,6 +91,12 @@ public class BlockbaseCommands {
 	}
 
 	private static int statusCommand(CommandContext<CommandSourceStack> context) {
+		Level world = context.getSource().getLevel();
+
+		// Repo status
+		Repository repo = Repository.load(world);
+		boolean isRepoInitialized = repo != null;
+
 		List<BlockChange> changes = Blockbase.blockTracker.getChanges();
 		int totalChanges = changes.size();
 
@@ -138,7 +144,47 @@ public class BlockbaseCommands {
 			}
 		}
 
-		// For now, staging/branch/repo status are placeholders; will be implemented in Step 4.
+		// Compose repo/branch info
+		String branchInfo = "main";
+		String repoInfo;
+		String headInfo = "";
+		if (isRepoInitialized) {
+			repoInfo = String.format("initialized (repo: %s)", repo.getName());
+			// Try to show HEAD (latest commit short id)
+			Path commitsDir = Repository.getCommitsDirectory(world);
+			String head = null;
+			if (commitsDir != null && java.nio.file.Files.exists(commitsDir)) {
+				try {
+					head = java.nio.file.Files.list(commitsDir)
+						.filter(p -> p.getFileName().toString().endsWith(".json"))
+						.max((a, b) -> {
+							try {
+								long at = java.nio.file.Files.getLastModifiedTime(a).toMillis();
+								long bt = java.nio.file.Files.getLastModifiedTime(b).toMillis();
+								return Long.compare(at, bt);
+							} catch (java.io.IOException e) {
+								return 0;
+							}
+						})
+						.map(p -> {
+							try {
+								String json = java.nio.file.Files.readString(p);
+								String id = extractString(json, "\"id\":\"");
+								if (id == null) return null;
+								return id.length() > 7 ? id.substring(0, 7) : id;
+							} catch (java.io.IOException e) {
+								return null;
+							}
+						})
+						.orElse(null);
+				} catch (java.io.IOException ignore) {}
+			}
+			if (head != null) {
+				headInfo = String.format(" (HEAD %s)", head);
+			}
+		} else {
+			repoInfo = "not initialized (use /bb init)";
+		}
 		context.getSource().sendSuccess(
 			new net.minecraft.network.chat.TextComponent(String.format(
 				"[Blockbase] Status:\n" +
@@ -146,14 +192,15 @@ public class BlockbaseCommands {
 				" - Tracked changes by block:\n%s" +
 				" - Staged changes (total): %d\n" +
 				" - Staged changes by block:\n%s" +
-				" - Current branch: %s\n" +
+				" - Current branch: %s%s\n" +
 				" - Repository: %s",
 				totalChanges,
 				trackedBreakdown.toString(),
 				stagedCount,
 				stagedBreakdown.toString(),
-				"main (placeholder)",
-				"not initialized (use /blockbase init in Step 4)"
+				branchInfo,
+				headInfo,
+				repoInfo
 			)),
 			false
 		);
@@ -343,7 +390,7 @@ public class BlockbaseCommands {
 				String json = Files.readString(path);
 
 				String id = extractString(json, "\"id\":\"");
-				String message = extractString(json, "\"message\":\"");
+				String message = unescapeJson(extractString(json, "\"message\":\""));
 				String author = extractString(json, "\"author\":\"");
 
 				String shortId = id != null && id.length() > 7 ? id.substring(0, 7) : id;
@@ -400,6 +447,37 @@ public class BlockbaseCommands {
 		return json.substring(start, end);
 	}
 
+	// Minimal JSON unescape for common sequences in our stored fields
+	private static String unescapeJson(String s) {
+		if (s == null || s.isEmpty()) return s;
+		// Order matters: unescape escaped backslashes first
+		return s.replace("\\\\", "\\")
+				.replace("\\\"", "\"")
+				.replace("\\n", "\n")
+				.replace("\\t", "\t")
+				.replace("\\r", "\r");
+	}
+
+	// Split a JSON array inner content into top-level object strings
+	private static List<String> splitTopLevelJsonObjects(String arrayInner) {
+		java.util.ArrayList<String> out = new java.util.ArrayList<>();
+		int depth = 0;
+		int start = -1;
+		for (int i = 0; i < arrayInner.length(); i++) {
+			char c = arrayInner.charAt(i);
+			if (c == '{') {
+				if (depth == 0) start = i;
+				depth++;
+			} else if (c == '}') {
+				depth--;
+				if (depth == 0 && start != -1) {
+					out.add(arrayInner.substring(start, i + 1).trim());
+					start = -1;
+				}
+			}
+		}
+		return out;
+	}
 	private static int resetHardCommand(CommandContext<CommandSourceStack> context) {
 		Level world = context.getSource().getLevel();
 
@@ -555,14 +633,7 @@ public class BlockbaseCommands {
 					continue;
 				}
 
-				String[] changeStrings = changesPart.split("\\},\\s*");
-
-				for (String changeStr : changeStrings) {
-					changeStr = changeStr.trim();
-					if (!changeStr.endsWith("}")) {
-						changeStr = changeStr + "}";
-					}
-
+				for (String changeStr : splitTopLevelJsonObjects(changesPart)) {
 					BlockChange change = BlockChange.fromJsonString(changeStr, registry);
 					if (change == null) continue;
 

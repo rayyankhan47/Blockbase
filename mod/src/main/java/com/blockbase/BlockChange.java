@@ -144,8 +144,11 @@ public class BlockChange {
 			
 			BlockPos pos = new BlockPos(x, y, z);
 			
+			// Support both new keys (...StateId) and legacy keys (...State)
 			String oldStateId = extractStringOrNull(json, "\"oldStateId\":");
+			if (oldStateId == null) oldStateId = extractStringOrNull(json, "\"oldState\":"); // legacy
 			String newStateId = extractStringOrNull(json, "\"newStateId\":");
+			if (newStateId == null) newStateId = extractStringOrNull(json, "\"newState\":"); // legacy
 			String oldPropsStr = extractObjectOrNull(json, "\"oldProps\":");
 			String newPropsStr = extractObjectOrNull(json, "\"newProps\":");
 			
