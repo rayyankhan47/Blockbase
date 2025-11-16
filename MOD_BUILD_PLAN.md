@@ -206,21 +206,21 @@
 ## Step 5: Backend API Communication (MVP: Push Only)
 
 ### 5.1 Set Up HTTP Client
-- [ ] Add HTTP client dependency to `build.gradle` (OkHttp or Java HttpClient)
-- [ ] Create `ApiClient` class
-- [ ] Add base URL configuration (config file or command argument)
-- [ ] Add methods for:
+- [x] Add HTTP client dependency to `build.gradle` (OkHttp or Java HttpClient)
+- [x] Create `ApiClient` class
+- [x] Add base URL configuration (config file or command argument)
+- [x] Add methods for:
   - `POST /api/repos` - create repository
   - `GET /api/repos/:id` - get repository
   - `POST /api/repos/:id/commits` - create commit
   - `GET /api/repos/:id/commits` - list commits
 
 ### 5.2 Implement Repository Creation on Backend
-- [ ] Add `/blockbase remote add <url>` command
-- [ ] Store remote URL in repo config
-- [ ] On init, optionally create repo on backend
-- [ ] Send repository data to backend API
-- [ ] Test: Create repo locally, push to backend
+- [x] Add `/blockbase remote add origin <url>` command
+- [x] Store remote URL in repo config
+- [x] On init, optionally create repo on backend
+- [x] Send repository data to backend API
+- [x] Test: Create repo locally, push to backend
 
 ### 5.3 Implement Push Command
 - [ ] Add `/blockbase push` command

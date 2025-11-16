@@ -74,6 +74,10 @@ public class BlockbaseCommands {
 						.executes(BlockbaseCommands::statusCommand)
 				)
 				.then(
+					Commands.literal("push")
+						.executes(BlockbaseCommands::pushCommand)
+				)
+				.then(
 					Commands.literal("remote")
 						.then(
 							Commands.literal("add")
@@ -101,6 +105,7 @@ public class BlockbaseCommands {
 			" - /bb add .  : Stage all currently tracked changes\n" +
 			" - /bb log    : Show recent commits\n" +
 			" - /bb reset --hard <commitId> : Reset world to a specific commit (destructive)\n" +
+			" - /bb push   : Push local commits to remote backend\n" +
 			" - /bb remote add origin <url> : Set remote backend URL for this repo\n" +
 			" - /bb remote show : Display current remote URL\n" +
 			" - /bb help   : Show this help message\n" +
@@ -732,6 +737,105 @@ public class BlockbaseCommands {
 			false
 		);
 		return 1;
+	}
+
+	private static int pushCommand(CommandContext<CommandSourceStack> context) {
+		Level world = context.getSource().getLevel();
+		Repository repo = Repository.load(world);
+		if (repo == null) {
+			context.getSource().sendFailure(new net.minecraft.network.chat.TextComponent("[Blockbase] No repository found. Run /bb init first."));
+			return 0;
+		}
+		String remote = repo.getRemoteUrl();
+		if (remote == null || remote.isEmpty()) {
+			context.getSource().sendFailure(new net.minecraft.network.chat.TextComponent("[Blockbase] No remote set. Use /bb remote add origin <url>"));
+			return 0;
+		}
+
+		Path commitsDir = Repository.getCommitsDirectory(world);
+		if (commitsDir == null || !Files.exists(commitsDir)) {
+			context.getSource().sendSuccess(new net.minecraft.network.chat.TextComponent("[Blockbase] No commits to push."), false);
+			return 1;
+		}
+
+		try {
+			List<Path> commitFiles = Files.list(commitsDir)
+				.filter(p -> p.getFileName().toString().endsWith(".json"))
+				.sorted((a, b) -> {
+					try {
+						long at = Files.getLastModifiedTime(a).toMillis();
+						long bt = Files.getLastModifiedTime(b).toMillis();
+						return Long.compare(at, bt); // oldest first
+					} catch (IOException e) {
+						return 0;
+					}
+				})
+				.collect(Collectors.toList());
+
+			if (commitFiles.isEmpty()) {
+				context.getSource().sendSuccess(new net.minecraft.network.chat.TextComponent("[Blockbase] No commits to push."), false);
+				return 1;
+			}
+
+			ApiClient client = new ApiClient(remote, null);
+			int pushed = 0;
+			int failed = 0;
+			for (Path path : commitFiles) {
+				String json = Files.readString(path);
+				String id = extractString(json, "\"id\":\"");
+				String message = unescapeJson(extractString(json, "\"message\":\""));
+				String author = extractString(json, "\"author\":\"");
+				long ts = extractLong(json, "\"timestamp\":");
+				String timestamp = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSX").format(new Date(ts == 0L ? System.currentTimeMillis() : ts));
+
+				// Extract raw changes array to forward as-is
+				String changesArray = "[]";
+				int idx = json.indexOf("\"changes\":[");
+				if (idx != -1) {
+					int start = idx + "\"changes\":".length();
+					// start should point to '['
+					int bracket = json.indexOf("[", start);
+					if (bracket != -1) {
+						int depth = 0;
+						int end = -1;
+						for (int i = bracket; i < json.length(); i++) {
+							char c = json.charAt(i);
+							if (c == '[') depth++;
+							else if (c == ']') {
+								depth--;
+								if (depth == 0) {
+                                    end = i;
+									break;
+								}
+							}
+						}
+						if (end != -1) {
+							changesArray = json.substring(bracket, end + 1);
+						}
+					}
+				}
+
+				ApiClient.ApiResult res = client.createCommit(repo.getId(), id, message, author, timestamp, changesArray);
+				if (res.ok) {
+					pushed++;
+				} else {
+					failed++;
+					Blockbase.LOGGER.warn("Push failed for commit {}: status={}, body={}, error={}", id, res.status, res.body, res.error);
+				}
+			}
+
+			context.getSource().sendSuccess(
+				new net.minecraft.network.chat.TextComponent(String.format("[Blockbase] Push complete. Pushed %d commit(s)%s.",
+					pushed,
+					failed > 0 ? String.format(" (%d failed - see logs)", failed) : "")),
+				false
+			);
+			return failed > 0 ? 0 : 1;
+		} catch (IOException e) {
+			Blockbase.LOGGER.error("Failed to read commits for push", e);
+			context.getSource().sendFailure(new net.minecraft.network.chat.TextComponent("[Blockbase] Failed to push commits. Check logs for details."));
+			return 0;
+		}
 	}
 
 	private static int remoteShowCommand(CommandContext<CommandSourceStack> context) {
