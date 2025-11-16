@@ -146,16 +146,16 @@ bb push`}
                       p: ({ node, ...props }) => <p className="my-3 leading-8" {...props} />,
                       ul: ({ node, ...props }) => <ul className="my-3 ml-6 list-disc" {...props} />,
                       ol: ({ node, ...props }) => <ol className="my-3 ml-6 list-decimal" {...props} />,
-                      code: ({ node, inline, className, children, ...props }) =>
-                        inline ? (
-                          <code className="rounded bg-black/30 px-1.5 py-0.5 theme-light:bg-black/10" {...props}>
-                            {children}
-                          </code>
-                        ) : (
-                          <pre className="my-3 overflow-auto rounded bg-black/35 p-4 theme-light:bg-black/10">
-                            <code {...props}>{children}</code>
-                          </pre>
-                        ),
+                      code: ({ inline, children, ...props }: any) =>
+                        inline
+                          ? (
+                            <code className="rounded px-1.5 py-0.5" {...props}>{children}</code>
+                          )
+                          : (
+                            <pre className="my-3 overflow-auto rounded p-4">
+                              <code {...props}>{children}</code>
+                            </pre>
+                          ),
                       a: ({ node, ...props }) => (
                         <a className="text-[var(--accent)] underline" {...props} />
                       ),
