@@ -114,7 +114,7 @@ public class BlockbaseCommands {
 			" - /bb log    : Show recent commits\n" +
 			" - /bb reset --hard <commitId> : Reset world to a specific commit (destructive)\n" +
 			" - /bb push   : Push local commits to remote backend\n" +
-			" - /bb diff   : Enter visual diff mode (P to cycle modes, Shift+P to exit)\n" +
+			" - /bb diff   : Enter visual diff mode (G to cycle modes, Shift+G to exit)\n" +
 			" - /bb diff clear : Exit visual diff mode\n" +
 			" - /bb remote add origin <url> : Set remote backend URL for this repo\n" +
 			" - /bb remote show : Display current remote URL\n" +

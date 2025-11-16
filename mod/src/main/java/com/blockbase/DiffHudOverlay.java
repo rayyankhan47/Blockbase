@@ -15,9 +15,9 @@ public class DiffHudOverlay {
 			PoseStack ps = poseStack;
 			var mode = DiffViewManager.getMode();
 			String title = switch (mode) {
-				case DIFF -> "Diff mode (P to cycle, Shift+P to exit)";
-				case CURRENT -> "Current mode (P to cycle, Shift+P to exit)";
-				case PREVIOUS -> "Previous mode (P to cycle, Shift+P to exit)";
+				case DIFF -> "Diff mode (G to cycle, Shift+G to exit)";
+				case CURRENT -> "Current mode (G to cycle, Shift+G to exit)";
+				case PREVIOUS -> "Previous mode (G to cycle, Shift+G to exit)";
 				default -> "";
 			};
 
