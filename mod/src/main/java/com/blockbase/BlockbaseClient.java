@@ -13,6 +13,7 @@ public class BlockbaseClient implements ClientModInitializer {
 	@Override
 	public void onInitializeClient() {
 		DiffOverlayRenderer.init();
+		DiffHudOverlay.init();
 		toggleModeKey = KeyBindingHelper.registerKeyBinding(new KeyMapping(
 			"key.blockbase.toggle_diff_mode",
 			GLFW.GLFW_KEY_P,
