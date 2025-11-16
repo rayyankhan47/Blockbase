@@ -1,6 +1,8 @@
 package com.blockbase;
 
 import net.fabricmc.api.ModInitializer;
+import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
+import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.fabricmc.fabric.api.event.player.PlayerBlockBreakEvents;
 
 import org.slf4j.Logger;
@@ -33,6 +35,9 @@ public class Blockbase implements ModInitializer {
 		// Register block event listeners
 		registerBlockEvents();
 		
+		// Register server lifecycle events for loading/saving changes
+		registerServerEvents();
+		
 		LOGGER.info("Blockbase mod initialized - block tracking enabled");
 	}
 
@@ -61,5 +66,36 @@ public class Blockbase implements ModInitializer {
 		// This is more reliable than using UseItemCallback
 		
 		LOGGER.info("Block event listeners registered");
+	}
+	
+	private void registerServerEvents() {
+		// Load changes when server starts
+		ServerLifecycleEvents.SERVER_STARTED.register(server -> {
+			// Load changes from the overworld
+			Level overworld = server.getLevel(Level.OVERWORLD);
+			if (overworld != null) {
+				blockTracker.loadChanges(overworld);
+			}
+		});
+		
+		// Save changes periodically (every 15 seconds = 300 ticks)
+		ServerTickEvents.END_SERVER_TICK.register(server -> {
+			if (server.getTickCount() % 300 == 0) { // Every 15 seconds
+				Level overworld = server.getLevel(Level.OVERWORLD);
+				if (overworld != null && blockTracker.getChangeCount() > 0) {
+					blockTracker.saveChanges(overworld);
+				}
+			}
+		});
+		
+		// Save changes when server stops
+		ServerLifecycleEvents.SERVER_STOPPING.register(server -> {
+			Level overworld = server.getLevel(Level.OVERWORLD);
+			if (overworld != null && blockTracker.getChangeCount() > 0) {
+				blockTracker.saveChanges(overworld);
+			}
+		});
+		
+		LOGGER.info("Server lifecycle events registered");
 	}
 }

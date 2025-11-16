@@ -1,9 +1,16 @@
 package com.blockbase;
 
 import net.minecraft.core.BlockPos;
-import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.core.Registry;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.storage.LevelResource;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -122,6 +129,139 @@ public class BlockTracker {
 	 */
 	public boolean isTracking() {
 		return isTracking;
+	}
+	
+	/**
+	 * Save all tracked changes to a JSON file in the world folder.
+	 * @param world The world (used to get the save directory)
+	 */
+	public void saveChanges(Level world) {
+		if (world.isClientSide()) {
+			Blockbase.LOGGER.warn("Cannot save changes on client side");
+			return;
+		}
+		
+		try {
+			Path worldDir = getWorldDirectory(world);
+			if (worldDir == null) {
+				Blockbase.LOGGER.error("Could not determine world directory");
+				return;
+			}
+			
+			Path blockbaseDir = worldDir.resolve(".blockbase");
+			Files.createDirectories(blockbaseDir);
+			
+			Path changesFile = blockbaseDir.resolve("changes.json");
+			
+			Registry<Block> blockRegistry = world.registryAccess().registryOrThrow(Registry.BLOCK_REGISTRY);
+			
+			StringBuilder json = new StringBuilder();
+			json.append("[\n");
+			
+			for (int i = 0; i < changes.size(); i++) {
+				BlockChange change = changes.get(i);
+				json.append("  ").append(change.toJsonString(blockRegistry));
+				if (i < changes.size() - 1) {
+					json.append(",");
+				}
+				json.append("\n");
+			}
+			
+			json.append("]");
+			
+			Files.writeString(changesFile, json.toString());
+			Blockbase.LOGGER.info("Saved {} block changes to {}", changes.size(), changesFile);
+			
+		} catch (IOException e) {
+			Blockbase.LOGGER.error("Failed to save block changes", e);
+		}
+	}
+	
+	/**
+	 * Load changes from a JSON file in the world folder.
+	 * @param world The world (used to get the save directory)
+	 */
+	public void loadChanges(Level world) {
+		if (world.isClientSide()) {
+			Blockbase.LOGGER.warn("Cannot load changes on client side");
+			return;
+		}
+		
+		try {
+			Path worldDir = getWorldDirectory(world);
+			if (worldDir == null) {
+				Blockbase.LOGGER.warn("Could not determine world directory, skipping load");
+				return;
+			}
+			
+			Path changesFile = worldDir.resolve(".blockbase").resolve("changes.json");
+			
+			if (!Files.exists(changesFile)) {
+				Blockbase.LOGGER.debug("No changes file found at {}, starting fresh", changesFile);
+				return;
+			}
+			
+			String jsonContent = Files.readString(changesFile);
+			
+			// Parse JSON array (simple parser for MVP)
+			// Remove outer brackets and split by }, (with lookahead for comma)
+			String trimmed = jsonContent.trim();
+			if (!trimmed.startsWith("[") || !trimmed.endsWith("]")) {
+				Blockbase.LOGGER.error("Invalid JSON format in changes file");
+				return;
+			}
+			
+			trimmed = trimmed.substring(1, trimmed.length() - 1).trim();
+			
+			if (trimmed.isEmpty()) {
+				Blockbase.LOGGER.debug("Changes file is empty");
+				return;
+			}
+			
+			Registry<Block> blockRegistry = world.registryAccess().registryOrThrow(Registry.BLOCK_REGISTRY);
+			
+			// Split by }, but keep the closing brace
+			String[] changeStrings = trimmed.split("\\},\\s*");
+			
+			changes.clear();
+			int loaded = 0;
+			
+			for (String changeStr : changeStrings) {
+				// Add back the closing brace if it was removed
+				if (!changeStr.trim().endsWith("}")) {
+					changeStr = changeStr.trim() + "}";
+				}
+				
+				// Remove leading whitespace and newlines
+				changeStr = changeStr.trim();
+				
+				BlockChange change = BlockChange.fromJsonString(changeStr, blockRegistry);
+				if (change != null) {
+					changes.add(change);
+					loaded++;
+				}
+			}
+			
+			Blockbase.LOGGER.info("Loaded {} block changes from {}", loaded, changesFile);
+			
+		} catch (IOException e) {
+			Blockbase.LOGGER.error("Failed to load block changes", e);
+		}
+	}
+	
+	/**
+	 * Get the world save directory path.
+	 * @param world The world
+	 * @return The path to the world save directory, or null if not available
+	 */
+	private Path getWorldDirectory(Level world) {
+		if (world.getServer() == null) {
+			return null;
+		}
+		
+		MinecraftServer server = world.getServer();
+		Path worldPath = server.getWorldPath(LevelResource.ROOT);
+		return worldPath;
 	}
 }
 
