@@ -66,25 +66,23 @@ public class DiffCalculator {
 				}
 			}
 
-			// Build current snapshot by scanning radius, but cap work
-			Map<BlockPos, BlockState> currentStates = new HashMap<>();
-			final int cap = 250_000; // safety cap
-			int processed = 0;
-			int r = Math.max(1, radius);
-			for (int dx = -r; dx <= r; dx++) {
-				for (int dy = -r; dy <= r; dy++) {
-					for (int dz = -r; dz <= r; dz++) {
-						if (processed++ > cap) break;
-						BlockPos pos = center.offset(dx, dy, dz);
-						if (!withinRadius(center, pos, r * r)) continue;
-						BlockState now = world.getBlockState(pos);
-						if (now != null && !now.isAir()) {
-							currentStates.put(pos, now);
-						}
-					}
-					if (processed > cap) break;
+			// Determine positions of interest: any previously known positions, plus currently tracked changes (unstaged)
+			java.util.HashSet<BlockPos> positions = new java.util.HashSet<>(previousStates.keySet());
+			java.util.List<BlockChange> currentTracked = Blockbase.blockTracker.getChanges();
+			for (BlockChange ch : currentTracked) {
+				BlockPos pos = ch.getPosition();
+				if (withinRadius(center, pos, radius * radius)) {
+					positions.add(pos);
 				}
-				if (processed > cap) break;
+			}
+
+			// Read current states only for positions of interest
+			Map<BlockPos, BlockState> currentStates = new HashMap<>();
+			for (BlockPos pos : positions) {
+				BlockState now = world.getBlockState(pos);
+				if (now != null && !now.isAir()) {
+					currentStates.put(pos, now);
+				}
 			}
 
 			Set<BlockPos> added = new HashSet<>();
@@ -104,11 +102,13 @@ public class DiffCalculator {
 					modified.add(pos);
 				}
 			}
-			// Analyze removals
+			// Analyze removals using direct world reads for previous positions
 			for (Map.Entry<BlockPos, BlockState> e : previousStates.entrySet()) {
 				BlockPos pos = e.getKey();
 				BlockState prev = e.getValue();
-				BlockState now = currentStates.get(pos);
+				// Only consider within radius (use given radius)
+				if (!withinRadius(center, pos, radius * radius)) continue;
+				BlockState now = world.getBlockState(pos);
 				boolean prevIsAir = (prev == null) || prev.isAir();
 				boolean nowIsAir = (now == null) || now.isAir();
 				if (!prevIsAir && nowIsAir) {

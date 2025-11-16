@@ -33,19 +33,13 @@ public class DiffOverlayRenderer {
 			if (mode == DiffViewManager.Mode.DIFF) {
 				RenderSystem.setShader(GameRenderer::getPositionShader);
 				for (BlockPos p : DiffViewManager.getAdded()) {
-					drawBox(poseStack, camPos, p, 0f, 1f, 0f, 0.45f); // green
+					drawBox(poseStack, camPos, p, 0f, 1f, 0f, 0.65f); // stronger green
 				}
 				for (BlockPos p : DiffViewManager.getRemoved()) {
-					drawBox(poseStack, camPos, p, 1f, 0f, 0f, 0.45f); // red
+					drawBox(poseStack, camPos, p, 1f, 0f, 0f, 0.65f); // stronger red
 				}
-				for (BlockPos p : DiffViewManager.getModified()) {
-					drawBox(poseStack, camPos, p, 1f, 1f, 0f, 0.45f); // yellow
-				}
-			} else if (mode == DiffViewManager.Mode.PREVIOUS) {
-				RenderSystem.setShader(GameRenderer::getPositionShader);
-				for (BlockPos p : DiffViewManager.getPreviousStates().keySet()) {
-					drawBox(poseStack, camPos, p, 0.3f, 0.7f, 1f, 0.35f); // cyan-ish ghost
-				}
+			} else {
+				// Current mode: no overlays
 			}
 
 			RenderSystem.enableTexture();

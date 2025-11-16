@@ -14,12 +14,9 @@ public class DiffHudOverlay {
 
 			PoseStack ps = poseStack;
 			var mode = DiffViewManager.getMode();
-			String title = switch (mode) {
-				case DIFF -> "Diff mode (G to cycle, Shift+G to exit)";
-				case CURRENT -> "Current mode (G to cycle, Shift+G to exit)";
-				case PREVIOUS -> "Previous mode (G to cycle, Shift+G to exit)";
-				default -> "";
-			};
+			String title = mode == DiffViewManager.Mode.DIFF
+				? "Diff mode (G to toggle, Shift+G to exit)"
+				: "Current mode (G to toggle, Shift+G to exit)";
 
 			int x = 12;
 			int y = 12;
@@ -29,8 +26,7 @@ public class DiffHudOverlay {
 			if (mode == DiffViewManager.Mode.DIFF) {
 				int added = DiffViewManager.getAdded().size();
 				int removed = DiffViewManager.getRemoved().size();
-				int modified = DiffViewManager.getModified().size();
-				mc.font.draw(ps, new TextComponent(String.format("Added: %d  Removed: %d  Modified: %d", added, removed, modified)), x, y + 12, color);
+				mc.font.draw(ps, new TextComponent(String.format("Added: %d  Removed: %d", added, removed)), x, y + 12, color);
 			}
 		});
 	}

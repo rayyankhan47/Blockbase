@@ -13,13 +13,13 @@ import java.util.concurrent.atomic.AtomicReference;
  */
 public class DiffViewManager {
 	public enum Mode {
-		OFF, DIFF, CURRENT, PREVIOUS
+		OFF, DIFF, CURRENT
 	}
 
 	private static final AtomicReference<Mode> mode = new AtomicReference<>(Mode.OFF);
 	private static DiffCalculator.DiffResult lastResult;
 	private static BlockPos anchor;
-	private static int radius = 256;
+	private static int radius = 64;
 
 	public static Mode getMode() {
 		return mode.get();
@@ -43,24 +43,14 @@ public class DiffViewManager {
 
 	public static void cycle(Level world, BlockPos center) {
 		Mode current = mode.get();
-		if (current == Mode.OFF) {
+		if (current == Mode.OFF || current == Mode.CURRENT) {
 			anchor = center;
 			lastResult = DiffCalculator.compute(world, center, radius);
-			Blockbase.LOGGER.info("[blockbase] Diff computed: added={}, removed={}, modified={}",
-				lastResult.added.size(), lastResult.removed.size(), lastResult.modified.size());
+			Blockbase.LOGGER.info("[blockbase] Diff computed: added={}, removed={}",
+				lastResult.added.size(), lastResult.removed.size());
 			mode.set(Mode.DIFF);
-			return;
-		}
-		if (current == Mode.DIFF) {
+		} else if (current == Mode.DIFF) {
 			mode.set(Mode.CURRENT);
-		} else if (current == Mode.CURRENT) {
-			mode.set(Mode.PREVIOUS);
-		} else if (current == Mode.PREVIOUS) {
-			anchor = center;
-			lastResult = DiffCalculator.compute(world, center, radius);
-			Blockbase.LOGGER.info("[blockbase] Diff recomputed: added={}, removed={}, modified={}",
-				lastResult.added.size(), lastResult.removed.size(), lastResult.modified.size());
-			mode.set(Mode.DIFF);
 		}
 	}
 

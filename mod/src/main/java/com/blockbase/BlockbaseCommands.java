@@ -114,7 +114,7 @@ public class BlockbaseCommands {
 			" - /bb log    : Show recent commits\n" +
 			" - /bb reset --hard <commitId> : Reset world to a specific commit (destructive)\n" +
 			" - /bb push   : Push local commits to remote backend\n" +
-			" - /bb diff   : Enter visual diff mode (G to cycle modes, Shift+G to exit)\n" +
+			" - /bb diff   : Enter visual diff mode (G to toggle, Shift+G to exit)\n" +
 			" - /bb diff clear : Exit visual diff mode\n" +
 			" - /bb remote add origin <url> : Set remote backend URL for this repo\n" +
 			" - /bb remote show : Display current remote URL\n" +
@@ -245,7 +245,7 @@ public class BlockbaseCommands {
 		try {
 			var player = context.getSource().getPlayerOrException();
 			DiffNetwork.send((net.minecraft.server.level.ServerPlayer) player, DiffNetwork.Action.ENTER);
-			context.getSource().sendSuccess(new net.minecraft.network.chat.TextComponent("[Blockbase] Entered diff mode. Press G to cycle, Shift+G to exit."), false);
+			context.getSource().sendSuccess(new net.minecraft.network.chat.TextComponent("[Blockbase] Entered diff mode. Press G to toggle, Shift+G to exit."), false);
 			return 1;
 		} catch (Exception e) {
 			context.getSource().sendFailure(new net.minecraft.network.chat.TextComponent("[Blockbase] Failed to enter diff mode: " + e.getMessage()));
