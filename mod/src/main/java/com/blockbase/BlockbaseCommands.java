@@ -778,6 +778,8 @@ public class BlockbaseCommands {
 			}
 
 			ApiClient client = new ApiClient(remote, null);
+			String remoteRepoId = repo.getRemoteRepoId();
+			String targetRepoId = (remoteRepoId != null && !remoteRepoId.isEmpty()) ? remoteRepoId : repo.getId();
 			int pushed = 0;
 			int failed = 0;
 			for (Path path : commitFiles) {
@@ -815,7 +817,7 @@ public class BlockbaseCommands {
 					}
 				}
 
-				ApiClient.ApiResult res = client.createCommit(repo.getId(), id, message, author, timestamp, changesArray);
+				ApiClient.ApiResult res = client.createCommit(targetRepoId, id, message, author, timestamp, changesArray);
 				if (res.ok) {
 					pushed++;
 				} else {
@@ -867,13 +869,26 @@ public class BlockbaseCommands {
 			return 0;
 		}
 
-		Repository updated = repo.withRemoteUrl(url);
+		// Allow repo-scoped URLs like https://host/api/repos/<repoId>
+		String remoteBase = url;
+		String remoteRepoId = null;
+		int at = url.indexOf("/repos/");
+		if (at != -1) {
+			int start = at + "/repos/".length();
+			int end = url.indexOf("/", start);
+			if (end == -1) end = url.length();
+			remoteRepoId = url.substring(start, end);
+			remoteBase = url.substring(0, at);
+		}
+
+		Repository updated = repo.withRemote(remoteBase, remoteRepoId);
 		Repository.save(world, updated);
 
 		// Optionally attempt to create repo on backend
 		try {
-			ApiClient client = ApiClient.fromConfig();
-			ApiClient.ApiResult result = client.createRepository(updated.getId(), updated.getName(), java.util.Map.of("branch", updated.getDefaultBranch()));
+			ApiClient client = new ApiClient(remoteBase, null);
+			String createId = remoteRepoId != null && !remoteRepoId.isEmpty() ? remoteRepoId : updated.getId();
+			ApiClient.ApiResult result = client.createRepository(createId, updated.getName(), java.util.Map.of("branch", updated.getDefaultBranch()));
 			if (result.ok) {
 				context.getSource().sendSuccess(new net.minecraft.network.chat.TextComponent("[Blockbase] Remote set and repository created on backend."), false);
 			} else {

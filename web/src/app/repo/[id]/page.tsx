@@ -3,6 +3,7 @@ import { use, useEffect, useState } from 'react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import { getRepoById, Repo, updateRepo } from '@/lib/repoStore';
+import { getApiBase } from '@/lib/config';
 
 type Commit = {
   id: string;
@@ -79,22 +80,7 @@ export default function RepoPage({ params }: { params: Promise<{ id: string }> }
         {tab === 'readme' ? (
           <section className="space-y-4">
             {!repo.initialized && (
-              <div className="card p-5">
-                <h3 className="text-2xl font-semibold">Get started</h3>
-                <p className="mt-2 text-[var(--muted)]">
-                  This repository is not linked to a local world yet. When we add linking, you’ll see setup instructions here.
-                </p>
-                <div className="mt-3 rounded-md bg-black/30 p-4 text-sm">
-                  <pre>
-{`
-bb init
-bb add .
-bb commit "first commit"
-bb remote add origin <blockbase-remote-url>
-bb push`}
-                  </pre>
-                </div>
-              </div>
+              <ConnectBlock />
             )}
             <div className="card p-5">
               <div className="mb-4 flex items-center justify-between">
@@ -200,6 +186,50 @@ bb push`}
             </ul>
           </section>
         )}
+      </div>
+    </div>
+  );
+}
+
+function ConnectBlock() {
+  const apiBase = getApiBase();
+  const repo = typeof window !== 'undefined' ? window.location.pathname.split('/').filter(Boolean)[1] : '';
+  const remote = `${apiBase}/repos/${repo}`;
+  const [copied, setCopied] = useState(false);
+  const script = `/bb init
+/bb add .
+/bb commit "Initial commmit"
+/bb remote add origin ${remote}
+/bb push`;
+
+  const copy = async () => {
+    try {
+      await navigator.clipboard.writeText(remote);
+      setCopied(true);
+      window.setTimeout(() => setCopied(false), 3000);
+    } catch {
+      // fallback: no-op
+    }
+  };
+
+  return (
+    <div className="card p-5">
+      <h3 className="text-2xl font-semibold">Connect this repo</h3>
+      <p className="mt-2 text-[var(--muted)]">
+        Run these commands inside your Minecraft world to link it to this remote.
+      </p>
+      <div className="mt-3 rounded-md bg-black/30 p-4 text-sm theme-light:bg-black/10">
+        <pre>{script}</pre>
+      </div>
+      <div className="mt-3">
+        <button
+          onClick={copy}
+          className="accent-ring rounded-md px-4 py-2 font-semibold"
+          style={{ backgroundColor: 'var(--accent)', color: '#0a0a0a' }}
+          disabled={copied}
+        >
+          {copied ? 'Copied!' : 'Copy remote link'}
+        </button>
       </div>
     </div>
   );

@@ -21,17 +21,19 @@ public class Repository {
 	private final String defaultBranch;
 	private final long createdAt;
 	private final String remoteUrl;
+	private final String remoteRepoId;
 
 	public Repository(String id, String name, String defaultBranch, long createdAt) {
-		this(id, name, defaultBranch, createdAt, null);
+		this(id, name, defaultBranch, createdAt, null, null);
 	}
 
-	public Repository(String id, String name, String defaultBranch, long createdAt, String remoteUrl) {
+	public Repository(String id, String name, String defaultBranch, long createdAt, String remoteUrl, String remoteRepoId) {
 		this.id = id;
 		this.name = name;
 		this.defaultBranch = defaultBranch;
 		this.createdAt = createdAt;
 		this.remoteUrl = remoteUrl;
+		this.remoteRepoId = remoteRepoId;
 	}
 
 	public String getId() {
@@ -54,8 +56,16 @@ public class Repository {
 		return remoteUrl;
 	}
 
+	public String getRemoteRepoId() {
+		return remoteRepoId;
+	}
+
 	public Repository withRemoteUrl(String url) {
-		return new Repository(this.id, this.name, this.defaultBranch, this.createdAt, url);
+		return new Repository(this.id, this.name, this.defaultBranch, this.createdAt, url, this.remoteRepoId);
+	}
+
+	public Repository withRemote(String url, String repoId) {
+		return new Repository(this.id, this.name, this.defaultBranch, this.createdAt, url, repoId);
 	}
 
 	/**
@@ -245,6 +255,9 @@ public class Repository {
 		if (remoteUrl != null && !remoteUrl.isEmpty()) {
 			sb.append(",\"remoteUrl\":\"").append(escape(remoteUrl)).append("\"");
 		}
+		if (remoteRepoId != null && !remoteRepoId.isEmpty()) {
+			sb.append(",\"remoteRepoId\":\"").append(escape(remoteRepoId)).append("\"");
+		}
 		sb.append("}");
 		return sb.toString();
 	}
@@ -260,7 +273,12 @@ public class Repository {
 			if (idx != -1) {
 				remoteUrl = extractString(json, "\"remoteUrl\":\"");
 			}
-			return new Repository(id, name, defaultBranch, createdAt, remoteUrl);
+			String remoteRepoId = null;
+			int idx2 = json.indexOf("\"remoteRepoId\":\"");
+			if (idx2 != -1) {
+				remoteRepoId = extractString(json, "\"remoteRepoId\":\"");
+			}
+			return new Repository(id, name, defaultBranch, createdAt, remoteUrl, remoteRepoId);
 		} catch (Exception e) {
 			Blockbase.LOGGER.error("Failed to parse repo.json: {}", json, e);
 			return null;
