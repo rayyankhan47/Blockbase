@@ -172,7 +172,6 @@
 - [x] Test: Make changes, run `/blockbase add .`, check status
 
 ### 4.4 Implement Commit Command
-### 4.4 Implement Commit Command
 - [x] Add `/blockbase commit <message>` command
 - [x] Take staged changes
 - [x] Create `Commit` object

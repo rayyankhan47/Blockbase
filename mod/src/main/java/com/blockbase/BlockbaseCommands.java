@@ -7,9 +7,16 @@ import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.world.level.Level;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.text.SimpleDateFormat;
+import java.util.Comparator;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * Registers all /blockbase commands.
@@ -44,6 +51,10 @@ public class BlockbaseCommands {
 						.executes(BlockbaseCommands::helpCommand)
 				)
 				.then(
+					Commands.literal("log")
+						.executes(BlockbaseCommands::logCommand)
+				)
+				.then(
 					Commands.literal("status")
 						.executes(BlockbaseCommands::statusCommand)
 				)
@@ -56,6 +67,7 @@ public class BlockbaseCommands {
 			" - /blockbase init   : Initialize Blockbase repository in this world\n" +
 			" - /blockbase commit <message> : Commit staged changes with a message\n" +
 			" - /blockbase add .  : Stage all currently tracked changes\n" +
+			" - /blockbase log    : Show recent commits\n" +
 			" - /blockbase help   : Show this help message\n" +
 			" - /blockbase status : Show tracked change status"
 		), false);
@@ -195,7 +207,18 @@ public class BlockbaseCommands {
 		if (staged.isEmpty()) {
 			context.getSource().sendFailure(
 				new net.minecraft.network.chat.TextComponent(
-					"[Blockbase] No staged changes. Use /blockbase stage first."
+					"[Blockbase] No staged changes. Use /blockbase add . first."
+				)
+			);
+			return 0;
+		}
+
+		// Enforce quotes around commit message to mimic git usage
+		String rawInput = context.getInput();
+		if (!rawInput.contains("\"")) {
+			context.getSource().sendFailure(
+				new net.minecraft.network.chat.TextComponent(
+					"[Blockbase] Please wrap the commit message in double quotes, e.g. /blockbase commit \"my message\""
 				)
 			);
 			return 0;
@@ -241,6 +264,119 @@ public class BlockbaseCommands {
 		);
 
 		return 1;
+	}
+
+	private static int logCommand(CommandContext<CommandSourceStack> context) {
+		Level world = context.getSource().getLevel();
+
+		// Ensure repository is initialized
+		Repository repo = Repository.load(world);
+		if (repo == null) {
+			context.getSource().sendFailure(
+				new net.minecraft.network.chat.TextComponent(
+					"[Blockbase] No repository found. Run /blockbase init first."
+				)
+			);
+			return 0;
+		}
+
+		Path commitsDir = Repository.getCommitsDirectory(world);
+		if (commitsDir == null || !Files.exists(commitsDir)) {
+			context.getSource().sendSuccess(
+				new net.minecraft.network.chat.TextComponent("[Blockbase] No commits yet."),
+				false
+			);
+			return 1;
+		}
+
+		try {
+			List<Path> commitFiles = Files.list(commitsDir)
+				.filter(p -> p.getFileName().toString().endsWith(".json"))
+				.sorted((a, b) -> {
+					try {
+						long at = Files.getLastModifiedTime(a).toMillis();
+						long bt = Files.getLastModifiedTime(b).toMillis();
+						return Long.compare(bt, at); // newest first
+					} catch (IOException e) {
+						return 0;
+					}
+				})
+				.limit(10) // show latest 10 commits
+				.collect(Collectors.toList());
+
+			if (commitFiles.isEmpty()) {
+				context.getSource().sendSuccess(
+					new net.minecraft.network.chat.TextComponent("[Blockbase] No commits yet."),
+					false
+				);
+				return 1;
+			}
+
+			SimpleDateFormat fmt = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+			StringBuilder sb = new StringBuilder();
+			sb.append("[Blockbase] Commit log (latest first):\n");
+
+			for (Path path : commitFiles) {
+				String json = Files.readString(path);
+
+				String id = extractString(json, "\"id\":\"");
+				String message = extractString(json, "\"message\":\"");
+				String author = extractString(json, "\"author\":\"");
+				long timestamp = extractLong(json, "\"timestamp\":");
+
+				String shortId = id != null && id.length() > 7 ? id.substring(0, 7) : id;
+				String dateStr = fmt.format(new Date(timestamp));
+
+				sb.append(String.format(" - %s | %s | %s | %s\n",
+					shortId,
+					author,
+					dateStr,
+					message
+				));
+			}
+
+			context.getSource().sendSuccess(
+				new net.minecraft.network.chat.TextComponent(sb.toString()),
+				false
+			);
+			return 1;
+
+		} catch (IOException e) {
+			Blockbase.LOGGER.error("Failed to read commit log", e);
+			context.getSource().sendFailure(
+				new net.minecraft.network.chat.TextComponent(
+					"[Blockbase] Failed to read commit log. Check logs for details."
+				)
+			);
+			return 0;
+		}
+	}
+
+	// Simple JSON helpers for extracting fields in commit log
+	private static long extractLong(String json, String key) {
+		int start = json.indexOf(key);
+		if (start == -1) {
+			return 0L;
+		}
+		start += key.length();
+		int end = json.indexOf(",", start);
+		if (end == -1) {
+			end = json.indexOf("}", start);
+		}
+		return Long.parseLong(json.substring(start, end).trim());
+	}
+
+	private static String extractString(String json, String key) {
+		int start = json.indexOf(key);
+		if (start == -1) {
+			return "";
+		}
+		start += key.length();
+		int end = json.indexOf("\"", start);
+		if (end == -1) {
+			return "";
+		}
+		return json.substring(start, end);
 	}
 
 	private static int initCommand(CommandContext<CommandSourceStack> context) {
