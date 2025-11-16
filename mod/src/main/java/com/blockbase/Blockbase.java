@@ -25,6 +25,9 @@ public class Blockbase implements ModInitializer {
 	// BlockTracker instance to track all block changes
 	public static final BlockTracker blockTracker = new BlockTracker();
 
+	// StagingArea instance to track staged changes (for commits)
+	public static final StagingArea stagingArea = new StagingArea();
+
 	@Override
 	public void onInitialize() {
 		// This code runs as soon as Minecraft is in a mod-load-ready state.

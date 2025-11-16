@@ -25,6 +25,10 @@ public class BlockbaseCommands {
 						.executes(BlockbaseCommands::initCommand)
 				)
 				.then(
+					Commands.literal("stage")
+						.executes(BlockbaseCommands::stageCommand)
+				)
+				.then(
 					Commands.literal("help")
 						.executes(BlockbaseCommands::helpCommand)
 				)
@@ -39,6 +43,7 @@ public class BlockbaseCommands {
 		context.getSource().sendSuccess(new net.minecraft.network.chat.TextComponent(
 			"[Blockbase] Commands:\n" +
 			" - /blockbase init   : Initialize Blockbase repository in this world\n" +
+			" - /blockbase stage  : Stage all currently tracked changes\n" +
 			" - /blockbase help   : Show this help message\n" +
 			" - /blockbase status : Show tracked change status"
 		), false);
@@ -49,8 +54,11 @@ public class BlockbaseCommands {
 		List<BlockChange> changes = Blockbase.blockTracker.getChanges();
 		int totalChanges = changes.size();
 
-		// Aggregate changes by block type (using human-readable block name)
-		Map<String, Integer> byBlock = new HashMap<>();
+		List<BlockChange> staged = Blockbase.stagingArea.getStagedChanges();
+		int stagedCount = staged.size();
+
+		// Aggregate tracked changes by block type (using human-readable block name)
+		Map<String, Integer> trackedByBlock = new HashMap<>();
 		for (BlockChange change : changes) {
 			// Prefer newState if present; otherwise fall back to oldState
 			net.minecraft.world.level.block.state.BlockState state =
@@ -58,15 +66,35 @@ public class BlockbaseCommands {
 			if (state == null) continue;
 
 			String name = state.getBlock().getName().getString();
-			byBlock.merge(name, 1, Integer::sum);
+			trackedByBlock.merge(name, 1, Integer::sum);
 		}
 
-		StringBuilder breakdown = new StringBuilder();
-		if (byBlock.isEmpty()) {
-			breakdown.append("  (no tracked block changes yet)\n");
+		StringBuilder trackedBreakdown = new StringBuilder();
+		if (trackedByBlock.isEmpty()) {
+			trackedBreakdown.append("  (no tracked block changes yet)\n");
 		} else {
-			for (Map.Entry<String, Integer> entry : byBlock.entrySet()) {
-				breakdown.append(String.format("  - %s: %d changes\n", entry.getKey(), entry.getValue()));
+			for (Map.Entry<String, Integer> entry : trackedByBlock.entrySet()) {
+				trackedBreakdown.append(String.format("  - %s: %d changes\n", entry.getKey(), entry.getValue()));
+			}
+		}
+
+		// Aggregate staged changes by block type
+		Map<String, Integer> stagedByBlock = new HashMap<>();
+		for (BlockChange change : staged) {
+			net.minecraft.world.level.block.state.BlockState state =
+				change.getNewState() != null ? change.getNewState() : change.getOldState();
+			if (state == null) continue;
+
+			String name = state.getBlock().getName().getString();
+			stagedByBlock.merge(name, 1, Integer::sum);
+		}
+
+		StringBuilder stagedBreakdown = new StringBuilder();
+		if (stagedByBlock.isEmpty()) {
+			stagedBreakdown.append("  (no staged changes)\n");
+		} else {
+			for (Map.Entry<String, Integer> entry : stagedByBlock.entrySet()) {
+				stagedBreakdown.append(String.format("  - %s: %d changes\n", entry.getKey(), entry.getValue()));
 			}
 		}
 
@@ -76,12 +104,14 @@ public class BlockbaseCommands {
 				"[Blockbase] Status:\n" +
 				" - Tracked changes (total): %d\n" +
 				" - Tracked changes by block:\n%s" +
-				" - Staged changes: %s\n" +
+				" - Staged changes (total): %d\n" +
+				" - Staged changes by block:\n%s" +
 				" - Current branch: %s\n" +
 				" - Repository: %s",
 				totalChanges,
-				breakdown.toString(),
-				"0 (staging not implemented yet)",
+				trackedBreakdown.toString(),
+				stagedCount,
+				stagedBreakdown.toString(),
 				"main (placeholder)",
 				"not initialized (use /blockbase init in Step 4)"
 			)),
@@ -96,6 +126,42 @@ public class BlockbaseCommands {
 			new net.minecraft.network.chat.TextComponent("[Blockbase] Use /blockbase help for available commands."),
 			false
 		);
+		return 1;
+	}
+
+	private static int stageCommand(CommandContext<CommandSourceStack> context) {
+		Level world = context.getSource().getLevel();
+
+		// Ensure repository is initialized
+		Repository repo = Repository.load(world);
+		if (repo == null) {
+			context.getSource().sendFailure(
+				new net.minecraft.network.chat.TextComponent(
+					"[Blockbase] No repository found. Run /blockbase init first."
+				)
+			);
+			return 0;
+		}
+
+		List<BlockChange> changes = Blockbase.blockTracker.getChanges();
+		if (changes.isEmpty()) {
+			context.getSource().sendSuccess(
+				new net.minecraft.network.chat.TextComponent("[Blockbase] No changes to stage."),
+				false
+			);
+			return 1;
+		}
+
+		Blockbase.stagingArea.stageAll(changes);
+
+		context.getSource().sendSuccess(
+			new net.minecraft.network.chat.TextComponent(String.format(
+				"[Blockbase] Staged %d changes (use /blockbase status to view details).",
+				changes.size()
+			)),
+			false
+		);
+
 		return 1;
 	}
 

@@ -132,38 +132,44 @@
 ## Step 4: Repository & Commit System
 
 ### 4.1 Create Repository Structure
-- [ ] Create `Repository` class to manage repo data
-- [ ] Create `.blockbase/` folder in world directory
-- [ ] Create `repo.json` file with:
+- [x] Create `Repository` class to manage repo data
+- [x] Create `.blockbase/` folder in world directory
+- [x] Create `repo.json` file with:
   - Repository ID
   - Name
   - Default branch
   - Created timestamp
-- [ ] Add `/blockbase init` command:
+- [x] Add `/blockbase init` command:
   - Create `.blockbase/` folder
   - Initialize `repo.json`
-  - Create initial commit
-- [ ] Test: Run `/blockbase init` in a world
+  - Create initial commit (future enhancement; currently just repo metadata)
+- [x] Test: Run `/blockbase init` in a world
 
 ### 4.2 Create Commit Data Structure
-- [ ] Create `Commit` class:
+- [x] Create `Commit` class:
   - Commit ID (SHA-1 hash)
   - Message
   - Author
   - Timestamp
   - List of block changes
   - Parent commit ID
-- [ ] Create method to generate commit hash
-- [ ] Create method to serialize commit to JSON
+  - Commit ID (SHA-1 hash)
+  - Message
+  - Author
+  - Timestamp
+  - List of block changes
+  - Parent commit ID
+- [x] Create method to generate commit hash
+- [x] Create method to serialize commit to JSON
 
 ### 4.3 Implement Staging System
-- [ ] Add `StagingArea` class to track staged changes
-- [ ] Add `/blockbase stage` command:
+- [x] Add `StagingArea` class to track staged changes
+- [x] Add `/blockbase stage` command:
   - Stage all current changes
   - Or stage specific region (future enhancement)
-- [ ] Store staged changes separately from unstaged
-- [ ] Update `/blockbase status` to show staged vs unstaged
-- [ ] Test: Make changes, run `/blockbase stage`, check status
+- [x] Store staged changes separately from unstaged
+- [x] Update `/blockbase status` to show staged vs unstaged
+- [x] Test: Make changes, run `/blockbase stage`, check status
 
 ### 4.4 Implement Commit Command
 - [ ] Add `/blockbase commit <message>` command
