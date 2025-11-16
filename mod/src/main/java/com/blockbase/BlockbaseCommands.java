@@ -633,7 +633,9 @@ public class BlockbaseCommands {
 					continue;
 				}
 
-				for (String changeStr : splitTopLevelJsonObjects(changesPart)) {
+				java.util.List<String> changeObjs = splitTopLevelJsonObjects(changesPart);
+				for (int j = changeObjs.size() - 1; j >= 0; j--) {
+					String changeStr = changeObjs.get(j);
 					BlockChange change = BlockChange.fromJsonString(changeStr, registry);
 					if (change == null) continue;
 
