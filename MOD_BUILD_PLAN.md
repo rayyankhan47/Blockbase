@@ -65,26 +65,26 @@
 ## Step 2: Block Tracking System
 
 ### 2.1 Create BlockTracker Class
-- [ ] Create new file: `src/main/java/com/blockbase/BlockTracker.java`
-- [ ] Create class to track block changes
-- [ ] Add data structure to store changes:
+- [x] Create new file: `src/main/java/com/blockbase/BlockTracker.java`
+- [x] Create class to track block changes
+- [x] Add data structure to store changes:
   - Block position (x, y, z)
   - Old block state
   - New block state
   - Timestamp
-- [ ] Add methods:
+- [x] Add methods:
   - `trackBlockPlace(BlockPos, BlockState)` - when block placed
   - `trackBlockBreak(BlockPos, BlockState)` - when block broken
   - `getChanges()` - return all tracked changes
   - `clearChanges()` - reset tracking
 
 ### 2.2 Register Block Event Listeners
-- [ ] In `BlockbaseMod.java`, register event callbacks:
+- [x] In `BlockbaseMod.java`, register event callbacks:
   - `BlockPlaceCallback.EVENT.register()` - for block placement
   - `BlockBreakCallback.EVENT.register()` - for block breaking
-- [ ] Connect events to `BlockTracker` methods
-- [ ] Test: Place a block, verify it's tracked
-- [ ] Test: Break a block, verify it's tracked
+- [x] Connect events to `BlockTracker` methods
+- [x] Test: Place a block, verify it's tracked
+- [x] Test: Break a block, verify it's tracked
 
 ### 2.3 Handle Block State Changes
 - [ ] Register `BlockStateChangeCallback` for block modifications
