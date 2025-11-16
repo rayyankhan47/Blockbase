@@ -87,20 +87,20 @@
 - [x] Test: Break a block, verify it's tracked
 
 ### 2.3 Handle Block State Changes
-- [ ] Register `BlockStateChangeCallback` for block modifications
-- [ ] Track when blocks change state (e.g., redstone wire power level)
-- [ ] Update `BlockTracker` to handle state changes
-- [ ] Test: Change redstone wire power, verify tracking
+- [x] Register `BlockStateChangeCallback` for block modifications
+- [x] Track when blocks change state (e.g., redstone wire power level)
+- [x] Update `BlockTracker` to handle state changes
+- [x] Test: Change redstone wire power, verify tracking
 
 ### 2.4 Persist Block Changes (Local Storage)
-- [ ] Create `BlockChange` data class:
+- [x] Create `BlockChange` data class:
   - Position (x, y, z)
   - Old block type/state
   - New block type/state
-- [ ] Add method to save changes to JSON file
-- [ ] Add method to load changes from JSON file
-- [ ] Store in world folder: `.blockbase/changes.json`
-- [ ] Test: Save and load changes
+- [x] Add method to save changes to JSON file
+- [x] Add method to load changes from JSON file
+- [x] Store in world folder: `.blockbase/changes.json`
+- [x] Test: Save and load changes
 
 ---
 

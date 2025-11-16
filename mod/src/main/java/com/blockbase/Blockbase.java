@@ -1,6 +1,7 @@
 package com.blockbase;
 
 import net.fabricmc.api.ModInitializer;
+import net.fabricmc.fabric.api.command.v1.CommandRegistrationCallback;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.fabricmc.fabric.api.event.player.PlayerBlockBreakEvents;
@@ -35,6 +36,9 @@ public class Blockbase implements ModInitializer {
 		// Register block event listeners
 		registerBlockEvents();
 		
+		// Register commands
+		registerCommands();
+		
 		// Register server lifecycle events for loading/saving changes
 		registerServerEvents();
 		
@@ -66,6 +70,13 @@ public class Blockbase implements ModInitializer {
 		// This is more reliable than using UseItemCallback
 		
 		LOGGER.info("Block event listeners registered");
+	}
+	
+	private void registerCommands() {
+		CommandRegistrationCallback.EVENT.register((dispatcher, dedicated) -> {
+			BlockbaseCommands.register(dispatcher);
+		});
+		LOGGER.info("Blockbase commands registered");
 	}
 	
 	private void registerServerEvents() {
