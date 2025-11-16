@@ -2,6 +2,7 @@ package com.blockbase;
 
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.context.CommandContext;
+import com.mojang.brigadier.arguments.StringArgumentType;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.world.level.Level;
@@ -25,8 +26,18 @@ public class BlockbaseCommands {
 						.executes(BlockbaseCommands::initCommand)
 				)
 				.then(
-					Commands.literal("stage")
-						.executes(BlockbaseCommands::stageCommand)
+					Commands.literal("commit")
+						.then(
+							Commands.argument("message", StringArgumentType.greedyString())
+								.executes(BlockbaseCommands::commitCommand)
+						)
+				)
+				.then(
+					Commands.literal("add")
+						.then(
+							Commands.literal(".")
+								.executes(BlockbaseCommands::stageCommand)
+						)
 				)
 				.then(
 					Commands.literal("help")
@@ -43,7 +54,8 @@ public class BlockbaseCommands {
 		context.getSource().sendSuccess(new net.minecraft.network.chat.TextComponent(
 			"[Blockbase] Commands:\n" +
 			" - /blockbase init   : Initialize Blockbase repository in this world\n" +
-			" - /blockbase stage  : Stage all currently tracked changes\n" +
+			" - /blockbase commit <message> : Commit staged changes with a message\n" +
+			" - /blockbase add .  : Stage all currently tracked changes\n" +
 			" - /blockbase help   : Show this help message\n" +
 			" - /blockbase status : Show tracked change status"
 		), false);
@@ -146,7 +158,7 @@ public class BlockbaseCommands {
 		List<BlockChange> changes = Blockbase.blockTracker.getChanges();
 		if (changes.isEmpty()) {
 			context.getSource().sendSuccess(
-				new net.minecraft.network.chat.TextComponent("[Blockbase] No changes to stage."),
+				new net.minecraft.network.chat.TextComponent("[Blockbase] No changes to add."),
 				false
 			);
 			return 1;
@@ -156,8 +168,74 @@ public class BlockbaseCommands {
 
 		context.getSource().sendSuccess(
 			new net.minecraft.network.chat.TextComponent(String.format(
-				"[Blockbase] Staged %d changes (use /blockbase status to view details).",
+				"[Blockbase] Added %d changes to staging (use /blockbase status to view details).",
 				changes.size()
+			)),
+			false
+		);
+
+		return 1;
+	}
+
+	private static int commitCommand(CommandContext<CommandSourceStack> context) {
+		Level world = context.getSource().getLevel();
+
+		// Ensure repository is initialized
+		Repository repo = Repository.load(world);
+		if (repo == null) {
+			context.getSource().sendFailure(
+				new net.minecraft.network.chat.TextComponent(
+					"[Blockbase] No repository found. Run /blockbase init first."
+				)
+			);
+			return 0;
+		}
+
+		List<BlockChange> staged = Blockbase.stagingArea.getStagedChanges();
+		if (staged.isEmpty()) {
+			context.getSource().sendFailure(
+				new net.minecraft.network.chat.TextComponent(
+					"[Blockbase] No staged changes. Use /blockbase stage first."
+				)
+			);
+			return 0;
+		}
+
+		String message = StringArgumentType.getString(context, "message");
+		if (message == null || message.trim().isEmpty()) {
+			context.getSource().sendFailure(
+				new net.minecraft.network.chat.TextComponent(
+					"[Blockbase] Commit message cannot be empty."
+				)
+			);
+			return 0;
+		}
+
+		// Determine parent commit ID (if any)
+		String parentId = Repository.getLatestCommitId(world);
+
+		// Author: use the command source's display name
+		String author = context.getSource().getTextName();
+
+		// Create commit and compute its ID
+		Commit commit = Commit.create(message.trim(), author, parentId, staged, world);
+
+		// Save commit to disk
+		Repository.saveCommit(world, commit);
+
+		// Clear staged changes and current tracked changes (working directory is now "clean")
+		Blockbase.stagingArea.clear();
+		Blockbase.blockTracker.clearChanges();
+
+		// Show short commit ID (first 7 chars) for readability
+		String shortId = commit.getId().length() > 7 ? commit.getId().substring(0, 7) : commit.getId();
+
+		context.getSource().sendSuccess(
+			new net.minecraft.network.chat.TextComponent(String.format(
+				"[Blockbase] Created commit %s: \"%s\" (%d changes)",
+				shortId,
+				commit.getMessage(),
+				commit.getChanges().size()
 			)),
 			false
 		);

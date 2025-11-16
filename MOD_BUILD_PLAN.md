@@ -164,22 +164,23 @@
 
 ### 4.3 Implement Staging System
 - [x] Add `StagingArea` class to track staged changes
-- [x] Add `/blockbase stage` command:
+- [x] Add `/blockbase add .` command:
   - Stage all current changes
   - Or stage specific region (future enhancement)
 - [x] Store staged changes separately from unstaged
 - [x] Update `/blockbase status` to show staged vs unstaged
-- [x] Test: Make changes, run `/blockbase stage`, check status
+- [x] Test: Make changes, run `/blockbase add .`, check status
 
 ### 4.4 Implement Commit Command
-- [ ] Add `/blockbase commit <message>` command
-- [ ] Take staged changes
-- [ ] Create `Commit` object
-- [ ] Generate commit hash
-- [ ] Link to previous commit (if exists)
-- [ ] Save commit to `.blockbase/commits/<commitId>.json`
-- [ ] Clear staging area after commit
-- [ ] Test: Stage changes, commit with message, verify commit file exists
+### 4.4 Implement Commit Command
+- [x] Add `/blockbase commit <message>` command
+- [x] Take staged changes
+- [x] Create `Commit` object
+- [x] Generate commit hash
+- [x] Link to previous commit (if exists)
+- [x] Save commit to `.blockbase/commits/<commitId>.json`
+- [x] Clear staging area after commit (and reset tracked changes)
+- [x] Test: Stage changes, commit with message, verify commit file exists
 
 ### 4.5 Implement Commit History
 - [ ] Add `/blockbase log` command

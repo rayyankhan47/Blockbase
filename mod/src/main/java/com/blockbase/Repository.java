@@ -110,6 +110,77 @@ public class Repository {
 		}
 	}
 
+	/**
+	 * Get the directory where commits are stored for this world.
+	 * @param world The world
+	 * @return Path to .blockbase/commits
+	 */
+	public static Path getCommitsDirectory(Level world) {
+		if (world.getServer() == null) {
+			return null;
+		}
+		MinecraftServer server = world.getServer();
+		Path worldDir = server.getWorldPath(LevelResource.ROOT);
+		if (worldDir == null) {
+			return null;
+		}
+		return worldDir.resolve(".blockbase").resolve("commits");
+	}
+
+	/**
+	 * Save a commit JSON file in .blockbase/commits.
+	 */
+	public static void saveCommit(Level world, Commit commit) {
+		Path commitsDir = getCommitsDirectory(world);
+		if (commitsDir == null) {
+			Blockbase.LOGGER.error("Cannot save commit: world directory not available");
+			return;
+		}
+		try {
+			Files.createDirectories(commitsDir);
+			Path commitFile = commitsDir.resolve(commit.getId() + ".json");
+			Files.writeString(commitFile, commit.toJson(world));
+			Blockbase.LOGGER.info("Saved commit {} to {}", commit.getId(), commitFile);
+		} catch (IOException e) {
+			Blockbase.LOGGER.error("Failed to save commit {}", commit.getId(), e);
+		}
+	}
+
+	/**
+	 * Get the latest commit ID for this world by looking at the newest commit file.
+	 * @return commit ID or null if none exist
+	 */
+	public static String getLatestCommitId(Level world) {
+		Path commitsDir = getCommitsDirectory(world);
+		if (commitsDir == null || !Files.exists(commitsDir)) {
+			return null;
+		}
+		try {
+			return Files.list(commitsDir)
+				.filter(p -> p.getFileName().toString().endsWith(".json"))
+				.max((a, b) -> {
+					try {
+						long at = Files.getLastModifiedTime(a).toMillis();
+						long bt = Files.getLastModifiedTime(b).toMillis();
+						return Long.compare(at, bt);
+					} catch (IOException e) {
+						return 0;
+					}
+				})
+				.map(p -> {
+					String name = p.getFileName().toString();
+					if (name.endsWith(".json")) {
+						return name.substring(0, name.length() - 5);
+					}
+					return name;
+				})
+				.orElse(null);
+		} catch (IOException e) {
+			Blockbase.LOGGER.error("Failed to list commit files", e);
+			return null;
+		}
+	}
+
 	private static Path getRepoFile(Level world) {
 		if (world.getServer() == null) {
 			return null;
