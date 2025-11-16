@@ -53,35 +53,33 @@ export default async function RepoPage({
 	const meta = mockRepoMeta(id);
 
 	return (
-		<div className="min-h-screen w-full px-6 py-10">
-			<div className="mx-auto max-w-5xl">
+		<div className="min-h-screen w-full px-8 py-14">
+			<div className="mx-auto max-w-6xl">
 				<header className="mb-8">
-					<h1 className="heading-mc text-2xl md:text-3xl">
-						{meta.name}
-					</h1>
-					<p className="mt-1 text-sm text-[var(--muted)]">
+					<h1 className="text-5xl font-bold">{meta.name}</h1>
+					<p className="mt-3 text-xl text-[var(--muted)]">
 						World: {meta.worldName}
 					</p>
-					<p className="mt-1 text-xs text-[var(--muted)]">
+					<p className="mt-1 text-md text-[var(--muted)]">
 						Updated: {new Date(meta.updatedAt).toLocaleString()}
 					</p>
 				</header>
 
-				<section className="space-y-3">
-					<h2 className="text-lg font-semibold">Commits</h2>
-					<ul className="space-y-2">
+				<section className="space-y-5">
+					<h2 className="text-3xl font-semibold">Commits</h2>
+					<ul className="space-y-4">
 						{mockCommits.map((c) => (
-							<li key={c.id} className="card p-4">
+							<li key={c.id} className="card p-6">
 								<a
 									href={`/repo/${id}/commit/${c.id}`}
 									className="block"
 								>
 									<div className="flex items-center justify-between">
 										<div className="min-w-0">
-											<div className="truncate font-medium">
+											<div className="truncate text-xl font-medium">
 												{c.message}
 											</div>
-											<div className="mt-1 text-xs text-[var(--muted)]">
+											<div className="mt-1 text-md text-[var(--muted)]">
 												<span className="font-mono">
 													{c.id}
 												</span>{" "}
@@ -91,7 +89,7 @@ export default async function RepoPage({
 												).toLocaleString()}
 											</div>
 										</div>
-										<div className="text-xs text-[var(--muted)]">
+										<div className="text-md text-[var(--muted)]">
 											View
 										</div>
 									</div>

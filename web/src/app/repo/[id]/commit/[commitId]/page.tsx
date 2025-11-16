@@ -34,32 +34,55 @@ const mockCommitDetail = (commitId: string): CommitDetail => ({
 function DeltaList({
 	title,
 	items,
+	variant = "neutral",
 }: {
 	title: string;
 	items: BlockDelta[];
+	variant?: "added" | "removed" | "neutral";
 }) {
+	const headerBg =
+		variant === "added"
+			? "rgba(34,197,94,0.12)" // green 500 @ 12%
+			: variant === "removed"
+			? "rgba(239,68,68,0.12)" // red 500 @ 12%
+			: "transparent";
+	const headerBorder =
+		variant === "added"
+			? "rgba(34,197,94,0.35)"
+			: variant === "removed"
+			? "rgba(239,68,68,0.35)"
+			: "var(--accent-weak)";
 	return (
-		<section className="mt-6">
-			<h3 className="text-base font-semibold">{title}</h3>
+		<section className="card overflow-hidden">
+			<div
+				className="border-b px-5 py-4"
+				style={{ background: headerBg, borderColor: headerBorder }}
+			>
+				<h3 className="text-xl font-semibold">{title}</h3>
+			</div>
 			{items.length === 0 ? (
-				<p className="mt-2 text-sm text-[var(--muted)]">None</p>
+				<p className="px-5 py-4 text-base text-[var(--muted)]">None</p>
 			) : (
-				<ul className="mt-3 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+				<ul className="grid gap-2 p-4 sm:grid-cols-2 lg:grid-cols-2">
 					{items.map((b) => (
-						<li key={b.id} className="card flex items-center gap-3 p-3">
-							<div className="h-10 w-10 flex-shrink-0 overflow-hidden rounded">
+						<li
+							key={b.id}
+							className="flex items-center gap-3 rounded-md p-3"
+							style={{ background: "rgba(255,255,255,0.02)" }}
+						>
+							<div className="h-12 w-12 flex-shrink-0 overflow-hidden rounded">
 								<Image
 									src={getBlockIconPath(b.id)}
 									alt={b.name}
-									width={40}
-									height={40}
+									width={48}
+									height={48}
 								/>
 							</div>
 							<div className="min-w-0">
-								<div className="truncate text-sm font-medium">
+								<div className="truncate text-base font-medium">
 									{b.name}
 								</div>
-								<div className="text-xs text-[var(--muted)]">
+								<div className="text-sm text-[var(--muted)]">
 									{b.count} {b.count === 1 ? "block" : "blocks"}
 								</div>
 							</div>
@@ -80,23 +103,23 @@ export default async function CommitPage({
 	const data = mockCommitDetail(commitId);
 
 	return (
-		<div className="min-h-screen w-full px-6 py-10">
-			<div className="mx-auto max-w-5xl">
-				<header className="mb-6">
-					<h1 className="heading-mc text-2xl md:text-3xl">
-						Commit {data.id}
-					</h1>
-					<p className="mt-2 text-sm">
-						<span className="font-medium">{data.message}</span>
+		<div className="min-h-screen w-full px-8 py-14">
+			<div className="mx-auto max-w-6xl">
+				<header className="mb-8">
+					<h1 className="text-5xl font-bold">Commit {data.id}</h1>
+					<p className="mt-4 text-2xl">
+						<span className="font-semibold">{data.message}</span>
 					</p>
-					<p className="mt-1 text-xs text-[var(--muted)]">
+					<p className="mt-1 text-md text-[var(--muted)]">
 						by {data.author} •{" "}
 						{new Date(data.timestamp).toLocaleString()}
 					</p>
 				</header>
 
-				<DeltaList title="Added" items={data.added} />
-				<DeltaList title="Removed" items={data.removed} />
+				<div className="grid gap-6 md:grid-cols-2">
+					<DeltaList title="Added" items={data.added} variant="added" />
+					<DeltaList title="Removed" items={data.removed} variant="removed" />
+				</div>
 			</div>
 		</div>
 	);

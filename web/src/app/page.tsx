@@ -1,69 +1,51 @@
-type Repo = {
-  id: string;
-  name: string;
-  worldName: string;
-  createdAt: string;
-  updatedAt: string;
-  commits: number;
-};
-
-const mockRepos: Repo[] = [
-  {
-    id: "alpha",
-    name: "Alpha Base",
-    worldName: "Superflat Testing",
-    createdAt: "2025-11-10T12:00:00Z",
-    updatedAt: "2025-11-16T18:20:00Z",
-    commits: 12,
-  },
-  {
-    id: "redstone-alu",
-    name: "Redstone ALU",
-    worldName: "Redstone Lab",
-    createdAt: "2025-11-12T09:30:00Z",
-    updatedAt: "2025-11-16T17:55:00Z",
-    commits: 7,
-  },
-  {
-    id: "sky-island",
-    name: "Sky Island",
-    worldName: "Creative Sandbox",
-    createdAt: "2025-11-01T08:10:00Z",
-    updatedAt: "2025-11-15T22:15:00Z",
-    commits: 21,
-  },
-];
-
 export default function Home() {
   return (
-    <div className="min-h-screen w-full px-6 py-10">
-      <div className="mx-auto max-w-5xl">
-        <header className="mb-8">
-          <h1 className="heading-mc text-3xl md:text-4xl">Blockbase</h1>
-          <p className="mt-2 text-sm text-[var(--muted)]">
-            Your Minecraft build repos
-          </p>
-        </header>
-
-        <section className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {mockRepos.map((repo) => (
-            <a
-              key={repo.id}
-              href={`/repo/${repo.id}`}
-              className="card block p-4 transition hover:opacity-95"
-            >
-              <h2 className="text-xl font-semibold">{repo.name}</h2>
-              <div className="mt-2 text-sm text-[var(--muted)]">
-                <div>World: {repo.worldName}</div>
-                <div>Commits: {repo.commits}</div>
-              </div>
-              <div className="mt-4 text-xs text-[var(--muted)]">
-                Updated: {new Date(repo.updatedAt).toLocaleString()}
-              </div>
-            </a>
-          ))}
-        </section>
+    <main className="min-h-screen w-full px-8 py-16 flex items-center">
+      <div className="mx-auto max-w-6xl text-center">
+        <h1 className="brand-title text-6xl md:text-7xl">Blockbase</h1>
+        <p className="mx-auto mt-5 max-w-2xl text-xl text-[var(--muted)]">
+          Version control for Minecraft builds. Track, commit, and review your
+          worlds like code.
+        </p>
+        <div className="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row">
+          <a
+            href="/repos"
+            className="accent-ring inline-flex items-center justify-center rounded-xl px-8 py-5 text-lg font-semibold text-black"
+            style={{ backgroundColor: "var(--accent)" }}
+          >
+            Get Started
+          </a>
+          <a
+            href="/repos"
+            className="accent-ring inline-flex items-center justify-center rounded-xl border px-8 py-5 text-lg"
+            style={{ borderColor: "var(--accent-weak)" }}
+          >
+            {/* Placeholder: will become \"View Your Repositories\" if logged in */}
+            Login
+          </a>
+        </div>
+        <div className="mx-auto mt-14 grid max-w-5xl gap-6 md:grid-cols-3">
+          <div className="card p-6 text-left">
+            <h3 className="text-2xl font-semibold">Track Changes</h3>
+            <p className="mt-3 text-base text-[var(--muted)]">
+              Block-level tracking for placements, breaks, and state changes.
+              Commit and review your world history.
+            </p>
+          </div>
+          <div className="card p-6 text-left">
+            <h3 className="text-2xl font-semibold">Visual Diffs</h3>
+            <p className="mt-3 text-base text-[var(--muted)]">
+              See added/removed blocks by type to understand builds at a glance.
+            </p>
+          </div>
+          <div className="card p-6 text-left">
+            <h3 className="text-2xl font-semibold">Git-like Workflow</h3>
+            <p className="mt-3 text-base text-[var(--muted)]">
+              Add, commit, log, and reset—familiar commands adapted to Minecraft.
+            </p>
+          </div>
+        </div>
       </div>
-    </div>
+    </main>
   );
 }

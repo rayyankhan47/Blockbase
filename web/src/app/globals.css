@@ -5,7 +5,9 @@
   --foreground: #e5eef6;
   --muted: #94a3b8;
   --card: #0f141a;
-  --border: #1f2937;
+  --border: #1a2330;
+  --accent: #22c55e; /* green-500 */
+  --accent-weak: #14532d; /* green-900-ish for subtle borders */
 }
 
 @theme inline {
@@ -21,10 +23,12 @@ body {
   background: var(--background);
   color: var(--foreground);
   font-family: var(--font-sans);
+  font-size: 18px; /* accessibility-friendly base */
+  line-height: 1.7;
 }
 
-/* Minecraft heading font */
-h1, h2, h3, .heading-mc {
+/* Brand wordmark only */
+.brand-title {
   font-family: 'Minecraft', 'Minecraftia', var(--font-sans);
   text-rendering: optimizeLegibility;
 }
@@ -32,6 +36,35 @@ h1, h2, h3, .heading-mc {
 /* Simple card utility */
 .card {
   background: var(--card);
-  border: 1px solid var(--border);
-  border-radius: 0.75rem;
+  border: 1px solid var(--accent-weak);
+  border-radius: 0.9rem;
+}
+
+/* Default accent outline */
+.accent-ring {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+/* Accent ring on interactive */
+.accent-ring:hover,
+.accent-ring:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+/* Light theme overrides */
+.theme-light {
+  --background: #f8fafc; /* slate-50-ish */
+  --foreground: #0b1220; /* slate-950-ish */
+  --muted: #444c5e;      /* darker muted for light bg */
+  --card: #ffffff;
+  --border: #d1e7dd;     /* light green-tinted border */
+  --accent: #16a34a;     /* green-600 */
+  --accent-weak: #c7f9cc;/* pale green for borders */
+}
+
+/* Smooth theme transitions */
+html, body, .card {
+  transition: background-color 200ms ease, color 200ms ease, border-color 200ms ease;
 }

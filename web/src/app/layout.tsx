@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import "@fontsource-variable/montserrat";
+import FloatingControls from "@/components/FloatingControls";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -24,11 +25,31 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <head>
         <link rel="stylesheet" href="https://fonts.cdnfonts.com/css/minecraft-4" />
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              (function() {
+                try {
+                  var t = localStorage.getItem('bb-theme');
+                  if (!t) {
+                    t = (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) ? 'dark' : 'light';
+                  }
+                  if (t === 'light') {
+                    document.documentElement.classList.add('theme-light');
+                  } else {
+                    document.documentElement.classList.remove('theme-light');
+                  }
+                } catch(e) {}
+              })();
+            `,
+          }}
+        />
       </head>
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+        <FloatingControls />
         {children}
       </body>
     </html>
